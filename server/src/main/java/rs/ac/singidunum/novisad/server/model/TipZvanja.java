@@ -1,22 +1,23 @@
 package rs.ac.singidunum.novisad.server.model;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class NacunaOblast {
+public class TipZvanja {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String naziv;
 
-    public NacunaOblast() {
+    public TipZvanja() {
     }
 
-    public NacunaOblast(Long id, String naziv) {
+    public TipZvanja(Long id, String naziv) {
         this.id = id;
         this.naziv = naziv;
     }

@@ -11,7 +11,7 @@ public class Nastavnik {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String naziv;
+    private String ime;
     private String biografija;
     private String jmbg;
 
@@ -23,7 +23,7 @@ public class Nastavnik {
 
     public Nastavnik(Long id, String naziv, String biografija, String jmbg, Set<Zvanje> zvanja) {
         this.id = id;
-        this.naziv = naziv;
+        this.ime = naziv;
         this.biografija = biografija;
         this.jmbg = jmbg;
         this.zvanja = zvanja;
@@ -37,12 +37,12 @@ public class Nastavnik {
         this.id = id;
     }
 
-    public String getNaziv() {
-        return naziv;
+    public String getIme() {
+        return ime;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setIme(String ime) {
+        this.ime = ime;
     }
 
     public String getBiografija() {

@@ -14,6 +14,7 @@ public class StudijskiProgram {
 
     private String naziv;
 
+    @Lob
     private String opis;
 
     @ManyToOne
@@ -22,7 +23,7 @@ public class StudijskiProgram {
     @OneToOne
     private Nastavnik rukovodilac;
 
-    @OneToMany //TODO:Pitati asistenra za ovo
+    @OneToMany(mappedBy = "studijskiProgram") //TODO:Pitati asistenra za ovo
     private Set<GodinaStudija> godineStudija;
 
     public StudijskiProgram() {
