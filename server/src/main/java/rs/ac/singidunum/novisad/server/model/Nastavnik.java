@@ -2,10 +2,11 @@ package rs.ac.singidunum.novisad.server.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-public class Nastavnik {
+public class Nastavnik extends RegistrovaniKorisnik{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,19 +14,19 @@ public class Nastavnik {
 
     private String ime;
     private String biografija;
-    private String jmbg;
 
     @OneToMany(mappedBy = "nastavnik")
     private Set<Zvanje> zvanja;
 
     public Nastavnik() {
+        super();
     }
 
-    public Nastavnik(Long id, String naziv, String biografija, String jmbg, Set<Zvanje> zvanja) {
-        this.id = id;
-        this.ime = naziv;
+    public Nastavnik(Long id, String korisnickoIme, String lozinka, Long jmbg, String ime, String prezime, String email, Adresa adresa, LocalDateTime datumRodjenja, Set<PravoPristupa> pravoPristupaSet, Long id1, String ime1, String biografija, Set<Zvanje> zvanja) {
+        super(id, korisnickoIme, lozinka, jmbg, ime, prezime, email, adresa, datumRodjenja, pravoPristupaSet);
+        this.id = id1;
+        this.ime = ime1;
         this.biografija = biografija;
-        this.jmbg = jmbg;
         this.zvanja = zvanja;
     }
 
@@ -53,13 +54,6 @@ public class Nastavnik {
         this.biografija = biografija;
     }
 
-    public String getJmbg() {
-        return jmbg;
-    }
-
-    public void setJmbg(String jmbg) {
-        this.jmbg = jmbg;
-    }
 
     public Set<Zvanje> getZvanja() {
         return zvanja;

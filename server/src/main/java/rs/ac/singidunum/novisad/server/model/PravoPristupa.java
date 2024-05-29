@@ -11,9 +11,9 @@ public class PravoPristupa {
     private String naziv;
 
     @ManyToOne()
-    private Korisnik vlasnik;
+    private RegistrovaniKorisnik vlasnik;
 
-    public PravoPristupa(Long id, String naziv, Korisnik vlasnik) {
+    public PravoPristupa(Long id, String naziv, RegistrovaniKorisnik vlasnik) {
         this.id = id;
         this.naziv = naziv;
         this.vlasnik = vlasnik;
@@ -39,11 +39,11 @@ public class PravoPristupa {
         this.naziv = naziv;
     }
 
-    public Korisnik getVlasnik() {
+    public RegistrovaniKorisnik getVlasnik() {
         return vlasnik;
     }
 
-    public void setVlasnik(Korisnik vlasnik) {
+    public void setVlasnik(RegistrovaniKorisnik vlasnik) {
         this.vlasnik = vlasnik;
     }
 }

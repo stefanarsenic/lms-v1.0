@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import rs.ac.singidunum.novisad.server.model.Korisnik;
+import rs.ac.singidunum.novisad.server.model.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.model.PravoPristupa;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     KorisnikServices korisnikServices;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Korisnik> korisnik= korisnikServices.findByKorisnickoIme(username);
+        Optional<RegistrovaniKorisnik> korisnik= korisnikServices.findByKorisnickoIme(username);
         if(korisnik.isPresent()){
             ArrayList<GrantedAuthority> grantedAuthorities=new ArrayList<>();
             for(PravoPristupa pravoPristupa:korisnik.get().getPravoPristupaSet()){

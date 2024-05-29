@@ -1,11 +1,11 @@
 package rs.ac.singidunum.novisad.server.dto;
 
-import rs.ac.singidunum.novisad.server.model.Korisnik;
+import rs.ac.singidunum.novisad.server.model.RegistrovaniKorisnik;
 
 import java.io.Serializable;
 
 /**
- * DTO for {@link Korisnik}
+ * DTO for {@link RegistrovaniKorisnik}
  */
 public class KorisnikDto implements Serializable {
     private  Long id;

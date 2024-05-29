@@ -18,13 +18,13 @@ import rs.ac.singidunum.novisad.server.dto.KorisnikDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
-import rs.ac.singidunum.novisad.server.model.Korisnik;
+import rs.ac.singidunum.novisad.server.model.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.utils.TokenUtils;
 
 @Controller
 @RequestMapping("/api")
-public class KorisnikContoller extends GenericController<Korisnik,Long, KorisnikDto> {
-    public KorisnikContoller(GenericService<Korisnik, Long> service) {
+public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Long, KorisnikDto> {
+    public KorisnikContoller(GenericService<RegistrovaniKorisnik, Long> service) {
         super(service);
     }
 
@@ -42,19 +42,19 @@ public class KorisnikContoller extends GenericController<Korisnik,Long, Korisnik
 
 
     @Override
-    protected KorisnikDto convertToDto(Korisnik entity) throws IllegalAccessException, InstantiationException {
+    protected KorisnikDto convertToDto(RegistrovaniKorisnik entity) throws IllegalAccessException, InstantiationException {
 
         return EntityDtoMapper.convertToDto(entity,KorisnikDto.class);
     }
 
     @Override
-    protected Korisnik convertToEntity(KorisnikDto dto) throws IllegalAccessException, InstantiationException {
-        return EntityDtoMapper.convertToEntity(dto,Korisnik.class);
+    protected RegistrovaniKorisnik convertToEntity(KorisnikDto dto) throws IllegalAccessException, InstantiationException {
+        return EntityDtoMapper.convertToEntity(dto, RegistrovaniKorisnik.class);
     }
 
     @RequestMapping(path = "/login",method = RequestMethod.POST)
     public ResponseEntity<String> login(@RequestBody KorisnikDto korisnikDto) throws IllegalAccessException, InstantiationException {
-        Korisnik korisnik=convertToEntity(korisnikDto);
+        RegistrovaniKorisnik korisnik=convertToEntity(korisnikDto);
         System.out.println(userDetailsService.loadUserByUsername(korisnik.getKorisnickoIme()));
         UsernamePasswordAuthenticationToken token=new UsernamePasswordAuthenticationToken(korisnik.getKorisnickoIme(),korisnik.getLozinka());
         Authentication authentication=authenticationManager.authenticate(token);
