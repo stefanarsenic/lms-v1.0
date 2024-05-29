@@ -9,6 +9,8 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Korisnik {
 
+    //TODO:Kako ostali nasledjuju korisnika?
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
