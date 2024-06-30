@@ -1,6 +1,7 @@
-package rs.ac.singidunum.novisad.server.model;
+package rs.ac.singidunum.novisad.server.model.korisnik;
 
 import jakarta.persistence.*;
+import rs.ac.singidunum.novisad.server.model.adresa.Adresa;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

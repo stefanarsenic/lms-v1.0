@@ -1,12 +1,13 @@
-package rs.ac.singidunum.novisad.server.model;
+package rs.ac.singidunum.novisad.server.model.korisnik;
 
 import jakarta.persistence.Entity;
+import rs.ac.singidunum.novisad.server.model.adresa.Adresa;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-public class Administrator  extends RegistrovaniKorisnik{
+public class Administrator  extends RegistrovaniKorisnik {
 
     public Administrator() {
         super();

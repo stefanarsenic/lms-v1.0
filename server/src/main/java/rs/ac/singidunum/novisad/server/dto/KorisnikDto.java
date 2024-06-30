@@ -1,6 +1,6 @@
 package rs.ac.singidunum.novisad.server.dto;
 
-import rs.ac.singidunum.novisad.server.model.RegistrovaniKorisnik;
+import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 
 import java.io.Serializable;
 

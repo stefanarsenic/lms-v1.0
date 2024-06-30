@@ -18,7 +18,7 @@ import rs.ac.singidunum.novisad.server.dto.KorisnikDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
-import rs.ac.singidunum.novisad.server.model.RegistrovaniKorisnik;
+import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.utils.TokenUtils;
 
 @Controller

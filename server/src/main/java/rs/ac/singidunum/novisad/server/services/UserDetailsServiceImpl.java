@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import rs.ac.singidunum.novisad.server.model.RegistrovaniKorisnik;
-import rs.ac.singidunum.novisad.server.model.PravoPristupa;
+import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
+import rs.ac.singidunum.novisad.server.model.korisnik.PravoPristupa;
 
 import java.util.ArrayList;
 import java.util.Optional;

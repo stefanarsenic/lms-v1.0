@@ -1,12 +1,15 @@
-package rs.ac.singidunum.novisad.server.model;
+package rs.ac.singidunum.novisad.server.model.nastavnik;
 
 import jakarta.persistence.*;
+import rs.ac.singidunum.novisad.server.model.adresa.Adresa;
+import rs.ac.singidunum.novisad.server.model.korisnik.PravoPristupa;
+import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-public class Nastavnik extends RegistrovaniKorisnik{
+public class Nastavnik extends RegistrovaniKorisnik {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

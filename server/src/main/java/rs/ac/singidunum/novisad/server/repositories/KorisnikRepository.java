@@ -3,7 +3,7 @@ package rs.ac.singidunum.novisad.server.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import rs.ac.singidunum.novisad.server.model.RegistrovaniKorisnik;
+import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 
 import java.util.Optional;
 
