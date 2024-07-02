@@ -1,5 +1,4 @@
-package rs.ac.singidunum.novisad.server.model.anketa;
-
+package rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,13 +10,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class TipOdgovora {
+public class TipEvaluacije {
 
     @Id
     @GeneratedValue
     private Long id;
-    private String tip;
+    private String naziv;
 }

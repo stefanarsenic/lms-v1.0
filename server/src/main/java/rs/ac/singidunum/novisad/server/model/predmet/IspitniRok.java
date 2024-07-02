@@ -1,4 +1,4 @@
-package rs.ac.singidunum.novisad.server.model.student;
+package rs.ac.singidunum.novisad.server.model.predmet;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,22 +8,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.ac.singidunum.novisad.server.model.student.Student;
-import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
+import rs.ac.singidunum.novisad.server.model.student.GodinaStudija;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PrijaveIspita {
+public class IspitniRok {
 
     @Id
     @GeneratedValue
     private Long id;
-    private Integer brojPrijave;
+    private String naziv;
+    private LocalDate pocetak;
+    private LocalDate kraj;
     @OneToOne
-    private Student student;
-    @OneToOne
-    private Predmet predmet;
+    private GodinaStudija godinaStudija;
 }

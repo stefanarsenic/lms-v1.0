@@ -6,19 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Ishod {
+public class Ispit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
-    @Lob
-    @Column(nullable = false)
-    private String opis;
-    @ManyToOne
+    private LocalDateTime datumPolaganja;
+    private Time termin;
+    private String sala;
+    private String poruka;
+    @OneToOne
+    private IspitniRok ispitniRok;
+    @OneToOne
     private Predmet predmet;
 }
