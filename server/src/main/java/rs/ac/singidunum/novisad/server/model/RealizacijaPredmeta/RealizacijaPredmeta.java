@@ -1,10 +1,7 @@
 package rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +16,7 @@ import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 public class RealizacijaPredmeta {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
     private Predmet predmet;

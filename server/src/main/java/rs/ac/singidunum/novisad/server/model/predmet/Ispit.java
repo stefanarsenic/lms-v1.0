@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Ispit {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime datumPolaganja;
     private Time termin;

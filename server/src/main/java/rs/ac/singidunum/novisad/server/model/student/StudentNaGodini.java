@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class StudentNaGodini {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime datumUpisa;
     private String brojIndeksa;

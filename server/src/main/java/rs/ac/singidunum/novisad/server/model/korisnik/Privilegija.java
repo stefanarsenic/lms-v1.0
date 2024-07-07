@@ -6,18 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Collection;
+
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class PravoPristupa {
+public class Privilegija {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String naziv;
 
-    @ManyToOne()
-    private RegistrovaniKorisnik vlasnik;
+    @ManyToMany(mappedBy = "privilegije")
+    private Collection<Uloga> uloge;
 }
