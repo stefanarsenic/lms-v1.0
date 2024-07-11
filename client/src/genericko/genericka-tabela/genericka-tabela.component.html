@@ -1,0 +1,22 @@
+<table>
+  <thead>
+  <tr>
+    <th *ngFor="let item  of kljucevi;">
+      {{item}}
+    </th>
+    <th>Akcije</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr [ngClass]="{'minus':podataka.stanje<0}" *ngFor="let podataka of podaci; index as i">
+    <td *ngFor="let attribute of kljucevi">{{ podataka[attribute] }}</td>
+    <td>
+      <button (click)="ukloni(podataka.id)">Ukloni</button>
+    </td>
+    <td>
+      <button (click)="izmena(podataka.id)">Izmena</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
