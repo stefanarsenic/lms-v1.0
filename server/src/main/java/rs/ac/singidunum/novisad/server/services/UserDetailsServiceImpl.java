@@ -3,10 +3,8 @@ package rs.ac.singidunum.novisad.server.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +12,8 @@ import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.model.korisnik.Privilegija;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.model.korisnik.Uloga;
-import rs.ac.singidunum.novisad.server.repositories.UlogaRepository;
+import rs.ac.singidunum.novisad.server.repositories.korisnik.UlogaRepository;
+import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikService;
 
 import java.util.*;
 

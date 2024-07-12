@@ -6,9 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.ac.singidunum.novisad.server.model.nastavnik.NacunaOblast;
-import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
-import rs.ac.singidunum.novisad.server.model.nastavnik.TipZvanja;
 
 import java.time.LocalDateTime;
 
@@ -30,5 +27,5 @@ public class Zvanje {
     @OneToOne
     private TipZvanja tipZvanja;
     @OneToOne
-    private NacunaOblast nacunaOblast;
+    private NaucnaOblast nacunaOblast;
 }

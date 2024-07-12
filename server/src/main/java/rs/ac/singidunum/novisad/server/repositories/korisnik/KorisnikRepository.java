@@ -1,4 +1,4 @@
-package rs.ac.singidunum.novisad.server.repositories;
+package rs.ac.singidunum.novisad.server.repositories.korisnik;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

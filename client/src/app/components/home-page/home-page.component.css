@@ -1,0 +1,60 @@
+body {
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  padding: 100px;
+}
+
+.login-btn{
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px 50px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-text {
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+.logo{
+  width: 80px;
+  aspect-ratio: 1;
+  background-image: url("../../assets/logo.png");
+  background-size: cover;
+}
+
+.link {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+

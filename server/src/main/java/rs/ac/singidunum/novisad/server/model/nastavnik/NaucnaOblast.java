@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class NacunaOblast {
+public class NaucnaOblast {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

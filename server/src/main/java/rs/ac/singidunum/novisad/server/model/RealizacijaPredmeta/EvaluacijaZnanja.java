@@ -27,4 +27,6 @@ public class EvaluacijaZnanja {
     private Ishod ishod;
     @OneToOne
     private Fajl instrumentEvaluacije;
+    @OneToOne
+    private TipEvaluacije tipEvaluacije;
 }

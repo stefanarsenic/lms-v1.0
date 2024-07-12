@@ -1,12 +1,10 @@
-package rs.ac.singidunum.novisad.server.services;
+package rs.ac.singidunum.novisad.server.services.korisnik;
 
 
 import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
-import rs.ac.singidunum.novisad.server.repositories.KorisnikRepository;
-
-import java.util.Optional;
+import rs.ac.singidunum.novisad.server.repositories.korisnik.KorisnikRepository;
 
 @Service
 public class KorisnikService extends GenericService<RegistrovaniKorisnik, Long> {

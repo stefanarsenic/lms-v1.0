@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 
 import java.util.Set;
 
@@ -26,6 +27,10 @@ public class Predmet {
     private Integer drugiObliciNastave;
     private Integer istrazivackiRad;
     private Integer ostaliCasovi;
+    @OneToOne
+    private Nastavnik nastavnik;
+    @OneToOne
+    private Nastavnik asistent;
     @OneToMany(mappedBy = "predmet")
     private Set<Ishod> silabus;
     @OneToMany(mappedBy = "predmet", cascade = CascadeType.ALL)
