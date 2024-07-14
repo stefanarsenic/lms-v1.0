@@ -6,11 +6,13 @@ import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.repositories.korisnik.KorisnikRepository;
 
+import java.util.Optional;
+
 @Service
-public class KorisnikService extends GenericService<RegistrovaniKorisnik, Long> {
+public class KorisnikServices extends GenericService<RegistrovaniKorisnik, Long> {
     private final KorisnikRepository korisnikRepository;
 
-    public KorisnikService(KorisnikRepository korisnikRepository) {
+    public KorisnikServices(KorisnikRepository korisnikRepository) {
         super(korisnikRepository);
         this.korisnikRepository = korisnikRepository;
     }
@@ -19,11 +21,7 @@ public class KorisnikService extends GenericService<RegistrovaniKorisnik, Long> 
         return korisnikRepository.findAll();
     }
 
-    public RegistrovaniKorisnik findByKorisnickoIme(String korisnickoIme) {
+    public Optional<RegistrovaniKorisnik> findByKorisnickoIme(String korisnickoIme) {
         return korisnikRepository.findByKorisnickoIme(korisnickoIme);
-    }
-
-    public RegistrovaniKorisnik findByEmail(String email) {
-        return korisnikRepository.findByEmail(email);
     }
 }

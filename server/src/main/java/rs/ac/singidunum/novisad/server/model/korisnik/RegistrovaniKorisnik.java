@@ -25,21 +25,10 @@ public class RegistrovaniKorisnik {
     private Long id;
     private String korisnickoIme;
     private String lozinka;
-    private Long jmbg;
+    private String email;
     private String ime;
     private String prezime;
-    private String email;
-    @OneToOne
-    private Adresa adresa;
-    private LocalDateTime datumRodjenja;
-    private boolean enabled;
-    private boolean tokenExpired;
-    @ManyToMany
-    @JoinTable(
-            name = "korisnicke_uloge",
-            joinColumns = @JoinColumn(
-                    name = "korisnik_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "uloga_id", referencedColumnName = "id"))
-    private Collection<Uloga> uloge;
+    @OneToMany(mappedBy = "registrovaniKorisnik")
+    private Set<PravoPristupa> pravoPristupaSet=new HashSet<>();
+
 }

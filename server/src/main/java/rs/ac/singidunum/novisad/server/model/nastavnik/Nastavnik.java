@@ -18,8 +18,8 @@ import java.util.Set;
 @Entity
 public class Nastavnik extends RegistrovaniKorisnik {
 
-    private String ime;
     private String biografija;
+    private String jmbg;
     @OneToMany(mappedBy = "nastavnik")
     private Set<Zvanje> zvanja;
 }
