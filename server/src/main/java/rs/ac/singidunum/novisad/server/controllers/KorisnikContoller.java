@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,6 +53,7 @@ public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Lo
         return EntityDtoMapper.convertToEntity(dto, RegistrovaniKorisnik.class);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(path = "/login",method = RequestMethod.POST)
     public ResponseEntity<String> login(@RequestBody KorisnikDto korisnikDto) throws IllegalAccessException, InstantiationException {
         RegistrovaniKorisnik korisnik=convertToEntity(korisnikDto);
