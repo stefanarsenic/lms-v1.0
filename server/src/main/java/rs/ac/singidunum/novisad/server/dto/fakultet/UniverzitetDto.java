@@ -16,7 +16,7 @@ import java.util.Set;
 public class UniverzitetDto implements Serializable {
     private Long id;
     private String naziv;
-    private LocalDateTime datumOsnovanja;
+    private LocalDateTime datumOsnivanja;
     private AdresaDto adresa;
     private Set<FakultetDto> fakulteti;
     private NastavnikDto rektor;

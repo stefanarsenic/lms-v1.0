@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.model.korisnik.PravoPristupa;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
-import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikServices;
 
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    KorisnikServices korisnikServices;
+    KorisnikService korisnikServices;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<RegistrovaniKorisnik> korisnik= korisnikServices.findByKorisnickoIme(username);

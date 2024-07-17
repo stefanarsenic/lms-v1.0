@@ -19,6 +19,8 @@ import java.util.Set;
 public class Student extends RegistrovaniKorisnik {
 
     private String jmbg;
+    @OneToOne
+    private Adresa adresa;
     @ManyToOne
     private GodinaStudija godinaStudija;
 

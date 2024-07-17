@@ -9,10 +9,10 @@ import rs.ac.singidunum.novisad.server.repositories.korisnik.KorisnikRepository;
 import java.util.Optional;
 
 @Service
-public class KorisnikServices extends GenericService<RegistrovaniKorisnik, Long> {
+public class KorisnikService extends GenericService<RegistrovaniKorisnik, Long> {
     private final KorisnikRepository korisnikRepository;
 
-    public KorisnikServices(KorisnikRepository korisnikRepository) {
+    public KorisnikService(KorisnikRepository korisnikRepository) {
         super(korisnikRepository);
         this.korisnikRepository = korisnikRepository;
     }

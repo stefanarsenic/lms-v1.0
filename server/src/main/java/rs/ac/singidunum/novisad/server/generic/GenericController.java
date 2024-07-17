@@ -25,7 +25,7 @@ public abstract  class GenericController <T,ID,D>{
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
-    @PostMapping("/dodaj")
+    @PostMapping
     public ResponseEntity<D> create(@RequestBody D dto) throws IllegalAccessException, InstantiationException {
         T entity = convertToEntity(dto);
         entity = service.save(entity);

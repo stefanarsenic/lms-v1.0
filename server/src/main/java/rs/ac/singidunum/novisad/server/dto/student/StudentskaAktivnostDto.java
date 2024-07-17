@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudenskaAktivnostDto implements Serializable {
+public class StudentskaAktivnostDto implements Serializable {
     private Long id;
     private AktivnostDto aktivnost;
     private StudentNaGodiniDto student;
