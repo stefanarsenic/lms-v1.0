@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(korisnik.isPresent()){
             ArrayList<GrantedAuthority> grantedAuthorities=new ArrayList<>();
             for(PravoPristupa pravoPristupa:korisnik.get().getPravoPristupaSet()){
-                grantedAuthorities.add(new SimpleGrantedAuthority((pravoPristupa.getNaziv())));
+                grantedAuthorities.add(new SimpleGrantedAuthority((pravoPristupa.getUloga().getNaziv())));
             }
             return new User(korisnik.get().getKorisnickoIme(),korisnik.get().getLozinka(),grantedAuthorities);
         }

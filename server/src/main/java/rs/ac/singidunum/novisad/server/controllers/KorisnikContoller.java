@@ -11,23 +11,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import rs.ac.singidunum.novisad.server.dto.KorisnikDto;
+import org.springframework.web.bind.annotation.*;
+import rs.ac.singidunum.novisad.server.dto.RegistrovaniKorisnikDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
+import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikService;
 import rs.ac.singidunum.novisad.server.utils.TokenUtils;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/api")
-public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Long, KorisnikDto> {
+@CrossOrigin(origins = "http://localhost:4200")
+public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Long, RegistrovaniKorisnikDto> {
     public KorisnikContoller(GenericService<RegistrovaniKorisnik, Long> service) {
         super(service);
+        this.korisnikService= (KorisnikService) service;
     }
+
+    KorisnikService korisnikService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -43,19 +47,19 @@ public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Lo
 
 
     @Override
-    protected KorisnikDto convertToDto(RegistrovaniKorisnik entity) throws IllegalAccessException, InstantiationException {
+    protected RegistrovaniKorisnikDto convertToDto(RegistrovaniKorisnik entity) throws IllegalAccessException, InstantiationException {
 
-        return EntityDtoMapper.convertToDto(entity,KorisnikDto.class);
+        return EntityDtoMapper.convertToDto(entity,RegistrovaniKorisnikDto.class);
     }
 
     @Override
-    protected RegistrovaniKorisnik convertToEntity(KorisnikDto dto) throws IllegalAccessException, InstantiationException {
+    protected RegistrovaniKorisnik convertToEntity(RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
         return EntityDtoMapper.convertToEntity(dto, RegistrovaniKorisnik.class);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+
     @RequestMapping(path = "/login",method = RequestMethod.POST)
-    public ResponseEntity<String> login(@RequestBody KorisnikDto korisnikDto) throws IllegalAccessException, InstantiationException {
+    public ResponseEntity<String> login(@RequestBody RegistrovaniKorisnikDto korisnikDto) throws IllegalAccessException, InstantiationException {
         RegistrovaniKorisnik korisnik=convertToEntity(korisnikDto);
         System.out.println(userDetailsService.loadUserByUsername(korisnik.getKorisnickoIme()));
         UsernamePasswordAuthenticationToken token=new UsernamePasswordAuthenticationToken(korisnik.getKorisnickoIme(),korisnik.getLozinka());
@@ -69,4 +73,24 @@ public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Lo
 
     }
 
+    @RequestMapping(path = "/username", method = RequestMethod.GET)
+    public ResponseEntity<RegistrovaniKorisnikDto> findByUsername(@RequestParam String username) throws IllegalAccessException, InstantiationException {
+        Optional<RegistrovaniKorisnik> entityOptional = this.korisnikService.findByKorisnickoIme(username);
+        System.out.println(username);
+        if (entityOptional.isPresent()) {
+            RegistrovaniKorisnik entity = entityOptional.get();
+            RegistrovaniKorisnikDto dto = convertToDto(entity);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Override
+    @RequestMapping(path = "/register",method = RequestMethod.POST)
+    public ResponseEntity<RegistrovaniKorisnikDto> create(RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
+        String lozinka=dto.getLozinka();
+        dto.setLozinka(passwordEncoder.encode(lozinka));
+        return super.create(dto);
+    }
 }

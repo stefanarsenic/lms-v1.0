@@ -1,0 +1,78 @@
+.container {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-message {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-size: 1.2em;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  font-size: 1.2em;
+  padding: 10px;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+.text-danger {
+  color: red;
+  font-size: 0.9em;
+}
+
+.btn {
+  font-size: 1.2em;
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-size: cover;
+}

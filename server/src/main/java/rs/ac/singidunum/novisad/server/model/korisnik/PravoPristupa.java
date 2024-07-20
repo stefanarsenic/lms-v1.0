@@ -8,15 +8,16 @@ public class PravoPristupa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String naziv;
+    @ManyToOne
+    private Uloga uloga;
 
     @ManyToOne()
     private RegistrovaniKorisnik registrovaniKorisnik;
 
-    public PravoPristupa(Long id, String naziv, RegistrovaniKorisnik vlasnik) {
+    public PravoPristupa(Long id, Uloga uloga, RegistrovaniKorisnik registrovaniKorisnik) {
         this.id = id;
-        this.naziv = naziv;
-        this.registrovaniKorisnik = vlasnik;
+        this.uloga = uloga;
+        this.registrovaniKorisnik = registrovaniKorisnik;
     }
 
     public PravoPristupa() {
@@ -31,12 +32,12 @@ public class PravoPristupa {
         this.id = id;
     }
 
-    public String getNaziv() {
-        return naziv;
+    public Uloga getUloga() {
+        return uloga;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setUloga(Uloga uloga) {
+        this.uloga = uloga;
     }
 
     public RegistrovaniKorisnik getRegistrovaniKorisnik() {

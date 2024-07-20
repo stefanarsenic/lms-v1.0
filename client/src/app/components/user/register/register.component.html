@@ -1,0 +1,67 @@
+<div class="register-container">
+  <div class="form-wrapper">
+    <h2>Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div [ngSwitch]="currentStep">
+
+        <!-- Step 1 -->
+        <div *ngSwitchCase="1">
+          <div class="form-group">
+            <label for="ime">First Name</label>
+            <input id="ime" formControlName="ime" class="form-control" />
+            <div *ngIf="registerForm.get('ime')?.invalid && registerForm.get('ime')?.touched">
+              <small class="text-danger">First Name is required.</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="prezime">Last Name</label>
+            <input id="prezime" formControlName="prezime" class="form-control" />
+            <div *ngIf="registerForm.get('prezime')?.invalid && registerForm.get('prezime')?.touched">
+              <small class="text-danger">Last Name is required.</small>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!registerForm.get('ime')?.valid || !registerForm.get('prezime')?.valid">Next</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div *ngSwitchCase="2">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" formControlName="email" class="form-control" />
+            <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+              <small class="text-danger">Enter a valid email.</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="korisnickoIme">Username</label>
+            <input id="korisnickoIme" formControlName="korisnickoIme" class="form-control" />
+            <div *ngIf="registerForm.get('korisnickoIme')?.invalid && registerForm.get('korisnickoIme')?.touched">
+              <small class="text-danger">Username is required.</small>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-secondary" (click)="prevStep()">Previous</button>
+          <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!registerForm.get('email')?.valid || !registerForm.get('korisnickoIme')?.valid">Next</button>
+        </div>
+
+        <!-- Step 3 -->
+        <div *ngSwitchCase="3">
+          <div class="form-group">
+            <label for="lozinka">Password</label>
+            <input id="lozinka" type="password" formControlName="lozinka" class="form-control" />
+            <div *ngIf="registerForm.get('lozinka')?.invalid && registerForm.get('lozinka')?.touched">
+              <small class="text-danger">Password must be at least 6 characters.</small>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-secondary" (click)="prevStep()">Previous</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!registerForm.get('lozinka')?.valid">Submit</button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

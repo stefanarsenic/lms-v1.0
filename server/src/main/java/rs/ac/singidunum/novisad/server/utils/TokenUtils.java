@@ -68,7 +68,7 @@ public class TokenUtils {
 			uloge.add(o.getAuthority());
 		}
 		claims.put("role",uloge);
-		claims.put("sub", userDetails.getUsername());
+		claims.put("username", userDetails.getUsername());
 		claims.put("created", new Date(System.currentTimeMillis()));
 
 		return Jwts.builder().setClaims(claims).setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
