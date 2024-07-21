@@ -8,6 +8,7 @@ import {RegisterComponent} from "./components/user/register/register.component";
 import {MainStudentComponent} from "./components/main-student/main-student.component";
 import {FakultetComponent} from "./components/home-page/fakultet/fakultet.component";
 import {StudijskiProgramComponent} from "./components/home-page/studijski-program/studijski-program.component";
+import {AdminProfileComponent} from "./components/admin/admin-profile/admin-profile.component";
 
 export const routes: Routes = [
   {
@@ -35,6 +36,13 @@ export const routes: Routes = [
         component: StudijskiProgramComponent
       }
     ]
+  },
+  {
+    path:"admin",
+    component: AdminProfileComponent,
+    canActivate:[authGuard],data:{
+      allowedRoles:["ROLE_ADMIN"]
+    }
   },
   {path: "main", component: MainStudentComponent,canActivate:[authGuard],data:{
     allowedRoles:["ROLE_NASTAVNIK","ROLE_ADMIN"]
