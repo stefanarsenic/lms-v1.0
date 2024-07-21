@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {UniverzitetService} from "../../../services/univerzitet.service";
+import {Univerzitet} from "../../../model/univerzitet";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-o-univerzitetu',
@@ -7,6 +10,6 @@ import { Component } from '@angular/core';
   templateUrl: './o-univerzitetu.component.html',
   styleUrl: './o-univerzitetu.component.css'
 })
-export class OUniverzitetuComponent {
+export class OUniverzitetuComponent{
 
 }

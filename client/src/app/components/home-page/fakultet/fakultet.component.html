@@ -1,1 +1,13 @@
-<p>fakultet works!</p>
+<body>
+<div class="flexbox">
+  <div class="container">
+    <h1>{{fakultet.naziv}}</h1>
+    <div *ngFor="let studijskiProgram of fakultet.studijskiProgrami" class="card">
+      <button (click)="getStudijskiProgram(studijskiProgram.id)" class="card-btn">{{studijskiProgram.naziv}}</button>
+    </div>
+    <div class="studijski-program-container">
+      {{studijskiProgram.opis}}
+    </div>
+  </div>
+</div>
+</body>

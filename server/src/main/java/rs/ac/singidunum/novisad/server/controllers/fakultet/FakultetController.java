@@ -43,9 +43,9 @@ public class FakultetController extends GenericController<Fakultet, Long, Fakult
         entity.getUniverzitet().setFakulteti(Collections.emptySet());
         FakultetDto fakultetDto = EntityDtoMapper.convertToDto(entity, FakultetDto.class);
         fakultetDto.setStudijskiProgrami(Collections.emptySet());
-        fakultetDto.setNastavnik(EntityDtoMapper.convertToDto(entity.getDekan(), NastavnikDto.class));
-        fakultetDto.setAdresa(EntityDtoMapper.convertToDto(entity.getAdresa(), AdresaDto.class));
-        fakultetDto.setUniverzitet(EntityDtoMapper.convertToDto(entity.getUniverzitet(), UniverzitetDto.class));
+        //fakultetDto.setNastavnik(EntityDtoMapper.convertToDto(entity.getDekan(), NastavnikDto.class));
+        //fakultetDto.setAdresa(EntityDtoMapper.convertToDto(entity.getAdresa(), AdresaDto.class));
+        //fakultetDto.setUniverzitet(EntityDtoMapper.convertToDto(entity.getUniverzitet(), UniverzitetDto.class));
 
         Set<StudijskiProgramDto> studijskiProgramDtos = new HashSet<>(Collections.emptySet());
 

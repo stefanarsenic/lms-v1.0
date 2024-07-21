@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Singidunum University Login</title>
 </head>
 <body>
 <div class="container">
   <div class="header">
     <div class="logo-container">
       <div class="logo"></div>
-      <div class="logo-text">Univerzitet Singidunum</div>
+      <div class="logo-text">{{univerzitet[0].naziv}}</div>
     </div>
     <div class="nav">
       <a class="link" routerLink="o-univerzitetu">O Univerzitetu</a>
-      <a class="link" href="#">Lista Fakulteta</a>
+      <div class="custom-select-wrapper">
+        <select [(ngModel)]="selectedFakultetId" (change)="onSelectFakultet($event)" class="custom-select">
+          <option *ngFor="let fakultet of univerzitet[0].fakulteti" [value]="fakultet.id">{{fakultet.naziv}}</option>
+        </select>
+      </div>
       <a class="login-btn" routerLink="login">Login</a>
-      <a class="login-btn" routerLink="register">Register</a>
-      test notifikacija
+      <a class="register-btn" routerLink="register">Register</a>
     </div>
   </div>
 </div>

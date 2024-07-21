@@ -15,7 +15,6 @@ import java.util.Set;
 public class NastavnikDto implements Serializable {
     private Long id;
     private String korisnickoIme;
-    private String lozinka;
     private String email;
     private String ime;
     private String prezime;

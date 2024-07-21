@@ -24,7 +24,7 @@ public class Univerzitet {
     private Long id;
     private String naziv;
     private LocalDateTime datumOsnivanja;
-    @OneToOne
+    @ManyToOne
     private Adresa adresa;
     @OneToMany(mappedBy = "univerzitet",cascade = CascadeType.ALL)
     private Set<Fakultet> fakulteti;

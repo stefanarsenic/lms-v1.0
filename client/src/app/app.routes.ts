@@ -9,6 +9,7 @@ import {MainStudentComponent} from "./components/main-student/main-student.compo
 import {FakultetComponent} from "./components/home-page/fakultet/fakultet.component";
 import {StudijskiProgramComponent} from "./components/home-page/studijski-program/studijski-program.component";
 import {AdminProfileComponent} from "./components/admin/admin-profile/admin-profile.component";
+import {OUniverzitetuComponent} from "./components/home-page/o-univerzitetu/o-univerzitetu.component";
 
 export const routes: Routes = [
   {
@@ -18,6 +19,10 @@ export const routes: Routes = [
       {
         path: "login",
         component: LoginComponent
+      },
+      {
+        path: "o-univerzitetu",
+        component: OUniverzitetuComponent
       },
       {
         path: "fakultet",
