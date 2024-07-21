@@ -6,6 +6,8 @@ import {authGuard} from "./guards/auth.guard";
 import {UserProfileComponent} from "./components/user/user-profile/user-profile.component";
 import {RegisterComponent} from "./components/user/register/register.component";
 import {MainStudentComponent} from "./components/main-student/main-student.component";
+import {FakultetComponent} from "./components/home-page/fakultet/fakultet.component";
+import {StudijskiProgramComponent} from "./components/home-page/studijski-program/studijski-program.component";
 
 export const routes: Routes = [
   {
@@ -15,6 +17,22 @@ export const routes: Routes = [
       {
         path: "login",
         component: LoginComponent
+      },
+      {
+        path: "fakultet",
+        component: FakultetComponent
+      },
+      {
+        path: "fakultet/:id",
+        component: FakultetComponent
+      },
+      {
+        path: "studijski-program",
+        component: StudijskiProgramComponent
+      },
+      {
+        path: "studijski-program/:id",
+        component: StudijskiProgramComponent
       }
     ]
   },
