@@ -18,4 +18,7 @@ export class KorisnikService {
     return this.http.post("http://localhost:8080/api/register",korisnik)
   }
 
+  getUsers(){
+    return this.http.get("http://localhost:8080/api/korisnici")
+  }
 }

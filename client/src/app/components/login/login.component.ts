@@ -23,6 +23,8 @@ export class LoginComponent {
     this.loginService.login(this.forma.value).subscribe(value => {
       if(this.loginService.proveraUloga(["ROLE_REGULAR"])){
         this.router.navigate(["/korisnik"])
+      }else if(this.loginService.proveraUloga(["ROLE_ADMIN"])){
+        this.router.navigate(["/admin"])
       }else {
         //this.router.navigate(["/main"])
       }

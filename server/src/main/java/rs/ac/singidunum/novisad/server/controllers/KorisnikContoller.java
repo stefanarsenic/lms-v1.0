@@ -93,4 +93,10 @@ public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Lo
         dto.setLozinka(passwordEncoder.encode(lozinka));
         return super.create(dto);
     }
+
+    @Override
+    @RequestMapping(path = "/korisnici",method = RequestMethod.GET)
+    public ResponseEntity<Iterable<RegistrovaniKorisnikDto>> findAll() throws IllegalAccessException, InstantiationException {
+        return super.findAll();
+    }
 }
