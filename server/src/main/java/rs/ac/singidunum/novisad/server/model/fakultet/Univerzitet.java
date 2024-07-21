@@ -23,7 +23,7 @@ public class Univerzitet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String naziv;
-    private LocalDateTime datumOsnovanja;
+    private LocalDateTime datumOsnivanja;
     @OneToOne
     private Adresa adresa;
     @OneToMany(mappedBy = "univerzitet",cascade = CascadeType.ALL)

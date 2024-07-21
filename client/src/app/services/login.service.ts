@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {tap} from "rxjs";
+import {Router} from "@angular/router";
 
 
 @Injectable({
@@ -10,14 +11,15 @@ export class LoginService {
 
 
   korisnik=null
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private router: Router) { }
 
   login(korisnik:any){
     return this.http.post("http://localhost:8080/api/login",korisnik,{ responseType: 'text' }).pipe(
       tap(
         token=>{
           localStorage.setItem('token', token);
-          this.korisnik=JSON.parse(atob(token.split(".")[1]))
+          this.korisnik=JSON.parse(atob(token.split(".")[1]));
+          this.router.navigate(["/main"]);
         }
       )
     );

@@ -23,8 +23,10 @@ public class RegistrovaniKorisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String korisnickoIme;
     private String lozinka;
+    @Column(unique = true)
     private String email;
     private String ime;
     private String prezime;

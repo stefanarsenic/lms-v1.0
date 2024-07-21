@@ -11,7 +11,7 @@ body {
 }
 
 .header {
-  width: 80%;
+  width: 60%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -76,7 +76,7 @@ body {
 
 .container {
   margin: 0 auto;
-  width: 80%;
+  width: 60%;
   background-color: #dfe8f1;
   padding: 50px;
   text-align: center;

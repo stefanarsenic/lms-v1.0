@@ -3,13 +3,13 @@ import {TestService} from "../../services/test.service";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-main',
+  selector: 'app-main-student',
   standalone: true,
   imports: [],
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+  templateUrl: './main-student.component.html',
+  styleUrl: './main-student.component.css'
 })
-export class MainComponent {
+export class MainStudentComponent {
 
   constructor(private testService:TestService, private router: Router) {
   }
