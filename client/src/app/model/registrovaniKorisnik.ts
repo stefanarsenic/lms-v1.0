@@ -1,7 +1,7 @@
 import {PravoPristupa} from "./pravoPristupa";
 
 export interface RegistrovaniKorisnik {
-  id: number,
+  id: number|null,
   korisnickoIme: string,
   lozinka: string,
   email: string,

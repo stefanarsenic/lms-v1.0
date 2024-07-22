@@ -1,4 +1,4 @@
-package rs.ac.singidunum.novisad.server.controllers;
+package rs.ac.singidunum.novisad.server.controllers.security;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,4 +99,5 @@ public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Lo
     public ResponseEntity<Iterable<RegistrovaniKorisnikDto>> findAll() throws IllegalAccessException, InstantiationException {
         return super.findAll();
     }
+
 }

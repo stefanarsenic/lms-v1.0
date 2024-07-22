@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {TestService} from "../../services/test.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -11,15 +10,9 @@ import {Router} from "@angular/router";
 })
 export class MainStudentComponent {
 
-  constructor(private testService:TestService, private router: Router) {
+  constructor(private router: Router) {
   }
 
-
-  getNastavniciTest(){
-    this.testService.getNastavnici().subscribe(r=>{
-      console.log(r)
-    })
-  }
 
   logout(){
     localStorage.removeItem("token")

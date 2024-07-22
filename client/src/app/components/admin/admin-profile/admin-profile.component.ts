@@ -3,13 +3,15 @@ import {KorisnikService} from "../../../services/korisnik.service";
 import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {UsersComponent} from "../users/users.component";
+import {Button} from "primeng/button";
 
 @Component({
   selector: 'app-admin-profile',
   standalone: true,
   imports: [
     NgIf,
-    UsersComponent
+    UsersComponent,
+    Button
   ],
   templateUrl: './admin-profile.component.html',
   styleUrl: './admin-profile.component.css'

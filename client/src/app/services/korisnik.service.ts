@@ -23,4 +23,8 @@ export class KorisnikService {
   getAll(){
     return this.http.get("http://localhost:8080/api/korisnici")
   }
+
+  delete(id:number){
+    return this.http.delete(`http://localhost:8080/api/${id}`);
+  }
 }
