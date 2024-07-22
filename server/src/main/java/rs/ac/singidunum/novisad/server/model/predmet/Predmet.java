@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -27,16 +28,21 @@ public class Predmet {
     private Integer drugiObliciNastave;
     private Integer istrazivackiRad;
     private Integer ostaliCasovi;
-    @OneToOne
+    @ManyToOne
     private Nastavnik nastavnik;
-    @OneToOne
+    @ManyToOne
     private Nastavnik asistent;
     @OneToMany(mappedBy = "predmet")
     private Set<Ishod> silabus;
-    @OneToMany(mappedBy = "predmet", cascade = CascadeType.ALL)
-    private Set<Predmet> preduslov;
+    @ManyToMany
+    @JoinTable(
+            name = "preduslov",
+            joinColumns = @JoinColumn(name = "predmet_id"),
+            inverseJoinColumns = @JoinColumn(name = "preduslov_id")
+    )
+    private Set<Predmet> preduslov = new HashSet<>();
+    @ManyToMany(mappedBy = "preduslov")
+    private Set<Predmet> predmeti = new HashSet<>();
     @OneToMany(mappedBy = "predmet")
     private Set<PredmetPlanaZaGodinu> planovi;
-    @ManyToOne
-    private Predmet predmet;
 }
