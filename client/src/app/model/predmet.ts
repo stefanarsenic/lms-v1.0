@@ -1,5 +1,6 @@
 import {Nastavnik} from "./nastavnik";
 import {Ishod} from "./ishod";
+import {PredmetPlanaZaGodinu} from "./predmetPlanaZaGodinu";
 
 export interface Predmet {
   id: number,

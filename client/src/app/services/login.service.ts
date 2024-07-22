@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {tap} from "rxjs";
 import {Router} from "@angular/router";
+import {isTokenExpired} from "./auth.utils";
 
 
 @Injectable({
@@ -9,7 +10,7 @@ import {Router} from "@angular/router";
 })
 export class LoginService {
 
-
+  private token: string = 'token';
   korisnik=null
   constructor(private http:HttpClient, private router: Router) { }
 
@@ -26,6 +27,9 @@ export class LoginService {
   }
 
   proveraUloga(zahtevaneUloge:string[]){
+    const token: string | null = localStorage.getItem('token');
+    this.korisnik = (token) ?  JSON.parse(atob(token.split(".")[1])) : null;
+
     if(this.korisnik){
       let zahtevaneUlogeSet=new Set<string>(zahtevaneUloge)
       let role=new Set<string>(this.korisnik["role"])
@@ -45,5 +49,20 @@ export class LoginService {
 
     return false
   }
+  public getToken(): string | null {
+    return localStorage.getItem(this.token);
+  }
 
+  public saveToken(token: string): void {
+    localStorage.setItem(this.token, token);
+  }
+
+  public clearToken(): void {
+    localStorage.removeItem(this.token);
+  }
+
+  public isAuthenticated(): boolean {
+    const token = this.getToken();
+    return token != null && !isTokenExpired(token);
+  }
 }

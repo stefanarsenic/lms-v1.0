@@ -1,5 +1,6 @@
 import {Fakultet} from "./fakultet";
 import {Nastavnik} from "./nastavnik";
+import {GodinaStudija} from "./godinaStudija";
 
 export interface StudijskiProgram {
   id: number,

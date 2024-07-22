@@ -3,11 +3,12 @@ import {inject} from "@angular/core";
 import {LoginService} from "../services/login.service";
 
 export const authGuard: CanActivateFn = (route, state) => {
-  let loginService=inject(LoginService)
-  let router=inject(Router)
-  if (loginService.proveraUloga(route.data["allowedRoles"])){
-    return true
-  }
+  let loginService: LoginService = inject(LoginService);
+  let router: Router = inject(Router);
 
-  return router.createUrlTree(["/login"]);
+  if (loginService.isAuthenticated() && loginService.proveraUloga(route.data["allowedRoles"])){
+    return true;
+  }
+  router.navigate(['/login']);
+  return false;
 };

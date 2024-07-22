@@ -1,3 +1,5 @@
+import {PravoPristupa} from "./pravoPristupa";
+
 export interface RegistrovaniKorisnik {
   id: number,
   korisnickoIme: string,

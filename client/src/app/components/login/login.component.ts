@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {LoginService} from "../../services/login.service";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
@@ -10,14 +10,17 @@ import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent{
 
   forma=new FormGroup({
     "korisnickoIme":new FormControl(),
     "lozinka":new FormControl()
   })
 
-  constructor(private router: Router,private loginService:LoginService) {}
+  constructor(
+    private router: Router,
+    private loginService:LoginService
+  ) {}
 
   login(){
     this.loginService.login(this.forma.value).subscribe(value => {
@@ -26,9 +29,10 @@ export class LoginComponent {
       }else if(this.loginService.proveraUloga(["ROLE_ADMIN"])){
         this.router.navigate(["/admin"])
       }else {
-        //this.router.navigate(["/main"])
+        this.router.navigate(["/main"])
       }
 
     })
   }
+
 }

@@ -24,6 +24,7 @@ public class StudijskiProgram {
     private Long id;
     private String naziv;
     @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String opis;
     @ManyToOne
     private Fakultet fakultet;
