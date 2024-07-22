@@ -15,6 +15,7 @@ export class AppGenerickoComponent<T extends {id:null|number}> {
   selectedItem: T | undefined;
   itemForEditing: T | undefined;
 
+  tempItems:T[]=[]
   service2:any=null
   initialize(service: any) {
     this.update(service);
@@ -24,8 +25,10 @@ export class AppGenerickoComponent<T extends {id:null|number}> {
   update(service: any) {
     (service.getAll() as Observable<T[]>).subscribe(data => {
       this.items = data;
+      this.tempItems=[...data]
       this.headers = Object.keys(data[0]);
       this.selectedItem = data[0];
+      console.log(data)
     });
   }
 
