@@ -29,4 +29,6 @@ public class EvaluacijaZnanja {
     private Fajl instrumentEvaluacije;
     @OneToOne
     private TipEvaluacije tipEvaluacije;
+    @ManyToOne
+    private RealizacijaPredmeta realizacijaPredmeta;
 }

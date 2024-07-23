@@ -4,6 +4,7 @@
   border-radius: 5px;
   max-width: 400px;
   margin: auto;
+  backdrop-filter: blur(6px);
 }
 
 .login-form h2 {

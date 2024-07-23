@@ -50,7 +50,6 @@ public class UniverzitetController extends GenericController<Univerzitet, Long, 
             Set<StudijskiProgramDto> studijskiProgrami = new HashSet<>(Collections.emptySet());
             for(StudijskiProgram studijskiProgram : fakultet.getStudijskiProgrami()){
                 studijskiProgram.setFakultet(null);
-                studijskiProgram.getGodineStudija().forEach(godinaStudija -> godinaStudija.setStudijskiProgram(null));
                 StudijskiProgramDto studijskiProgramDto = EntityDtoMapper.convertToDto(studijskiProgram, StudijskiProgramDto.class);
                 studijskiProgramDto.setRukovodilac(EntityDtoMapper.convertToDto(studijskiProgram.getRukovodilac(), NastavnikDto.class));
                 studijskiProgrami.add(studijskiProgramDto);

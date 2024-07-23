@@ -1,6 +1,7 @@
 body {
   display: flex;
   justify-content: center;
+  max-height: 100%;
 }
 
 .container {
@@ -10,11 +11,50 @@ body {
   padding: 50px;
   width: 100%;
   text-align: center;
+  max-height: 68vh;
+  overflow: auto;
+}
+
+.container h1 {
+  color: #333;
+}
+
+.studijski-program-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.studijski-program-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.studijski-program-header h2 {
+  margin: 10px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.studijski-program-description {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #666;
+  text-align: justify;
+  width: auto;
+  padding: 20px;
+}
+
+.studijski-program-description p {
+  margin: 0;
 }
 
 .flexbox {
   width: 60%;
-  height: 500px;
   display: flex;
   justify-content: center;
 }
@@ -30,7 +70,46 @@ body {
   background-color: transparent;
   border: 0;
   transition: ease-in 0.1s;
-  border-bottom: 1px;
+  border-bottom: 1px solid transparent;
+}
+
+.rukovodilac-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.rukovodilac-text p {
+  color: #333;
+  opacity: 60%;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.rukovodilac-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.rukovodilac-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.rukovodilac-biography {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.rukovodilac-biography p {
+  margin: 0;
 }
 
 .card-btn:hover {
@@ -42,8 +121,5 @@ body {
   border-bottom: 1px solid black;
 }
 
-.studijski-program-container {
-  padding: 50px;
-}
 
 

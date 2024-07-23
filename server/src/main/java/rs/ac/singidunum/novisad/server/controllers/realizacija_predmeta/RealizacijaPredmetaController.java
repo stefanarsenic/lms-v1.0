@@ -35,12 +35,8 @@ public class RealizacijaPredmetaController extends GenericController<Realizacija
     protected RealizacijaPredmetaDto convertToDto(RealizacijaPredmeta entity) throws IllegalAccessException, InstantiationException {
         RealizacijaPredmetaDto r = EntityDtoMapper.convertToDto(entity, RealizacijaPredmetaDto.class);
         PredmetDto predmetDto = EntityDtoMapper.convertToDto(entity.getPredmet(), PredmetDto.class);
-        TerminNastaveDto terminNastaveDto = EntityDtoMapper.convertToDto(entity.getTerminNastave(), TerminNastaveDto.class);
-        EvaluacijaZnanjaDto evaluacijaZnanjaDto = EntityDtoMapper.convertToDto(entity.getEvaluacijaZnanja(), EvaluacijaZnanjaDto.class);
 
         r.setPredmet(predmetDto);
-        r.setTerminNastave(terminNastaveDto);
-        r.setEvaluacijaZnanja(evaluacijaZnanjaDto);
 
         return r;
     }
@@ -48,13 +44,9 @@ public class RealizacijaPredmetaController extends GenericController<Realizacija
     @Override
     protected RealizacijaPredmeta convertToEntity(RealizacijaPredmetaDto dto) throws IllegalAccessException, InstantiationException {
         Predmet predmet = predmetService.findById(dto.getPredmet().getId()).orElseThrow();
-        TerminNastave terminNastave = terminNastaveService.findById(dto.getTerminNastave().getId()).orElseThrow();
-        EvaluacijaZnanja evaluacijaZnanja = evaluacijaZnanjaService.findById(dto.getEvaluacijaZnanja().getId()).orElseThrow();
 
         RealizacijaPredmeta r = EntityDtoMapper.convertToEntity(dto, RealizacijaPredmeta.class);
         r.setPredmet(predmet);
-        r.setTerminNastave(terminNastave);
-        r.setEvaluacijaZnanja(evaluacijaZnanja);
 
         return r;
     }

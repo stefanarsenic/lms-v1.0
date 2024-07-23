@@ -19,5 +19,4 @@ public class StudentDto implements Serializable {
     private String email;
     private AdresaDto adresa;
     private LocalDateTime datumRodjenja;
-    private GodinaStudijaDto godinaStudija;
 }

@@ -10,18 +10,12 @@ import {LoginService} from "./services/login.service";
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent{
   title = 'client';
 
   constructor(
     private loginService: LoginService,
     private router: Router
   ) {
-  }
-
-  ngOnInit(): void {
-    if (!this.loginService.isAuthenticated()) {
-      this.router.navigate(['/login']);
-    }
   }
 }

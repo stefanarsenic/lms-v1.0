@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.generic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public abstract  class GenericController <T,ID,D>{
+
     protected GenericService<T, ID> service;
 
     public GenericController(GenericService<T, ID> service) {

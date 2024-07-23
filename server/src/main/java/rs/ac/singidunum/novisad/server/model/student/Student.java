@@ -17,11 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 public class Student extends RegistrovaniKorisnik {
-
     private String jmbg;
     @ManyToOne
     private Adresa adresa;
-    @ManyToOne
-    private GodinaStudija godinaStudija;
-
 }

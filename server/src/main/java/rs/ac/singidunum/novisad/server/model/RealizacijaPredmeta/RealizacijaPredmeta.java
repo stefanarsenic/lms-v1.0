@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,8 +22,9 @@ public class RealizacijaPredmeta {
     private Long id;
     @OneToOne
     private Predmet predmet;
-    @OneToOne
-    private TerminNastave terminNastave;
-    @OneToOne
-    private EvaluacijaZnanja evaluacijaZnanja;
+    @OneToMany(mappedBy = "realizacijaPredmeta")
+    private Set<TerminNastave> terminiNastave;
+    @OneToMany(mappedBy = "realizacijaPredmeta")
+    private Set<EvaluacijaZnanja> evaluacijeZnanja;
+    //TODO: konacna ocena na predmetu
 }

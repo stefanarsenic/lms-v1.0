@@ -1,5 +1,7 @@
 body {
   height: 100vh;
-  background: url('assets/bg-image.png') no-repeat center center fixed;
+  background-image: url('assets/bg-image.png');
   background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
 }

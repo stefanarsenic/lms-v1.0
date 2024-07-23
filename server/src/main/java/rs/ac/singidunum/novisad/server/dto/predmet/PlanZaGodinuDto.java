@@ -1,7 +1,7 @@
 package rs.ac.singidunum.novisad.server.dto.predmet;
 
 import lombok.*;
-import rs.ac.singidunum.novisad.server.dto.student.GodinaStudijaDto;
+import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -13,6 +13,6 @@ import java.util.Set;
 public class PlanZaGodinuDto implements Serializable {
     private Long id;
     private Integer godina;
-    private GodinaStudijaDto godinaStudija;
     private Set<PredmetPlanaZaGodinuDto> predmetiPlanaZaGodinu;
+    private StudijskiProgramDto studijskiProgram;
 }

@@ -4,6 +4,7 @@ import {UniverzitetService} from "../../services/univerzitet.service";
 import {Univerzitet} from "../../model/univerzitet";
 import {NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {DropdownChangeEvent, DropdownModule} from 'primeng/dropdown';
 
 @Component({
   selector: 'app-home-page',
@@ -12,7 +13,8 @@ import {FormsModule} from "@angular/forms";
     RouterOutlet,
     RouterLink,
     NgForOf,
-    FormsModule
+    FormsModule,
+    DropdownModule
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
@@ -24,7 +26,7 @@ export class HomePageComponent implements OnInit{
   ) {}
 
   univerzitet: Univerzitet[] = [];
-  selectedFakultetId: number | undefined;
+  selectedFakultet: any = {};
 
   ngOnInit(): void {
     this.univerzitetService.getAll().subscribe(data => {
@@ -33,9 +35,10 @@ export class HomePageComponent implements OnInit{
     })
   }
 
-  onSelectFakultet(event: Event){
-    if(this.selectedFakultetId){
-      this.router.navigate(['/fakultet', this.selectedFakultetId])
+  onSelectFakultet(event: DropdownChangeEvent){
+    console.log(this.selectedFakultet);
+    if(this.selectedFakultet){
+      this.router.navigate(['/fakultet', this.selectedFakultet.id])
     }
   }
 }

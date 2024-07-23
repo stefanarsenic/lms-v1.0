@@ -1,7 +1,6 @@
-package rs.ac.singidunum.novisad.server.dto.predmet;
+package rs.ac.singidunum.novisad.server.dto.realizacija_predmeta;
 
 import lombok.*;
-import rs.ac.singidunum.novisad.server.dto.student.GodinaStudijaDto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -15,5 +14,4 @@ public class IspitniRokDto implements Serializable {
     private String naziv;
     private LocalDate pocetak;
     private LocalDate kraj;
-    private GodinaStudijaDto godinaStudija;
 }

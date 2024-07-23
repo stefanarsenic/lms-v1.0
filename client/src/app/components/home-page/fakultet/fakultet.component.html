@@ -5,9 +5,26 @@
     <div *ngFor="let studijskiProgram of fakultet.studijskiProgrami" class="card">
       <button (click)="getStudijskiProgram(studijskiProgram.id)" class="card-btn">{{studijskiProgram.naziv}}</button>
     </div>
-    <div class="studijski-program-container">
-      {{studijskiProgram.opis}}
+    <div class="rukovodilac-container" *ngIf="rukovodilac">
+      <div class="rukovodilac-text">
+        <p>RUKOVODILAC</p>
+      </div>
+      <div class="rukovodilac-header">
+        <h2>{{ rukovodilac.ime }} {{ rukovodilac.prezime }}</h2>
+      </div>
+      <div class="rukovodilac-biography">
+        <p>{{ rukovodilac.biografija }}</p>
+      </div>
     </div>
+    <div class="studijski-program-container" *ngIf="studijskiProgram">
+      <div class="studijski-program-header">
+        <h2>Opis Studijskog Programa</h2>
+      </div>
+      <div class="studijski-program-description">
+        <p>{{ studijskiProgram.opis }}</p>
+      </div>
+    </div>
+
   </div>
 </div>
 </body>

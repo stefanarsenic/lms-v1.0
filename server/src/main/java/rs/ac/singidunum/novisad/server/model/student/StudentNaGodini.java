@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,8 +22,9 @@ public class StudentNaGodini {
     private Long id;
     private LocalDateTime datumUpisa;
     private String brojIndeksa;
+    private Integer godinaStudija;
     @OneToOne
     private Student student;
     @ManyToOne
-    private GodinaStudija godinaStudija;
+    private StudijskiProgram studijskiProgram;
 }

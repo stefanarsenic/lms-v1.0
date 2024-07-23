@@ -28,4 +28,6 @@ public class TerminNastave {
     private TipNastave tipNastave;
     @OneToOne
     private NastavniMaterijal nastavniMaterijal;
+    @ManyToOne
+    private RealizacijaPredmeta realizacijaPredmeta;
 }

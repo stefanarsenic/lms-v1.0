@@ -6,11 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.ac.singidunum.novisad.server.model.fakultet.Fakultet;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
-import rs.ac.singidunum.novisad.server.model.student.GodinaStudija;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -23,6 +19,7 @@ public class StudijskiProgram {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String naziv;
+    private Integer godineTrajanja;
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String opis;
@@ -30,6 +27,4 @@ public class StudijskiProgram {
     private Fakultet fakultet;
     @OneToOne
     private Nastavnik rukovodilac;
-    @OneToMany(mappedBy = "studijskiProgram") //TODO:Pitati asistenra za ovo
-    private Set<GodinaStudija> godineStudija;
 }
