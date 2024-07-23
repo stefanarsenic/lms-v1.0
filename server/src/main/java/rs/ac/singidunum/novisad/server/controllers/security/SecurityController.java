@@ -25,8 +25,8 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200")
-public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Long, RegistrovaniKorisnikDto> {
-    public KorisnikContoller(GenericService<RegistrovaniKorisnik, Long> service) {
+public class SecurityController extends GenericController<RegistrovaniKorisnik,Long, RegistrovaniKorisnikDto> {
+    public SecurityController(GenericService<RegistrovaniKorisnik, Long> service) {
         super(service);
         this.korisnikService= (KorisnikService) service;
     }
@@ -92,12 +92,6 @@ public class KorisnikContoller extends GenericController<RegistrovaniKorisnik,Lo
         String lozinka=dto.getLozinka();
         dto.setLozinka(passwordEncoder.encode(lozinka));
         return super.create(dto);
-    }
-
-    @Override
-    @RequestMapping(path = "/korisnici",method = RequestMethod.GET)
-    public ResponseEntity<Iterable<RegistrovaniKorisnikDto>> findAll() throws IllegalAccessException, InstantiationException {
-        return super.findAll();
     }
 
 }

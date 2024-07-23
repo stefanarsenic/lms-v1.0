@@ -26,6 +26,9 @@ import {PasswordModule} from "primeng/password";
 import {DividerModule} from "primeng/divider";
 import {UlogaService} from "../../../services/uloga.service";
 import {Uloga} from "../../../model/uloga";
+import {Observable} from "rxjs";
+import {PravoPristupa} from "../../../model/pravoPristupa";
+
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -61,11 +64,13 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
 
   selectedUsers!: RegistrovaniKorisnik[] | null;
 
-  selektovaneUloge!:string[]
-   uloge!:Uloga[]
+  selektovaneUloge!:Uloga[]
+  uloge!:Uloga[]
   korisnik!:RegistrovaniKorisnik
   submitted: boolean = false;
   korisnikDialog: boolean = false;
+  pravoPristupa:PravoPristupa={id:undefined,uloga:undefined,registrovaniKorisnik:null}
+  korisnikZaEditovanje:any=undefined;
   constructor(private injector: Injector,private messageService: MessageService, private confirmationService: ConfirmationService,
               private ulogeService:UlogaService
   ) {
@@ -79,6 +84,7 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
   }
 
   ngOnInit() {
+
   }
 
   applyFilterGlobal($event: any, stringVal: any) {
@@ -86,15 +92,15 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
   }
 
   openNew() {
-    this.korisnik = {id:0,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[]};
+    this.korisnik = {id:null,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[]};
     this.submitted = false;
     this.korisnikDialog = true;
   }
   editProduct(korisnik1: RegistrovaniKorisnik) {
     this.korisnik = { ...korisnik1};
     this.korisnikDialog = true;
+    this.korisnikZaEditovanje=this.korisnik;
   }
-  //todo:Dodavanje,Edit,Delete
   deleteSelectedProducts() {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected products?',
@@ -114,27 +120,46 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
   }
 
   saveProduct() {
-    this.submitted = true;
 
-    if (this.korisnik.ime?.trim()) {
-      if (this.korisnik.id) {
-        this.korisnik= this.korisnik;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-      } else {
-        this.korisnik.id = null
-        //this.korisnik.pravoPristupaSet=this.selektovaneUloge
-        this.service2.register(this.korisnik).subscribe((r:RegistrovaniKorisnik)=>{
-            console.log(r)
-        })
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+    this.submitted = true;
+    if (this.korisnikZaEditovanje === undefined) {
+      for (let uloga of this.selektovaneUloge) {
+        this.pravoPristupa.uloga=uloga;
+        this.pravoPristupa.registrovaniKorisnik=null
+        this.korisnik.pravoPristupaSet.push(this.pravoPristupa)
       }
+      console.log(this.korisnik)
+      this.service2.create(this.korisnik).subscribe((r:RegistrovaniKorisnik)=>{
+        console.log(r)
+      })
+      // (this.service2.create(this.korisnik) as Observable<any>).subscribe(() => {
+      //   this.update(this.service2);
+      //   this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+      // });
+    } else {
+      // (this.service2.update(this.korisnikZaEditovanje.id, this.korisnikZaEditovanje) as Observable<any>).subscribe(() => {
+      //   this.update(this.service2);
+      //   this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+      // });
+    }
+
+    // if (this.korisnik.ime?.trim()) {
+    //   if (this.korisnik.id) {
+    //     this.korisnik= this.korisnik;
+    //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+    //   } else {
+    //     this.korisnik.id = null
+    //     //this.korisnik.pravoPristupaSet=this.selektovaneUloge
+    //     this.service2.register(this.korisnik).subscribe((r:RegistrovaniKorisnik)=>{
+    //         console.log(r)
+    //     })
+    //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+    //   }
 
       //this.korisnik = [...this.korisnik];
-      this.korisnikDialog = false;
-      //this.korisnik = {};
+    this.korisnikDialog = false;
+    this.korisnik = {id:0,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[]};
     }
-  }
-
 
 
 }

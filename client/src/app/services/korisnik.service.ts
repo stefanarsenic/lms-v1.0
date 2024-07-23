@@ -20,11 +20,15 @@ export class KorisnikService {
     return this.http.post("http://localhost:8080/api/register",korisnik)
   }
 
+  create(korisnik:any){
+    return this.http.post("http://localhost:8080/api/korisnici/dodaj",korisnik)
+  }
+
   getAll(){
     return this.http.get("http://localhost:8080/api/korisnici")
   }
 
   delete(id:number){
-    return this.http.delete(`http://localhost:8080/api/${id}`);
+    return this.http.delete(`http://localhost:8080/api/korisnici/${id}`);
   }
 }

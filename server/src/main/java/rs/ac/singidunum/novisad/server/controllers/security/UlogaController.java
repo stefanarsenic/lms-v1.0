@@ -1,4 +1,4 @@
-package rs.ac.singidunum.novisad.server.controllers;
+package rs.ac.singidunum.novisad.server.controllers.security;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

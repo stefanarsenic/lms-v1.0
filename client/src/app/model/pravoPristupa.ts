@@ -1,8 +1,7 @@
 import {RegistrovaniKorisnik} from "./registrovaniKorisnik";
 import {Uloga} from "./uloga";
-
 export interface PravoPristupa {
-  id: number,
-  uloga: Uloga,
-  registrovaniKorisnik: RegistrovaniKorisnik
+  id: number|undefined,
+  uloga: Uloga|undefined,
+  registrovaniKorisnik: RegistrovaniKorisnik|null
 }
