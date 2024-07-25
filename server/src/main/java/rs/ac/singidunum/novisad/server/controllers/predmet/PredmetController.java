@@ -1,5 +1,9 @@
 package rs.ac.singidunum.novisad.server.controllers.predmet;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
@@ -18,7 +22,9 @@ import rs.ac.singidunum.novisad.server.services.predmet.PredmetService;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/predmet")
@@ -32,6 +38,19 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         this.ishodService = ishodService;
         this.predmetService = predmetService;
         this.predmetPlanaZaGodinuService = predmetPlanaZaGodinuService;
+    }
+
+    @GetMapping("/studijski-program/{studijskiProgramId}")
+    public ResponseEntity<List<PredmetDto>> getPredmetiByStudijskiProgram(@PathVariable Long studijskiProgramId){
+        List<Predmet> predmeti = predmetService.findPredmetiByStudijskiProgram(studijskiProgramId);
+        return PredmetiToDto(predmeti);
+    }
+    @GetMapping("/studijski-program/{studijskiProgramId}/godina/{godina}")
+    public ResponseEntity<List<PredmetDto>> getPredmetiByStudijskiProgramAndGodina(
+            @PathVariable Long studijskiProgramId,
+            @PathVariable Integer godina){
+        List<Predmet> predmeti = predmetService.findPredmetiByStudijskiProgramAndGodina(studijskiProgramId, godina);
+        return PredmetiToDto(predmeti);
     }
 
     @Override
@@ -52,12 +71,6 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         if(entity.getPreduslov() != null){
             for(Predmet predmet : entity.getPreduslov()){
                 preduslovDto.add(EntityDtoMapper.convertToDto(predmet, PredmetDto.class));
-            }
-        }
-        if(entity.getPlanovi() != null){
-            for(PredmetPlanaZaGodinu predmetPlanaZaGodinu : entity.getPlanovi()){
-                predmetPlanaZaGodinu.setPredmet(null);
-                planoviDto.add(EntityDtoMapper.convertToDto(predmetPlanaZaGodinu, PredmetPlanaZaGodinuDto.class));
             }
         }
 
@@ -94,8 +107,19 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         Predmet predmet = EntityDtoMapper.convertToEntity(dto, Predmet.class);
         predmet.setSilabus(silabus);
         predmet.setPreduslov(preduslov);
-        predmet.setPlanovi(planovi);
 
         return predmet;
+    }
+
+    private ResponseEntity<List<PredmetDto>> PredmetiToDto(List<Predmet> predmeti) {
+        List<PredmetDto> predmetiDto = predmeti.stream().map(predmet -> {
+            try {
+                return EntityDtoMapper.convertToDto(predmet, PredmetDto.class);
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+
+        return new ResponseEntity<>(predmetiDto, HttpStatus.OK);
     }
 }

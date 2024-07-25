@@ -13,6 +13,7 @@ import java.util.Set;
 public class StudijskiProgramDto implements Serializable {
     private Long id;
     private String naziv;
+    private Integer godineTrajanja;
     private String opis;
     private FakultetDto fakultet;
     private NastavnikDto rukovodilac;

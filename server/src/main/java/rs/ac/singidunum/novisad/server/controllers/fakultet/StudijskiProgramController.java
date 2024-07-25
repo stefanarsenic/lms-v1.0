@@ -1,5 +1,9 @@
 package rs.ac.singidunum.novisad.server.controllers.fakultet;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.fakultet.FakultetDto;
@@ -11,6 +15,7 @@ import rs.ac.singidunum.novisad.server.model.fakultet.Fakultet;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.services.fakultet.FakultetService;
+import rs.ac.singidunum.novisad.server.services.fakultet.StudijskiProgramService;
 import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 
 import java.util.Collections;
@@ -23,10 +28,21 @@ public class StudijskiProgramController extends GenericController<StudijskiProgr
 
     private final FakultetService fakultetService;
     private final NastavnikService nastavnikService;
-    public StudijskiProgramController(GenericService<StudijskiProgram, Long> service, FakultetService fakultetService, NastavnikService nastavnikService) {
+    private final StudijskiProgramService studijskiProgramService;
+    public StudijskiProgramController(GenericService<StudijskiProgram, Long> service, FakultetService fakultetService, NastavnikService nastavnikService, StudijskiProgramService studijskiProgramService) {
         super(service);
         this.fakultetService = fakultetService;
         this.nastavnikService = nastavnikService;
+        this.studijskiProgramService = studijskiProgramService;
+    }
+
+    @PostMapping
+    public ResponseEntity<StudijskiProgramDto> create(@RequestBody StudijskiProgramDto dto) throws IllegalAccessException, InstantiationException {
+        StudijskiProgram studijskiProgram = convertToEntity(dto);
+        studijskiProgram = studijskiProgramService.createStudijskiProgram(studijskiProgram);
+        StudijskiProgramDto savedDto = convertToDto(studijskiProgram);
+
+        return new ResponseEntity<>(savedDto, HttpStatus.CREATED);
     }
 
     @Override

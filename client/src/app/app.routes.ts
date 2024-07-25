@@ -10,6 +10,9 @@ import {FakultetComponent} from "./components/home-page/fakultet/fakultet.compon
 import {StudijskiProgramComponent} from "./components/home-page/studijski-program/studijski-program.component";
 import {AdminProfileComponent} from "./components/admin/admin-profile/admin-profile.component";
 import {OUniverzitetuComponent} from "./components/home-page/o-univerzitetu/o-univerzitetu.component";
+import {
+  OrganizacijaStudijskogProgramaComponent
+} from "./components/home-page/organizacija-studijskog-programa/organizacija-studijskog-programa.component";
 
 export const routes: Routes = [
   {
@@ -39,6 +42,11 @@ export const routes: Routes = [
       {
         path: "studijski-program/:id",
         component: StudijskiProgramComponent
+      }
+      ,
+      {
+        path: "organizacija-sp",
+        component: OrganizacijaStudijskogProgramaComponent
       }
     ]
   },

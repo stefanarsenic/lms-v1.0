@@ -1,7 +1,12 @@
 body {
   margin: 0 auto;
   font-family: Arial, sans-serif;
-  height: 100%;
+  background-image: url("../../assets/bg-image.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100vh;
+  overflow: auto;
 }
 
 .container {

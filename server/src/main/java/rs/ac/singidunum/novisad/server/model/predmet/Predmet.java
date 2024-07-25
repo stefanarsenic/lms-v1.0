@@ -43,6 +43,4 @@ public class Predmet {
     private Set<Predmet> preduslov = new HashSet<>();
     @ManyToMany(mappedBy = "preduslov")
     private Set<Predmet> predmeti = new HashSet<>();
-    @OneToMany(mappedBy = "predmet")
-    private Set<PredmetPlanaZaGodinu> planovi;
 }
