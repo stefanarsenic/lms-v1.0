@@ -12,4 +12,5 @@ public interface PlanZaGodinuRepository extends JpaRepository<PlanZaGodinu, Long
 
     PlanZaGodinu findByStudijskiProgramAndGodina(StudijskiProgram studijskiProgram, Integer godina);
     List<PlanZaGodinu> findPlanZaGodinusByStudijskiProgram(StudijskiProgram studijskiProgram);
+    void deletePlanZaGodinusByStudijskiProgram(StudijskiProgram studijskiProgram);
 }

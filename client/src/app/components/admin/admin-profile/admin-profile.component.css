@@ -7,7 +7,9 @@
 
 body {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  height: auto;
 }
 
 .dashboard-container {
@@ -16,7 +18,7 @@ body {
 }
 
 .sidebar {
-  width: 250px;
+  width: 200px;
   background-color: #343a40;
   color: white;
   display: flex;

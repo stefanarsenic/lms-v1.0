@@ -13,10 +13,9 @@
     </div>
     <ul class="sidebar-menu">
       <li><a href="#">Dashboard</a></li>
-      <li><p-button (onClick)="showComponent('one')" icon="pi pi-users" [rounded]="true" severity="info" [outlined]="true" /></li>
-      <li><a href="#">Studenti</a></li>
+      <li><a routerLink="korisnici">Korisnici</a></li>
       <li><a href="#">Profesori</a></li>
-      <li><a href="#">Studjiski Programi</a></li>
+      <li><a routerLink="studijski-programi">Studjiski Programi</a></li>
       <li><a href="#">Organizacija</a></li>
       <li><a href="#">Sifarnik</a></li>
     </ul>
@@ -49,10 +48,9 @@
           <p>{{brojKorisnika}}</p>
         </div>
       </div>
-      <div *ngIf="currentComponent === 'one'">
-        <app-users></app-users>
+      <div>
+        <router-outlet></router-outlet>
       </div>
-
     </div>
   </div>
 </div>

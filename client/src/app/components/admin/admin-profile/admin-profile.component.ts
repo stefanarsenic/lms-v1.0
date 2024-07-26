@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {KorisnikService} from "../../../services/korisnik.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {UsersComponent} from "../users/users.component";
 import {Button} from "primeng/button";
@@ -11,7 +11,9 @@ import {Button} from "primeng/button";
   imports: [
     NgIf,
     UsersComponent,
-    Button
+    Button,
+    RouterOutlet,
+    RouterLink
   ],
   templateUrl: './admin-profile.component.html',
   styleUrl: './admin-profile.component.css'
