@@ -13,6 +13,10 @@ import {OUniverzitetuComponent} from "./components/home-page/o-univerzitetu/o-un
 import {
   OrganizacijaStudijskogProgramaComponent
 } from "./components/home-page/organizacija-studijskog-programa/organizacija-studijskog-programa.component";
+import {
+  StudijskiProgramCrudComponent
+} from "./components/admin/studijski-program/studijski-program-crud/studijski-program-crud.component";
+import {UsersComponent} from "./components/admin/users/users.component";
 
 export const routes: Routes = [
   {
@@ -43,16 +47,21 @@ export const routes: Routes = [
         path: "studijski-program/:id",
         component: StudijskiProgramComponent
       }
-      ,
-      {
-        path: "organizacija-sp",
-        component: OrganizacijaStudijskogProgramaComponent
-      }
     ]
   },
   {
     path:"admin",
     component: AdminProfileComponent,
+    children: [
+      {
+        path: "studijski-programi",
+        component: StudijskiProgramCrudComponent
+      },
+      {
+        path: "korisnici",
+        component: UsersComponent
+      },
+    ],
     canActivate:[authGuard],data:{
       allowedRoles:["ROLE_ADMIN"]
     }

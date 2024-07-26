@@ -6,8 +6,8 @@ import {StudijskiProgram} from "./studijskiProgram";
 export interface Fakultet {
   id: number,
   naziv: string,
-  adresa: Adresa,
-  univerzitet: Univerzitet,
-  dekan: Nastavnik,
-  studijskiProgrami: StudijskiProgram
+  adresa?: Adresa,
+  univerzitet?: Univerzitet,
+  dekan?: Nastavnik,
+  studijskiProgrami?: StudijskiProgram
 }

@@ -2,12 +2,10 @@ package rs.ac.singidunum.novisad.server.controllers.fakultet;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.fakultet.FakultetDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
+import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
@@ -20,6 +18,7 @@ import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -45,11 +44,37 @@ public class StudijskiProgramController extends GenericController<StudijskiProgr
         return new ResponseEntity<>(savedDto, HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<StudijskiProgramDto> update(@PathVariable Long id, @RequestBody StudijskiProgramDto dto) throws IllegalAccessException, InstantiationException {
+        Optional<StudijskiProgram> entityOptional = service.findById(id);
+        if (entityOptional.isPresent()) {
+            StudijskiProgram entity = convertToEntity(dto);
+            entity = studijskiProgramService.createStudijskiProgram(entity);
+            StudijskiProgramDto updatedDto = convertToDto(entity);
+            return ResponseEntity.ok(updatedDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        Optional<StudijskiProgram> studijskiProgram = service.findById(id);
+        if (studijskiProgram.isPresent()) {
+            StudijskiProgram entity = studijskiProgram.get();
+            service.delete(entity);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @Override
     protected StudijskiProgramDto convertToDto(StudijskiProgram entity) throws IllegalAccessException, InstantiationException {
         StudijskiProgramDto studijskiProgramDto = EntityDtoMapper.convertToDto(entity, StudijskiProgramDto.class);
         entity.getFakultet().setStudijskiProgrami(Collections.emptySet());
         studijskiProgramDto.setFakultet(EntityDtoMapper.convertToDto(entity.getFakultet(), FakultetDto.class));
+        studijskiProgramDto.setRukovodilac(EntityDtoMapper.convertToDto(entity.getRukovodilac(), NastavnikDto.class));
 
         return studijskiProgramDto;
     }

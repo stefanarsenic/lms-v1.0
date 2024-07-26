@@ -1,0 +1,233 @@
+<div class="card">
+  <p-toast />
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p-button
+        severity="success"
+        label="New"
+        icon="pi pi-plus"
+        class="mr-2"
+        (onClick)="openNew()" />
+      <p-button
+        severity="danger"
+        label="Delete"
+        icon="pi pi-trash"
+        (onClick)="deleteSelectedPrograms()"
+        [disabled]="!selectedPrograms || !selectedPrograms.length" />
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <p-fileUpload
+        mode="basic"
+        accept="image/*"
+        [maxFileSize]="1000000"
+        label="Import"
+        chooseLabel="Import"
+        class="mr-2 inline-block" />
+      <p-button
+        severity="help"
+        label="Export"
+        icon="pi pi-upload" />
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="studijskiProgrami"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['id', 'naziv', 'opis', 'godineTrajanja', 'rukovodilac', 'fakultet']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selectedPrograms"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h5 class="m-0">Administracija Studijskih Programa</h5>
+        <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Filter" />
+                </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox />
+        </th>
+        <th pSortableColumn="id" style="min-width:15rem">
+          ID <p-sortIcon field="id" />
+        </th>
+        <th pSortableColumn="naziv" style="min-width:15rem">
+          NAZIV <p-sortIcon field="naziv" />
+        </th>
+        <th pSortableColumn="opis">
+          OPIS<p-sortIcon field="opis" />
+        </th>
+        <th pSortableColumn="godineTrajanja">
+          GODINE TRAJANJA<p-sortIcon field="godineTrajanja" />
+        </th>
+        <th pSortableColumn="rukovodilac" style="min-width:10rem">
+          RUKOVODILAC<p-sortIcon field="rukovodilac" />
+        </th>
+        <th pSortableColumn="fakultet" style="min-width:10rem">
+          FAKULTET<p-sortIcon field="fakultet" />
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="studijskiProgrami" />
+        </td>
+        <td>
+          {{ item.id }}
+        </td>
+        <td>
+          {{ item.naziv }}
+        </td>
+        <td>
+          {{ item.opis }}
+        </td>
+        <td>
+          {{ item.godineTrajanja }}
+        </td>
+        <td>
+          {{ item.rukovodilac }}
+        </td>
+        <td>
+          {{ item.fakultet }}
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            [outlined]="true"
+            severity="success"
+            (onClick)="editStudijskiProgram(item)" />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [rounded]="true"
+            [outlined]="true"
+            (onClick)="obrisiStudijskiProgram(item.id)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ studijskiProgrami ? studijskiProgrami.length : 0 }} users.
+      </div>
+    </ng-template>
+  </p-table>
+
+  <p-dialog
+    [(visible)]="studijskiProgramDialog"
+    [style]="{
+     width: '450px',
+     height: 'auto'
+     }"
+    header="Korisicnike informacije"
+    [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field">
+        <p-dropdown
+          [options]="nastavnici"
+          [(ngModel)]="rukovodilac"
+          [filter]="true"
+          optionLabel="punoIme"
+          filterBy="ime,prezime"
+          [showClear]="true"
+          placeholder="Izaberite nastavnika">
+          <ng-template pTemplate="selectedItem" let-selectedNastavnik>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedNastavnik.ime }} {{selectedNastavnik.prezime}}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+        <small class="p-error" *ngIf="submitted && !studijskiProgram.rukovodilac">
+          Nastavnik is required.
+        </small>
+      </div>
+      <div class="field">
+        <p-dropdown
+          [options]="fakulteti"
+          [(ngModel)]="fakultet"
+          [filter]="true"
+          optionLabel="naziv"
+          filterBy="naziv"
+          [showClear]="true"
+          placeholder="Izaberite fakultet">
+          <ng-template pTemplate="selectedItem" let-selectedFakultet>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedFakultet.naziv }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+        <small class="p-error" *ngIf="submitted && !studijskiProgram.fakultet">
+          Fakultet is required.
+        </small>
+      </div>
+      <div class="field">
+        <label for="naziv">NAZIV</label>
+        <input
+          type="text"
+          pInputText
+          id="naziv"
+          [(ngModel)]="studijskiProgram.naziv"
+          required
+          autofocus />
+        <small class="p-error" *ngIf="submitted && !studijskiProgram.naziv">
+          Prezime is required.
+        </small>
+      </div>
+      <div class="field">
+        <label for="opis">OPIS</label>
+        <input
+          type="text"
+          pInputText
+          id="opis"
+          [(ngModel)]="studijskiProgram.opis"
+          required
+          autofocus />
+        <small class="p-error" *ngIf="submitted && !studijskiProgram.opis">
+          E-mail is required.
+        </small>
+      </div>
+      <div class="field">
+        <label for="godineTrajanja">GODINE TRAJANJA</label>
+        <input
+          type="text"
+          pInputText
+          id="godineTrajanja"
+          [(ngModel)]="studijskiProgram.godineTrajanja"
+          required
+          autofocus />
+        <small class="p-error" *ngIf="submitted && !studijskiProgram.godineTrajanja">
+          Korisnicko ime is required.
+        </small>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="hideDialog()" />
+      <p-button
+        label="Save"
+        icon="pi pi-check"
+        [text]="true"
+        (onClick)="dodajStudijskiProgram(studijskiProgram)" />
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{ width: '450px' }" />
+</div>
