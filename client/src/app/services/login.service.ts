@@ -33,7 +33,6 @@ export class LoginService {
     if(this.korisnik){
       let zahtevaneUlogeSet=new Set<string>(zahtevaneUloge)
       let role=new Set<string>(this.korisnik["role"])
-      console.log(role)
       let rezultatePreseka=new Set<string>([])
 
       for(let r of role){

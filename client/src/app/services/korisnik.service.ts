@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {RegistrovaniKorisnik} from "../model/registrovaniKorisnik";
 import {Observable} from "rxjs";
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,4 +32,17 @@ export class KorisnikService {
   delete(id:number){
     return this.http.delete(`http://localhost:8080/api/korisnici/${id}`);
   }
+
+  update(id:number,korisnik:RegistrovaniKorisnik){
+    console.log(korisnik.pravoPristupaSet)
+    return this.http.put(`http://localhost:8080/api/korisnici/azuriaj/${id}`,korisnik)
+  }
+
+  deleteUsers(userIds: number[]): Observable<void> {
+    const url = `http://localhost:8080/api/korisnici/delete`; // Adjust the endpoint path if needed
+    return this.http.request<void>('DELETE', url, {
+      body: userIds
+    });
+  }
+
 }

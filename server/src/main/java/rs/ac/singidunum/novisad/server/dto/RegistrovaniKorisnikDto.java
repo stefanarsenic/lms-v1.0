@@ -20,5 +20,5 @@ public class RegistrovaniKorisnikDto implements Serializable {
     String email;
     String ime;
     String prezime;
-    //Set<PravoPristupaDto> pravoPristupaSet;
+    Set<PravoPristupaDto> pravoPristupaSet;
 }

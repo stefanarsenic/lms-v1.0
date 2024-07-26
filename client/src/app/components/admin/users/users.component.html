@@ -176,7 +176,7 @@
 
       <div class="field">
         <label for="lozinka">Lozinka</label>
-        <p-password [(ngModel)]="korisnik.lozinka" [toggleMask]="true" id="lozinka">
+        <p-password [(ngModel)]="korisnik.lozinka" [toggleMask]="true" [disabled]="editPassword" id="lozinka">
           <ng-template pTemplate="header">
             <h6>Pick a password</h6>
           </ng-template>

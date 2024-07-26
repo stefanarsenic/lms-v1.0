@@ -30,7 +30,7 @@ public class RegistrovaniKorisnik {
     private String email;
     private String ime;
     private String prezime;
-    @OneToMany(mappedBy = "registrovaniKorisnik")
+    @OneToMany(mappedBy = "registrovaniKorisnik",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<PravoPristupa> pravoPristupaSet=new HashSet<>();
 
 }

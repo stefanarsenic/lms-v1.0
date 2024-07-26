@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class PravoPristupaDto implements Serializable {
     Long id;
     UlogaDto uloga;
-
+    RegistrovaniKorisnikDto registrovaniKorisnikDto;
 
 
 }
