@@ -118,33 +118,7 @@ public class KorisnikController extends GenericController<RegistrovaniKorisnik,L
         korisnikService.deleteUsers(userIds);
         return ResponseEntity.noContent().build();
     }
-
-    @Override
-    public ResponseEntity<RegistrovaniKorisnikDto> update(Long id, RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
-        Set<PravoPristupaDto> pravoPristupaDtos=new HashSet<>();
-        RegistrovaniKorisnikDto registrovaniKorisnikDto=dto;
-        dto.setPravoPristupaSet(new HashSet<>());
-        for(PravoPristupaDto pravoPristupaDto:dto.getPravoPristupaSet()){
-            Optional<Uloga> uloga=ulogaService.findById(pravoPristupaDto.getUloga().getId());
-            if (uloga.isPresent()){
-                UlogaDto ulogaDto =EntityDtoMapper.convertToDto(uloga,UlogaDto.class);
-                PravoPristupaDto pristupaDto=new PravoPristupaDto(null,ulogaDto,registrovaniKorisnikDto);
-                pravoPristupaDtos.add(pristupaDto);
-            }
-        }
-
-        dto.setPravoPristupaSet(pravoPristupaDtos);
-
-        RegistrovaniKorisnik registrovaniKorisnik=EntityDtoMapper.convertToEntity(dto,RegistrovaniKorisnik.class);
-
-        RegistrovaniKorisnik registrovaniKorisnik1=this.korisnikService.save(registrovaniKorisnik);
-
-
-
-        return new ResponseEntity<>(EntityDtoMapper.convertToDto(registrovaniKorisnik1,RegistrovaniKorisnikDto.class), HttpStatus.OK);
-    }
-
-
+    
     @PutMapping("/azuriaj/{id}")
     public ResponseEntity<RegistrovaniKorisnikDto> azuriranje(@PathVariable Long id, @RequestBody RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
         RegistrovaniKorisnik existingUser = korisnikService.findById(id)
