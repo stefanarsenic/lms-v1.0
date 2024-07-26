@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {Table, TableModule} from 'primeng/table';
 import {ProgressBarModule} from "primeng/progressbar";
 import {TagModule} from "primeng/tag";
-import {NgClass, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {MultiSelectModule} from "primeng/multiselect";
 import {RegistrovaniKorisnik} from "../../../model/registrovaniKorisnik";
@@ -28,6 +28,7 @@ import {UlogaService} from "../../../services/uloga.service";
 import {Uloga} from "../../../model/uloga";
 import {Observable} from "rxjs";
 import {PravoPristupa} from "../../../model/pravoPristupa";
+import {ChipModule} from "primeng/chip";
 
 @Component({
   selector: 'app-users',
@@ -52,7 +53,9 @@ import {PravoPristupa} from "../../../model/pravoPristupa";
     DialogModule,
     PasswordModule,
     DividerModule,
-    NgIf
+    NgIf,
+    ChipModule,
+    NgForOf
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
@@ -66,6 +69,7 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
   selectedUsers!: RegistrovaniKorisnik[] | null;
 
   selektovaneUloge:Uloga[]=[]
+  seletovaneUlogeFilter:Uloga[]=[]
   uloge!:Uloga[]
   korisnik!:RegistrovaniKorisnik
   submitted: boolean = false;
@@ -90,6 +94,9 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
   ngOnInit() {
 
   }
+  //TODO:Ne radi filter za uloge
+
+
 
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
@@ -118,7 +125,7 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
   }
   deleteSelectedProducts() {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected products?',
+      message: 'Are you sure you want to delete the selected users?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -129,7 +136,7 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
             console.log(r)
           })
         }
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
       }
     });
   }
@@ -154,7 +161,7 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
       this.service2.create(this.korisnik).subscribe((r:RegistrovaniKorisnik)=>{
         this.update(this.service2)
         this.selektovaneUloge=[]
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 3000 });
       })
     } else {
 
@@ -167,7 +174,8 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
       this.korisnik.pravoPristupaSet=this.listaPristupa;
 
       (this.service2.update(this.korisnik.id, this.korisnik) as Observable<any>).subscribe(() => {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+        this.update(this.service2)
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
       });
       this.korisnikZaEditovanje = undefined
 
@@ -175,6 +183,18 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
     this.korisnikDialog = false;
     this.korisnik = {id:0,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[]};
     }
+
+  getRoleClass(role: string): string {
+    switch (role.toLowerCase()) {
+      case 'admin':
+        return 'role-admin';
+      case 'user':
+        return 'role-user';
+      // Add more cases for other roles
+      default:
+        return 'role-default';
+    }
+  }
 
 
 }

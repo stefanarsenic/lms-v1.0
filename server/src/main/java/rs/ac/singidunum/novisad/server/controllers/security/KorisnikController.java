@@ -118,7 +118,7 @@ public class KorisnikController extends GenericController<RegistrovaniKorisnik,L
         korisnikService.deleteUsers(userIds);
         return ResponseEntity.noContent().build();
     }
-    
+
     @PutMapping("/azuriaj/{id}")
     public ResponseEntity<RegistrovaniKorisnikDto> azuriranje(@PathVariable Long id, @RequestBody RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
         RegistrovaniKorisnik existingUser = korisnikService.findById(id)

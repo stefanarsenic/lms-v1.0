@@ -1,0 +1,14 @@
+.role-admin {
+  background-color: #ff0000; /* Red for admin */
+  color: white;
+}
+
+.role-user {
+  background-color: #0000ff; /* Blue for user */
+  color: white;
+}
+
+.role-default {
+  background-color: #888888; /* Grey for default */
+  color: white;
+}

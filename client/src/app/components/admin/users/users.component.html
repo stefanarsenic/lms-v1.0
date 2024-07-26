@@ -40,6 +40,7 @@
     [tableStyle]="{ 'min-width': '75rem' }"
     [(selection)]="selectedUsers"
     [rowHover]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
     dataKey="id"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [showCurrentPageReport]="true"
@@ -70,26 +71,87 @@
         <th pSortableColumn="email" style="min-width:10rem">
           Email <p-sortIcon field="email" />
         </th>
+        <th pSortableColumn="role" style="min-width:10rem">
+          Uloge <p-sortIcon field="role" />
+        </th>
+        <th></th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>
+          <p-columnFilter type="text" field="ime" [showClearButton]="true" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="prezime" [showClearButton]="true" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="korisnickoIme" [showClearButton]="true" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="email" [showClearButton]="true" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="pravaPristupaSet" [showClearButton]="true" />
+        </th>
         <th></th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-product>
+    <ng-template pTemplate="body" let-product let-editing="editing">
       <tr>
         <td>
           <p-tableCheckbox [value]="product" />
         </td>
-        <td>
-          {{ product.ime }}
+        <td [pEditableColumn]="product.ime" pEditableColumnField="ime">
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.ime" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ product.ime }}
+            </ng-template>
+          </p-cellEditor>
         </td>
         <td>
-          {{ product.prezime }}
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.prezime" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ product.prezime }}
+            </ng-template>
+          </p-cellEditor>
         </td>
         <td>
-          {{ product.korisnickoIme }}
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.korisnickoIme" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ product.korisnickoIme }}
+            </ng-template>
+          </p-cellEditor>
         </td>
         <td>
-          {{ product.email }}
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.email" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ product.email }}
+            </ng-template>
+          </p-cellEditor>
         </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.pravoPristupaSet.uloga.naziv" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              <p-chip *ngFor="let role of product.pravoPristupaSet" [label]="role.uloga.naziv"></p-chip>
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
         <td>
           <p-button
             icon="pi pi-pencil"

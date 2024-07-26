@@ -40,6 +40,7 @@
     [tableStyle]="{ 'min-width': '75rem' }"
     [(selection)]="selectedPrograms"
     [rowHover]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
     dataKey="id"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [showCurrentPageReport]="true"
@@ -100,7 +101,7 @@
           {{ item.rukovodilac }}
         </td>
         <td>
-          {{ item.fakultet }}
+          {{ item.fakultet.naziv }}
         </td>
         <td>
           <p-button
