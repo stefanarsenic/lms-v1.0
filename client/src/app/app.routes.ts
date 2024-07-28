@@ -17,6 +17,7 @@ import {
   StudijskiProgramCrudComponent
 } from "./components/admin/studijski-program/studijski-program-crud/studijski-program-crud.component";
 import {UsersComponent} from "./components/admin/users/users.component";
+import {NastavnikComponent} from "./components/admin/nastavnik/nastavnik.component";
 
 export const routes: Routes = [
   {
@@ -61,6 +62,10 @@ export const routes: Routes = [
         path: "korisnici",
         component: UsersComponent
       },
+      {
+        path: "nastavnici",
+        component: NastavnikComponent
+      }
     ],
     canActivate:[authGuard],data:{
       allowedRoles:["ROLE_ADMIN"]

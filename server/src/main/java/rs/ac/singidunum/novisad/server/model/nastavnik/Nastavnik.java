@@ -20,6 +20,6 @@ public class Nastavnik extends RegistrovaniKorisnik {
 
     private String biografija;
     private String jmbg;
-    @OneToMany(mappedBy = "nastavnik")
+    @OneToMany(mappedBy = "nastavnik",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Zvanje> zvanja;
 }

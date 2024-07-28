@@ -184,17 +184,6 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
     this.korisnik = {id:0,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[]};
     }
 
-  getRoleClass(role: string): string {
-    switch (role.toLowerCase()) {
-      case 'admin':
-        return 'role-admin';
-      case 'user':
-        return 'role-user';
-      // Add more cases for other roles
-      default:
-        return 'role-default';
-    }
-  }
 
 
 }
