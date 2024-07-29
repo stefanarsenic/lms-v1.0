@@ -9,17 +9,17 @@
   <div class="header">
     <div class="logo-container">
       <div class="logo"></div>
-      <div class="logo-text">{{univerzitet[0].naziv}}</div>
+<!--     // <div class="logo-text">{{univerzitet[0].naziv}}</div>-->
     </div>
     <div class="nav">
       <a class="link" routerLink="organizacija-sp">Organizacija-SP</a>
       <a class="link" routerLink="o-univerzitetu">O Univerzitetu</a>
-      <p-dropdown
-        [options]="univerzitet[0].fakulteti"
-        [(ngModel)]="selectedFakultet"
-        (onChange)="onSelectFakultet($event)"
-        optionLabel="naziv"
-        placeholder="Izaberi Fakultet" />
+<!--      <p-dropdown-->
+<!--        [options]="univerzitet[0].fakulteti"-->
+<!--        [(ngModel)]="selectedFakultet"-->
+<!--        (onChange)="onSelectFakultet($event)"-->
+<!--        optionLabel="naziv"-->
+<!--        placeholder="Izaberi Fakultet" />-->
       <a class="login-btn" routerLink="login">Login</a>
       <a class="register-btn" routerLink="register">Register</a>
     </div>

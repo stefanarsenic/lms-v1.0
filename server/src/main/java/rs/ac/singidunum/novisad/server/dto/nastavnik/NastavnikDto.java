@@ -1,23 +1,27 @@
 package rs.ac.singidunum.novisad.server.dto.nastavnik;
 
-import jakarta.persistence.OneToMany;
 import lombok.*;
-import rs.ac.singidunum.novisad.server.model.korisnik.PravoPristupa;
+import rs.ac.singidunum.novisad.server.dto.PravoPristupaDto;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * DTO for {@link rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik}
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class NastavnikDto implements Serializable {
-    private Long id;
-    private String korisnickoIme;
-    private String email;
-    private String ime;
-    private String prezime;
-    private String biografija;
-    private Set<ZvanjeDto> zvanja;
+    Long id;
+    String korisnickoIme;
+    String lozinka;
+    String email;
+    String ime;
+    String prezime;
+    Set<PravoPristupaDto> pravoPristupaSet;
+    String biografija;
+    String jmbg;
+    Set<ZvanjeDto> zvanja;
 }

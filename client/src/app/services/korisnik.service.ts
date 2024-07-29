@@ -39,7 +39,7 @@ export class KorisnikService {
   }
 
   deleteUsers(userIds: number[]): Observable<void> {
-    const url = `http://localhost:8080/api/korisnici/delete`; // Adjust the endpoint path if needed
+    const url = `http://localhost:8080/api/korisnici/delete`;
     return this.http.request<void>('DELETE', url, {
       body: userIds
     });

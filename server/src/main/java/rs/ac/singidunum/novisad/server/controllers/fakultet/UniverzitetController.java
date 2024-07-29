@@ -1,6 +1,5 @@
 package rs.ac.singidunum.novisad.server.controllers.fakultet;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
@@ -22,7 +21,6 @@ import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/univerzitet")

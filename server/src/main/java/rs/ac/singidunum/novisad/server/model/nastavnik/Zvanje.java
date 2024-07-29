@@ -27,5 +27,5 @@ public class Zvanje {
     @OneToOne
     private TipZvanja tipZvanja;
     @OneToOne
-    private NaucnaOblast nacunaOblast;
+    private NaucnaOblast naucnaOblast;
 }

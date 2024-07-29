@@ -26,6 +26,12 @@ import {Observable} from "rxjs";
 import {NastavnikService} from "../../../services/nastavnik.service";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {NaucnaOblast} from "../../../model/naucnaOblast";
+import {NacunaOblastService} from "../../../services/nacuna-oblast.service";
+import {DropdownModule} from "primeng/dropdown";
+import {TipZvanjaService} from "../../../services/tip-zvanja.service";
+import {TipZvanja} from "../../../model/tipZvanja";
+import {CalendarModule} from "primeng/calendar";
 
 @Component({
   selector: 'app-nastavnik',
@@ -48,7 +54,9 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     ToastModule,
     ToolbarModule,
     FloatLabelModule,
-    InputTextareaModule
+    InputTextareaModule,
+    DropdownModule,
+    CalendarModule
   ],
   templateUrl: './nastavnik.component.html',
   styleUrl: './nastavnik.component.css'
@@ -64,19 +72,35 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
 
 
   zvanja!:Zvanje[]
+
+  naucnaOblast:NaucnaOblast={id:null,naziv:""}
+  nasucneOblasti:NaucnaOblast[]=[]
+  selektovanOblast!:NaucnaOblast
+
+  tipoviZvanja:TipZvanja[]=[]
+  selektovaniTipZvanja!:TipZvanja
+
   nastavnik!:Nastavnik
   submitted: boolean = false;
   korisnikDialog: boolean = false;
   selektovanaZvanja:Zvanje[]=[]
   korisnikZaEditovanje:any=undefined;
   editPassword:boolean=false
-  noviZvanja: any[] = [];
-  constructor(private injector: Injector,private messageService: MessageService, private confirmationService: ConfirmationService
-  ) {
+
+  zvanje:Zvanje={id:null,datumIzbora:null,datumPrestanka:null,nastavnik:null,tipZvanja: {id:null,naziv:""},naucnaOblast:null}
+  noviZvanja: Zvanje[] = [];
+  constructor(private injector: Injector,private messageService: MessageService, private confirmationService: ConfirmationService,private naucnaOblastService:NacunaOblastService,
+  private tipZvanjaService:TipZvanjaService) {
     super();
     const service = this.injector.get(NastavnikService);
     this.initialize(service);
     this.loading=false
+    this.naucnaOblastService.getAll().subscribe(r=>{
+      this.nasucneOblasti=r;
+    })
+    this.tipZvanjaService.getAll().subscribe(r=>{
+      this.tipoviZvanja=r;
+    })
 
   }
 
@@ -101,7 +125,7 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
     this.editPassword=true
 
   }
-
+  //todo:Treba uraditi: ADD,EDIT
   deleteSelectedProducts() {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected users?',
@@ -126,45 +150,37 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
   }
 
   saveProduct() {
-    // this.submitted = true;
-    // if (this.korisnikZaEditovanje === undefined) {
-    //   if(this.selektovaneUloge!=undefined){
-    //
-    //     for (let uloga of this.selektovaneUloge) {
-    //       this.pravoPristupa.uloga=uloga;
-    //       this.pravoPristupa.registrovaniKorisnik=null
-    //       this.korisnik.pravoPristupaSet.push(this.pravoPristupa)
-    //       this.pravoPristupa={id:undefined,uloga:undefined,registrovaniKorisnik:null}
-    //     }
-    //   }
-    //   this.service2.create(this.korisnik).subscribe((r:RegistrovaniKorisnik)=>{
-    //     this.update(this.service2)
-    //     this.selektovaneUloge=[]
-    //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 3000 });
-    //   })
-    // } else {
-    //
-    //   for (let uloga of this.selektovaneUloge) {
-    //     this.pravoPristupa.uloga=uloga;
-    //     this.pravoPristupa.registrovaniKorisnik
-    //     this.listaPristupa.push(this.pravoPristupa)
-    //     this.pravoPristupa={id:undefined,uloga:undefined,registrovaniKorisnik:null}
-    //   }
-    //   this.korisnik.pravoPristupaSet=this.listaPristupa;
-    //
-    //   (this.service2.update(this.korisnik.id, this.korisnik) as Observable<any>).subscribe(() => {
-    //     this.update(this.service2)
-    //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
-    //   });
-    //   this.korisnikZaEditovanje = undefined
-    //
-    // }
-    // this.korisnikDialog = false;
-    // this.korisnik = {id:0,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[]};
+    this.submitted = true;
+    if (this.korisnikZaEditovanje === undefined) {
+      this.nastavnik.zvanja=this.noviZvanja
+      this.service2.create(this.nastavnik).subscribe((r:Nastavnik)=>{
+        this.update(this.service2)
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Proffesor Created', life: 3000 });
+      })
+    } else {
+      // for (let uloga of this.selektovaneUloge) {
+      //   this.pravoPristupa.uloga=uloga;
+      //   this.pravoPristupa.registrovaniKorisnik
+      //   this.listaPristupa.push(this.pravoPristupa)
+      //   this.pravoPristupa={id:undefined,uloga:undefined,registrovaniKorisnik:null}
+      // }
+      // this.korisnik.pravoPristupaSet=this.listaPristupa;
+      //
+      // (this.service2.update(this.korisnik.id, this.korisnik) as Observable<any>).subscribe(() => {
+      //   this.update(this.service2)
+      //   this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
+      // });
+      // this.korisnikZaEditovanje = undefined
+
+    }
+    this.korisnikDialog = false;
+    this.nastavnik = {id:null,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[],biografija:"",zvanja:[],jmbg:""};
   }
 
   dodajZvanje() {
-    this.noviZvanja.push({ naziv: '' });
+    this.zvanje.nastavnik={...this.nastavnik}
+    this.noviZvanja.push({...this.zvanje});
+    this.zvanje={id:null,datumIzbora:null,datumPrestanka:null,nastavnik:null,tipZvanja: {id:null,naziv:""},naucnaOblast:null}
   }
   ukloniZvanje(index: number) {
     this.noviZvanja.splice(index, 1);

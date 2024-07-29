@@ -86,6 +86,7 @@ public class KorisnikController extends GenericController<RegistrovaniKorisnik,L
         return registrovaniKorisnik;
     }
 
+    //TODO:Popraviti DTO response (Korisnik)
     @Override
     @RequestMapping(path = "/dodaj", method = RequestMethod.POST)
     public ResponseEntity<RegistrovaniKorisnikDto> create(@RequestBody RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
@@ -112,13 +113,13 @@ public class KorisnikController extends GenericController<RegistrovaniKorisnik,L
     }
 
 
-    //TODO:Spoj ovo u front end
+
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteUsers(@RequestBody List<Long> userIds) {
         korisnikService.deleteUsers(userIds);
         return ResponseEntity.noContent().build();
     }
-
+    //TODO:Popraviti DTO response (Korisnik)
     @PutMapping("/azuriaj/{id}")
     public ResponseEntity<RegistrovaniKorisnikDto> azuriranje(@PathVariable Long id, @RequestBody RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
         RegistrovaniKorisnik existingUser = korisnikService.findById(id)

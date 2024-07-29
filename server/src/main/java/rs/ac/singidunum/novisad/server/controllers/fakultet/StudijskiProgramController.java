@@ -17,9 +17,7 @@ import rs.ac.singidunum.novisad.server.services.fakultet.StudijskiProgramService
 import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/studijski-program")

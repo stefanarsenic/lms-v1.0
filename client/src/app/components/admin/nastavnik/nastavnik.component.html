@@ -237,6 +237,20 @@
       </div>
 
       <div class="field">
+        <label for="jmbg">jmbg</label>
+        <input
+          type="text"
+          pInputText
+          id="jmbg"
+          [(ngModel)]="nastavnik.jmbg"
+          required
+          autofocus />
+        <small class="p-error" *ngIf="submitted && !nastavnik.jmbg">
+          jmbg is required.
+        </small>
+      </div>
+
+      <div class="field">
         <label for="lozinka">Lozinka</label>
         <p-password [(ngModel)]="nastavnik.lozinka" [toggleMask]="true" [disabled]="editPassword" id="lozinka">
           <ng-template pTemplate="header">
@@ -264,17 +278,63 @@
         rows="5"
         cols="30"
         pInputTextarea
+        [(ngModel)]="nastavnik.biografija"
         [autoResize]="true">
       </textarea>
-          <label for="biografija">Summary</label>
+          <label for="biografija">Biografija</label>
       </p-floatLabel>
       <label></label>
       <div class="field">
         <button type="button" pButton label="Dodaj zvanje" icon="pi pi-plus" (click)="dodajZvanje()"></button>
       </div>
       <div *ngFor="let zvanje of noviZvanja; let i = index" class="field">
-        <label for="naziv{{i}}">Naziv zvanja</label>
-        <input type="text" pInputText id="naziv{{i}}" [(ngModel)]="zvanje.naziv" required autofocus />
+        <div class="field">
+          <label for="datumIzbora">Datum izbora:</label>
+          <p-calendar [iconDisplay]="'input'"  [showIcon]="true" id="datumIzbora" [(ngModel)]="zvanje.datumIzbora" />
+        </div>
+        <div class="field">
+          <label for="datumIzbora">Datum prestanka:</label>
+          <p-calendar [iconDisplay]="'input'"  [showIcon]="true" id="datumPrestanka" [(ngModel)]="zvanje.datumPrestanka" />
+        </div>
+        <label>Naucna Oblast</label>
+        <div class="field">
+          <p-dropdown
+            [options]="nasucneOblasti"
+            appendTo="body"
+            [(ngModel)]="zvanje.naucnaOblast"
+            optionLabel="naziv"
+            [filter]="true"
+            filterBy="naziv"
+            [showClear]="true"
+            placeholder="Selektrujte oblast">
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+              <div class="flex align-items-center gap-2">
+                <div>{{ selectedOption.naziv }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <label>Tip zvanja</label>
+        <div class="field">
+          <p-dropdown
+            [options]="tipoviZvanja"
+            appendTo="body"
+            [(ngModel)]="zvanje.tipZvanja"
+            optionLabel="naziv"
+            [filter]="true"
+            filterBy="naziv"
+            [showClear]="true"
+            placeholder="Selektrujte tip zvanja">
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+              <div class="flex align-items-center gap-2">
+                <div>{{ selectedOption.naziv }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+
         <button type="button" pButton icon="pi pi-times" class="p-button-danger" (click)="ukloniZvanje(i)"></button>
       </div>
 

@@ -8,10 +8,8 @@ import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
-import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
-import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 import rs.ac.singidunum.novisad.server.services.predmet.PredmetService;
 
 @RestController

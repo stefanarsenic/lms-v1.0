@@ -15,5 +15,5 @@ public class ZvanjeDto implements Serializable {
     private LocalDateTime datumPrestanka;
     private NastavnikDto nastavnik;
     private TipZvanjaDto tipZvanja;
-    private NaucnaOblastDto nacunaOblast;
+    private NaucnaOblastDto naucnaOblast;
 }

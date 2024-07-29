@@ -4,7 +4,6 @@ import lombok.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 
 import java.io.Serializable;
-import java.util.Set;
 
 @Getter
 @Setter

@@ -1,4 +1,4 @@
 export interface TipZvanja {
-  id: number,
+  id: number |null,
   naziv: string
 }

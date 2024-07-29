@@ -3,10 +3,10 @@ import {TipZvanja} from "./tipZvanja";
 import {NaucnaOblast} from "./naucnaOblast";
 
 export interface Zvanje {
-  id: number,
-  datumIzbora: Date,
-  datumPrestanka: Date,
-  nastavnik: Nastavnik,
+  id: number |null,
+  datumIzbora: Date|null,
+  datumPrestanka: Date |null,
+  nastavnik: Nastavnik | null,
   tipZvanja: TipZvanja,
-  naucnaOblast: NaucnaOblast
+  naucnaOblast: NaucnaOblast|null
 }

@@ -1,6 +1,5 @@
 package rs.ac.singidunum.novisad.server.controllers.nastavnik;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
@@ -40,7 +39,7 @@ public class ZvanjeController extends GenericController<Zvanje, Long, ZvanjeDto>
         zvanjeDto.getNastavnik().setZvanja(Collections.emptySet());
         zvanjeDto.setNastavnik(EntityDtoMapper.convertToDto(entity.getNastavnik(), NastavnikDto.class));
         zvanjeDto.setTipZvanja(EntityDtoMapper.convertToDto(entity.getTipZvanja(), TipZvanjaDto.class));
-        zvanjeDto.setNacunaOblast(EntityDtoMapper.convertToDto(entity.getNacunaOblast(), NaucnaOblastDto.class));
+        zvanjeDto.setNaucnaOblast(EntityDtoMapper.convertToDto(entity.getNaucnaOblast(), NaucnaOblastDto.class));
 
         return zvanjeDto;
     }
@@ -49,12 +48,12 @@ public class ZvanjeController extends GenericController<Zvanje, Long, ZvanjeDto>
     protected Zvanje convertToEntity(ZvanjeDto dto) throws IllegalAccessException, InstantiationException {
         Nastavnik nastavnik = nastavnikService.findById(dto.getNastavnik().getId()).orElseThrow();
         TipZvanja tipZvanja = tipZvanjaService.findById(dto.getTipZvanja().getId()).orElseThrow();
-        NaucnaOblast naucnaOblast = naucnaOblastService.findById(dto.getNacunaOblast().getId()).orElseThrow();
+        NaucnaOblast naucnaOblast = naucnaOblastService.findById(dto.getNaucnaOblast().getId()).orElseThrow();
 
         Zvanje zvanje = EntityDtoMapper.convertToEntity(dto, Zvanje.class);
         zvanje.setNastavnik(nastavnik);
         zvanje.setTipZvanja(tipZvanja);
-        zvanje.setNacunaOblast(naucnaOblast);
+        zvanje.setNaucnaOblast(naucnaOblast);
 
         return zvanje;
     }

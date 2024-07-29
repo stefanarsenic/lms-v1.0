@@ -3,7 +3,6 @@ package rs.ac.singidunum.novisad.server.dto.fakultet;
 import lombok.*;
 import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
-import rs.ac.singidunum.novisad.server.model.fakultet.Univerzitet;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
