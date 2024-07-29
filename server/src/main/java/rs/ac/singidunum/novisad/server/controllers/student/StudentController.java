@@ -1,5 +1,10 @@
 package rs.ac.singidunum.novisad.server.controllers.student;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
@@ -10,15 +15,24 @@ import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.adresa.Adresa;
 import rs.ac.singidunum.novisad.server.model.student.Student;
 import rs.ac.singidunum.novisad.server.services.adresa.AdresaService;
+import rs.ac.singidunum.novisad.server.services.student.StudentService;
 
 @RestController
 @RequestMapping("/api/student")
 public class StudentController extends GenericController<Student, Long, StudentDto> {
-
     private final AdresaService adresaService;
-    public StudentController(GenericService<Student, Long> service, AdresaService adresaService) {
+    private final StudentService studentService;
+    public StudentController(GenericService<Student, Long> service, AdresaService adresaService, StudentService studentService) {
         super(service);
         this.adresaService = adresaService;
+        this.studentService = studentService;
+    }
+
+    @GetMapping("/{studentId}/drzava")
+    public ResponseEntity<String> getNazivDrzaveByStudentId(@PathVariable Long studentId){
+        String drzava = studentService.findNazivDrzaveByStudentId(studentId);
+
+        return new ResponseEntity<>(drzava, HttpStatus.OK);
     }
 
     @Override

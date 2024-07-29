@@ -1,0 +1,82 @@
+<body>
+<app-tabela-studenata (eventEmitter)="getStudent($event)"></app-tabela-studenata>
+<button (click)="download()">Download PDF</button>
+<div class="a4" id="a4">
+  <div class="header">
+    <h1>РЕПУБЛИКА СРБИЈА</h1>
+    <h2>Универзитет Сингидунум</h2>
+    <h3>ПРИЗНАЊЕ ИСПИТА</h3>
+  </div>
+
+  <div class="student-info">
+    <form [formGroup]="form">
+      <table>
+        <tr>
+          <td><strong>Име и презиме:</strong></td>
+          <td><input formControlName="punoIme"></td>
+        </tr>
+        <tr>
+          <td><strong>Датум рођења:</strong></td>
+          <td><input formControlName="datumRodjenja"></td>
+        </tr>
+        <tr>
+          <td><strong>Број индекса:</strong></td>
+          <td><input formControlName="brojIndeksa"></td>
+        </tr>
+        <tr>
+          <td><strong>Студијски програм:</strong></td>
+          <td><input formControlName="studijskiProgram"></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  <div class="exam-info">
+    <table class="exam-table">
+      <thead>
+      <tr>
+        <th>Ред. број</th>
+        <th>Назив испита</th>
+        <th>Универзитет</th>
+        <th>Студијски програм</th>
+        <th>Датум полагања</th>
+        <th>Оцена</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td>Основи рачунарства</td>
+        <td>Универзитет у Београду</td>
+        <td>Информационе технологије</td>
+        <td>15.02.2024</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Програмирање</td>
+        <td>Универзитет у Новом Саду</td>
+        <td>Рачунарске науке</td>
+        <td>10.03.2024</td>
+        <td>9</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Математика 1</td>
+        <td>Универзитет у Нишу</td>
+        <td>Електротехника</td>
+        <td>20.04.2024</td>
+        <td>8</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>Ова потврда се издаје за потребе студента.</p>
+    <p>Место и датум: Београд, 29.07.2024.</p>
+    <p>_________________________</p>
+    <p>(печат и потпис)</p>
+  </div>
+</div>
+</body>

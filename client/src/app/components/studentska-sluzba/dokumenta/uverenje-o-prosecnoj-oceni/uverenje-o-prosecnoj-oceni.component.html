@@ -1,0 +1,46 @@
+<body>
+<app-tabela-studenata (eventEmitter)="getStudent($event)"></app-tabela-studenata>
+<button (click)="download()">Download PDF</button>
+<div class="a4" id="a4">
+  <div class="header">
+    <h1>РЕПУБЛИКА СРБИЈА</h1>
+    <h2>Универзитет Сингидунум</h2>
+    <h3>УВЕРЕЊЕ О ПРОСЕЧНОЈ ОЦЕНИ</h3>
+  </div>
+
+  <div class="student-info">
+    <form [formGroup]="form">
+      <table>
+        <tr>
+          <td><strong>Име и презиме:</strong></td>
+          <td><input formControlName="punoIme"></td>
+        </tr>
+        <tr>
+          <td><strong>Датум рођења:</strong></td>
+          <td><input formControlName="datumRodjenja"></td>
+        </tr>
+        <tr>
+          <td><strong>Број индекса:</strong></td>
+          <td><input formControlName="brojIndeksa"></td>
+        </tr>
+        <tr>
+          <td><strong>Студијски програм:</strong></td>
+          <td><input formControlName="studijskiProgram"></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  <div class="average-grade">
+    <p>На основу досадашњих резултата студија, студент има просечну оцену:</p>
+    <h2>9.5</h2>
+  </div>
+
+  <div class="footer">
+    <p>Ова потврда се издаје за потребе студента.</p>
+    <p>Место и датум: Београд, 29.07.2024.</p>
+    <p>_________________________</p>
+    <p>(печат и потпис)</p>
+  </div>
+</div>
+</body>

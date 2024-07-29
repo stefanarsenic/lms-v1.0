@@ -1,0 +1,72 @@
+<p-table
+  #dt1
+  [value]="studenti"
+  dataKey="id"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [paginator]="true"
+  [globalFilterFields]="['brojIndeksa', 'student.ime', 'student.prezime', 'student.jmbg']"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" />
+      <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Filter" />
+            </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        <div class="flex align-items-center">
+          Broj Indeksa
+          <p-columnFilter type="text" field="brojIndeksa" display="menu" />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center">
+          Ime
+          <p-columnFilter type="text" field="student.ime" display="menu" />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center">
+          Prezime
+          <p-columnFilter type="text" field="student.prezime" display="menu" />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center">
+          JMBG
+          <p-columnFilter type="date" field="student.jmbg" display="menu" />
+        </div>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-student>
+    <tr>
+      <td>
+        {{ student.brojIndeksa }}
+      </td>
+      <td>
+        {{ student.student.ime }}
+      </td>
+      <td>
+        {{ student.student.prezime }}
+      </td>
+      <td>
+        {{ student.student.jmbg }}
+      </td>
+      <td>
+        <button class="select-button" (click)="selectStudent(student)">Izaberi</button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7">No customers found.</td>
+    </tr>
+  </ng-template>
+</p-table>

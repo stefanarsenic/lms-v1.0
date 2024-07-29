@@ -99,7 +99,7 @@ export class StudijskiProgramCrudComponent implements OnInit{
           punoIme: nastavnik.ime + " " + nastavnik.prezime
         };
       });
-    })
+    });
     this.fakultetService.getAll().subscribe(data => {
       this.fakulteti = data;
     });
@@ -128,16 +128,16 @@ export class StudijskiProgramCrudComponent implements OnInit{
     this.studijskiProgramZaEdit = this.studijskiProgram;
   }
   deleteSelectedPrograms() {
-    // this.confirmationService.confirm({
-    //   message: 'Da li ste sigurni da zelite da obrisete izabrane studijske programe?',
-    //   header: 'Confirm',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-    //     this.items = this.items.filter((val) => !this.selectedPrograms?.includes(val));
-    //     this.selectedPrograms = null;
-    //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Studijski programi obrisani!', life: 3000 });
-    //   }
-    // });
+    this.confirmationService.confirm({
+      message: 'Da li ste sigurni da zelite da obrisete izabrane studijske programe?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.studijskiProgrami = this.studijskiProgrami.filter((val) => !this.selectedPrograms?.includes(val));
+        this.selectedPrograms = null;
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Studijski programi obrisani!', life: 3000 });
+      }
+    });
   }
   hideDialog() {
     this.studijskiProgramDialog = false;
@@ -166,7 +166,12 @@ export class StudijskiProgramCrudComponent implements OnInit{
   }
   getStudijskiProgrami(){
     this.studijskiProgramService.getAll().subscribe(data => {
-      this.studijskiProgrami = data;
-    })
+      this.studijskiProgrami = data.map((studijskiProgram: any) => {
+        return {
+          ...studijskiProgram,
+          rukovodilacPunoIme: studijskiProgram.rukovodilac.ime + " " + studijskiProgram.rukovodilac.prezime
+        };
+      });
+    });
   }
 }

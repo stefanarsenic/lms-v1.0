@@ -1,0 +1,78 @@
+<body>
+<app-tabela-studenata (eventEmitter)="getStudent($event)"></app-tabela-studenata>
+<button (click)="download()">Download PDF</button>
+<div class="a4" id="a4">
+  <div class="header">
+    <h1>РЕПУБЛИКА СРБИЈА</h1>
+    <h2>Универзитет Сингидунум</h2>
+    <h3>ПОТВРДА О УПЛАЋЕНИМ ШКОЛАРИНАМА</h3>
+  </div>
+
+  <div class="student-info">
+    <form [formGroup]="form">
+      <table>
+        <tr>
+          <td><strong>Име и презиме:</strong></td>
+          <td><input formControlName="punoIme"></td>
+        </tr>
+        <tr>
+          <td><strong>Датум рођења:</strong></td>
+          <td><input formControlName="datumRodjenja"></td>
+        </tr>
+        <tr>
+          <td><strong>Број индекса:</strong></td>
+          <td><input formControlName="brojIndeksa"></td>
+        </tr>
+        <tr>
+          <td><strong>Студијски програм:</strong></td>
+          <td><input formControlName="studijskiProgram"></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  <div class="payment-info">
+    <table class="payment-table">
+      <thead>
+      <tr>
+        <th>Ред. број</th>
+        <th>Датум уплате</th>
+        <th>Износ (RSD)</th>
+        <th>Сврха уплате</th>
+        <th>Уплатилац</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td>15.02.2024</td>
+        <td>100,000</td>
+        <td>Прва рата школарине</td>
+        <td>Петар Петровић</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>15.03.2024</td>
+        <td>100,000</td>
+        <td>Друга рата школарине</td>
+        <td>Петар Петровић</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>15.04.2024</td>
+        <td>100,000</td>
+        <td>Трећа рата школарине</td>
+        <td>Петар Петровић</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>Ова потврда се издаје за потребе студента.</p>
+    <p>Место и датум: Београд, 29.07.2024.</p>
+    <p>_________________________</p>
+    <p>(печат и потпис)</p>
+  </div>
+</div>
+</body>

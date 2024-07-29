@@ -5,5 +5,6 @@ import {RegistrovaniKorisnik} from "./registrovaniKorisnik";
 export interface Student extends RegistrovaniKorisnik{
   id: number,
   adresa: Adresa,
-  godinaStudija: GodinaStudija
+  jmbg: string,
+  datumRodjenja: Date
 }

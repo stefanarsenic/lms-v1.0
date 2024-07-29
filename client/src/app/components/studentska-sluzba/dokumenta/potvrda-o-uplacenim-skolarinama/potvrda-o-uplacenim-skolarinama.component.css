@@ -1,0 +1,38 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.a4 {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  margin: 0 auto;
+  page-break-after: always;
+}
+.header, .footer {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.student-info, .payment-info {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.student-info td, .payment-info td {
+  padding: 5px;
+}
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.payment-table th, .payment-table td {
+  border: 1px solid #000;
+  padding: 10px;
+  text-align: left;
+}
+input {
+  border: 0;
+  border-bottom: 1px solid black;
+}

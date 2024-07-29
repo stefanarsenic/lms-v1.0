@@ -36,14 +36,14 @@
     [value]="studijskiProgrami"
     [rows]="10"
     [paginator]="true"
-    [globalFilterFields]="['id', 'naziv', 'opis', 'godineTrajanja', 'rukovodilac', 'fakultet']"
+    [globalFilterFields]="['id', 'naziv', 'opis', 'godineTrajanja', 'rukovodilacPunoIme', 'fakultet.naziv']"
     [tableStyle]="{ 'min-width': '75rem' }"
     [(selection)]="selectedPrograms"
     [rowHover]="true"
     [rowsPerPageOptions]="[10, 25, 50]"
+    [showCurrentPageReport]="true"
     dataKey="id"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [showCurrentPageReport]="true"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -56,26 +56,26 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 4rem">
+        <th>
           <p-tableHeaderCheckbox />
         </th>
-        <th pSortableColumn="id" style="min-width:15rem">
-          ID <p-sortIcon field="id" />
+        <th>
+          ID
         </th>
-        <th pSortableColumn="naziv" style="min-width:15rem">
-          NAZIV <p-sortIcon field="naziv" />
+        <th>
+          NAZIV
         </th>
-        <th pSortableColumn="opis">
-          OPIS<p-sortIcon field="opis" />
+        <th>
+          OPIS
         </th>
-        <th pSortableColumn="godineTrajanja">
-          GODINE TRAJANJA<p-sortIcon field="godineTrajanja" />
+        <th>
+          GODINE TRAJANJA
         </th>
-        <th pSortableColumn="rukovodilac" style="min-width:10rem">
-          RUKOVODILAC<p-sortIcon field="rukovodilac" />
+        <th>
+          RUKOVODILAC
         </th>
-        <th pSortableColumn="fakultet" style="min-width:10rem">
-          FAKULTET<p-sortIcon field="fakultet" />
+        <th>
+          FAKULTET
         </th>
         <th></th>
       </tr>
@@ -83,7 +83,7 @@
     <ng-template pTemplate="body" let-item>
       <tr>
         <td>
-          <p-tableCheckbox [value]="studijskiProgrami" />
+          <p-tableCheckbox [value]="item" />
         </td>
         <td>
           {{ item.id }}
@@ -98,7 +98,7 @@
           {{ item.godineTrajanja }}
         </td>
         <td>
-          {{ item.rukovodilac }}
+          {{ item.rukovodilacPunoIme }}
         </td>
         <td>
           {{ item.fakultet.naziv }}
@@ -185,7 +185,7 @@
           required
           autofocus />
         <small class="p-error" *ngIf="submitted && !studijskiProgram.naziv">
-          Prezime is required.
+          Naziv is required.
         </small>
       </div>
       <div class="field">
@@ -198,7 +198,7 @@
           required
           autofocus />
         <small class="p-error" *ngIf="submitted && !studijskiProgram.opis">
-          E-mail is required.
+          Opis is required.
         </small>
       </div>
       <div class="field">
@@ -211,7 +211,7 @@
           required
           autofocus />
         <small class="p-error" *ngIf="submitted && !studijskiProgram.godineTrajanja">
-          Korisnicko ime is required.
+          Godine trajanja is required.
         </small>
       </div>
     </ng-template>

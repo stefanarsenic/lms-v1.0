@@ -1,0 +1,39 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.a4 {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  margin: 0 auto;
+  page-break-after: always;
+}
+.header, .footer {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.student-info {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.student-info td {
+  padding: 5px;
+}
+.completion {
+  text-align: left;
+  margin: 20px 0;
+}
+.completion p {
+  margin: 10px 0;
+}
+.footer p {
+  margin: 5px 0;
+}
+input {
+  border: 0;
+  border-bottom: 1px solid black;
+}

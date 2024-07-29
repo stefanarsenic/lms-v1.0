@@ -18,6 +18,7 @@ import java.util.Set;
 @Entity
 public class Student extends RegistrovaniKorisnik {
     private String jmbg;
+    private LocalDateTime datumRodjenja;
     @ManyToOne
     private Adresa adresa;
 }
