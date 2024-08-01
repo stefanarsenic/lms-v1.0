@@ -8,5 +8,6 @@ export interface StudentNaGodini {
   brojIndeksa: string,
   godinaStudija: number,
   student: Student,
-  studijskiProgram: StudijskiProgram
+  studijskiProgram: StudijskiProgram,
+  datumZavrsetka: Date
 }

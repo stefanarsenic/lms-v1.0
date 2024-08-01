@@ -21,7 +21,7 @@ public class Predmet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String naziv;
-    private Integer esbp;
+    private Integer espb;
     private Boolean obavezan;
     private Integer brojPredavanja;
     private Integer brojVezbi;

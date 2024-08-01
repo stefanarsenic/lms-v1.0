@@ -23,4 +23,8 @@ public interface PredmetRepository extends JpaRepository<Predmet, Long> {
             "LEFT JOIN PlanZaGodinu pzg ON ppzg.planZaGodinu.id = pzg.id " +
             "WHERE pzg.studijskiProgram.id = :studijskiProgramId ")
     List<Predmet> findPredmetiByStudijskiProgram(@Param("studijskiProgramId") Long studijskiProgramId);
+
+    @Query("SELECT p.espb from Predmet p " +
+            "WHERE p.id = :predmetId ")
+    Integer getEspbOfPredmet(@Param("predmetId") Long predmetId);
 }

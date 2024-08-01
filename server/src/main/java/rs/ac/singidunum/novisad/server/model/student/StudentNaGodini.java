@@ -21,6 +21,7 @@ public class StudentNaGodini {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime datumUpisa;
+    private LocalDateTime datumZavrsetka;
     private String brojIndeksa;
     private Integer godinaStudija;
     @OneToOne

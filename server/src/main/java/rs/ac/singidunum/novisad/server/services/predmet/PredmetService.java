@@ -16,12 +16,13 @@ public class PredmetService extends GenericService<Predmet, Long> {
         super(repository);
         this.predmetRepository = predmetRepository;
     }
-
     public List<Predmet> findPredmetiByStudijskiProgramAndGodina(Long studijskiProgramId, Integer godina){
         return predmetRepository.findPredmetiByStudijskiProgramAndGodina(studijskiProgramId, godina);
     }
-
-    public  List<Predmet> findPredmetiByStudijskiProgram(Long studijskiProgramId){
+    public List<Predmet> findPredmetiByStudijskiProgram(Long studijskiProgramId){
         return predmetRepository.findPredmetiByStudijskiProgram(studijskiProgramId);
+    }
+    public Integer getEspbOfPredmet(Long predmetId){
+        return predmetRepository.getEspbOfPredmet(predmetId);
     }
 }

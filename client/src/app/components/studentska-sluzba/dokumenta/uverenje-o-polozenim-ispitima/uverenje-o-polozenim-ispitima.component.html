@@ -42,17 +42,11 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>1</td>
-        <td>Увод у програмирање</td>
-        <td>10</td>
-        <td>6</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Бази података</td>
-        <td>9</td>
-        <td>8</td>
+      <tr *ngFor="let polozeniIspit of polozeniIspitiStudenta; let i = index">
+        <td>{{ i+1 }}</td>
+        <td>{{ polozeniIspit.predmet.naziv }}</td>
+        <td>{{ polozeniIspit.konacnaOcena }}</td>
+        <td>{{ polozeniIspit.predmet.esbp }}</td>
       </tr>
       </tbody>
     </table>

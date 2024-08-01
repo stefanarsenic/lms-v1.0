@@ -13,7 +13,7 @@ import java.util.Set;
 public class PredmetDto implements Serializable {
     private Long id;
     private String naziv;
-    private Integer esbp;
+    private Integer espb;
     private Boolean obavezan;
     private Integer brojPredavanja;
     private Integer brojVezbi;

@@ -51,6 +51,11 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         List<Predmet> predmeti = predmetService.findPredmetiByStudijskiProgramAndGodina(studijskiProgramId, godina);
         return PredmetiToDto(predmeti);
     }
+    @GetMapping("/{predmetId}/esbp")
+    public ResponseEntity<Integer> getEsbp(@PathVariable Long predmetId) throws IllegalAccessException, InstantiationException {
+        Predmet predmet = predmetService.findById(predmetId).orElseThrow();
+        return new ResponseEntity<>(predmet.getEspb(), HttpStatus.OK);
+    }
 
     @Override
     protected PredmetDto convertToDto(Predmet entity) throws IllegalAccessException, InstantiationException {

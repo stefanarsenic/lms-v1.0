@@ -5,6 +5,10 @@ import {StudentNaGodini} from "../../../../model/studentNaGodini";
 import html2canvas from "html2canvas";
 import {jsPDF} from "jspdf";
 import {TabelaStudenataComponent} from "../tabela-studenata/tabela-studenata.component";
+import {PolozeniPredmetService} from "../../../../services/polozeni-predmet.service";
+import {PolozeniPredmet} from "../../../../model/polozeniPredmet";
+import {PredmetService} from "../../../../services/predmet.service";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-uverenje-o-polozenim-ispitima',
@@ -12,7 +16,8 @@ import {TabelaStudenataComponent} from "../tabela-studenata/tabela-studenata.com
   imports: [
     PaginatorModule,
     ReactiveFormsModule,
-    TabelaStudenataComponent
+    TabelaStudenataComponent,
+    NgForOf
   ],
   templateUrl: './uverenje-o-polozenim-ispitima.component.html',
   styleUrl: './uverenje-o-polozenim-ispitima.component.css'
@@ -20,7 +25,10 @@ import {TabelaStudenataComponent} from "../tabela-studenata/tabela-studenata.com
 export class UverenjeOPolozenimIspitimaComponent implements OnInit{
   form!: FormGroup;
   selektovaniStudent!: StudentNaGodini;
-  constructor() {}
+  polozeniIspitiStudenta: any[] = [];
+  constructor(
+    private polozeniPredmetiService: PolozeniPredmetService,
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -30,6 +38,12 @@ export class UverenjeOPolozenimIspitimaComponent implements OnInit{
       godinaStudija: new FormControl(0, [Validators.required, Validators.min(1)]),
       studijskiProgram: new FormControl('', Validators.required),
       skolskaGodina: new FormControl('', Validators.required)});
+  }
+  getPolozeniIspitiStudenta(studentId: number){
+    this.polozeniPredmetiService.getByStudentId(studentId).subscribe((data: PolozeniPredmet[]) => {
+      this.polozeniIspitiStudenta = data;
+    });
+    console.log(this.polozeniIspitiStudenta);
   }
   getStudent(studentNaGodini: StudentNaGodini){
     this.selektovaniStudent = studentNaGodini;
@@ -41,6 +55,7 @@ export class UverenjeOPolozenimIspitimaComponent implements OnInit{
         godinaStudija: this.selektovaniStudent.godinaStudija || 0,
         studijskiProgram: this.selektovaniStudent.studijskiProgram.naziv || '',
         skolskaGodina: new Date().getFullYear()});
+      this.getPolozeniIspitiStudenta(this.selektovaniStudent.id);
     }
   }
   generatePDF(){

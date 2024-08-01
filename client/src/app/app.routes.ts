@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import {HomePageComponent} from "./components/home-page/home-page.component";
-import {NotFoundComponent} from "./components/not-found/not-found.component";
 import {LoginComponent} from "./components/login/login.component";
 import {authGuard} from "./guards/auth.guard";
 import {UserProfileComponent} from "./components/user/user-profile/user-profile.component";
@@ -22,9 +21,6 @@ import {
   PotvrdaOPrijaviRasporedaIspitaComponent
 } from "./components/studentska-sluzba/dokumenta/potvrda-o-prijavi-rasporeda-ispita/potvrda-o-prijavi-rasporeda-ispita.component";
 import {
-  PotvrdaOUplacenimSkolarinamaComponent
-} from "./components/studentska-sluzba/dokumenta/potvrda-o-uplacenim-skolarinama/potvrda-o-uplacenim-skolarinama.component";
-import {
   UverenjeOProsecnojOceniComponent
 } from "./components/studentska-sluzba/dokumenta/uverenje-o-prosecnoj-oceni/uverenje-o-prosecnoj-oceni.component";
 import {
@@ -34,6 +30,7 @@ import {
   PriznanjeIspitaComponent
 } from "./components/studentska-sluzba/dokumenta/priznanje-ispita/priznanje-ispita.component";
 import {NastavnikComponent} from "./components/admin/nastavnik/nastavnik.component";
+import {UpisStudenataComponent} from "./components/studentska-sluzba/upis-studenata/upis-studenata.component";
 
 StudijskiProgramCrudComponent
 
@@ -78,6 +75,10 @@ export const routes: Routes = [
     // }
     children: [
       {
+        path: "upis-studenata",
+        component: UpisStudenataComponent
+      },
+      {
         path: "dokumenta",
         component: DokumentaComponent,
         children: [
@@ -92,10 +93,6 @@ export const routes: Routes = [
           {
             path: "potvrda-o-prijavi-rasporeda-ispita",
             component: PotvrdaOPrijaviRasporedaIspitaComponent
-          },
-          {
-            path: "potvrda-o-uplacenim-skolarinama",
-            component: PotvrdaOUplacenimSkolarinamaComponent
           },
           {
             path: "uverenje-o-prosecnoj-oceni",

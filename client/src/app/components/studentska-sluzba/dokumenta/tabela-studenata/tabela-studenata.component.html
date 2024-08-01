@@ -1,15 +1,14 @@
 <p-table
   #dt1
-  [value]="studenti"
   dataKey="id"
-  [rows]="10"
-  [rowsPerPageOptions]="[10, 25, 50]"
+  [value]="studenti"
+  [rows]="5"
+  [rowsPerPageOptions]="[5]"
   [paginator]="true"
-  [globalFilterFields]="['brojIndeksa', 'student.ime', 'student.prezime', 'student.jmbg']"
+  [globalFilterFields]="['brojIndeksa', 'student.ime', 'student.prezime']"
 >
   <ng-template pTemplate="caption">
     <div class="flex">
-      <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" />
       <span class="p-input-icon-left ml-auto">
                 <i class="pi pi-search"></i>
                     <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Filter" />
@@ -36,12 +35,6 @@
           <p-columnFilter type="text" field="student.prezime" display="menu" />
         </div>
       </th>
-      <th>
-        <div class="flex align-items-center">
-          JMBG
-          <p-columnFilter type="date" field="student.jmbg" display="menu" />
-        </div>
-      </th>
       <th></th>
     </tr>
   </ng-template>
@@ -55,9 +48,6 @@
       </td>
       <td>
         {{ student.student.prezime }}
-      </td>
-      <td>
-        {{ student.student.jmbg }}
       </td>
       <td>
         <button class="select-button" (click)="selectStudent(student)">Izaberi</button>

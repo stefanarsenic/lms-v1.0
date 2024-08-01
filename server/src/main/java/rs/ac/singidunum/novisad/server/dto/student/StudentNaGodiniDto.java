@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class StudentNaGodiniDto implements Serializable {
     private Long id;
     private LocalDateTime datumUpisa;
+    private LocalDateTime datumZavrsetka;
     private String brojIndeksa;
     private Integer godinaStudija;
     private StudentDto student;

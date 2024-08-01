@@ -5,6 +5,8 @@ import html2canvas from "html2canvas";
 import {jsPDF} from "jspdf";
 import {PaginatorModule} from "primeng/paginator";
 import {TabelaStudenataComponent} from "../tabela-studenata/tabela-studenata.component";
+import {PolozeniPredmetService} from "../../../../services/polozeni-predmet.service";
+import { parseAndFormatDate } from '../../../../utils/datum-utils';
 
 @Component({
   selector: 'app-uverenje-o-zavrsetku-studija',
@@ -20,7 +22,9 @@ import {TabelaStudenataComponent} from "../tabela-studenata/tabela-studenata.com
 export class UverenjeOZavrsetkuStudijaComponent implements OnInit{
   form!: FormGroup;
   selektovaniStudent!: StudentNaGodini;
-  constructor() {}
+  prosecnaOcenaStudenta: number = 0;
+  datumZavrsetkaStudija: any = undefined;
+  constructor(private polozeniPredmetService: PolozeniPredmetService) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -31,16 +35,21 @@ export class UverenjeOZavrsetkuStudijaComponent implements OnInit{
       studijskiProgram: new FormControl('', Validators.required),
       skolskaGodina: new FormControl('', Validators.required)});
   }
+  getProsecnaOcenaStudenta(studentId: number){
+    this.polozeniPredmetService.getProsecnaOcenaByStudentId(studentId).subscribe(data => this.prosecnaOcenaStudenta = data);
+  }
   getStudent(studentNaGodini: StudentNaGodini){
     this.selektovaniStudent = studentNaGodini;
     if (this.selektovaniStudent) {
       this.form.setValue({
         punoIme: `${this.selektovaniStudent.student.ime} ${this.selektovaniStudent.student.prezime}`,
         brojIndeksa: this.selektovaniStudent.brojIndeksa || '',
-        datumRodjenja: this.selektovaniStudent.student.datumRodjenja || '',
+        datumRodjenja: parseAndFormatDate(this.selektovaniStudent.student.datumRodjenja.toString()) || '',
         godinaStudija: this.selektovaniStudent.godinaStudija || 0,
         studijskiProgram: this.selektovaniStudent.studijskiProgram.naziv || '',
         skolskaGodina: new Date().getFullYear()});
+      this.getProsecnaOcenaStudenta(this.selektovaniStudent.id);
+      this.datumZavrsetkaStudija = parseAndFormatDate(this.selektovaniStudent.datumZavrsetka.toString());
     }
   }
   generatePDF(){
