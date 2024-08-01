@@ -3,6 +3,7 @@ import {GenerickiService} from "../../genericko/genericki.service";
 import {Nastavnik} from "../model/nastavnik";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {RegistrovaniKorisnik} from "../model/registrovaniKorisnik";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,11 @@ export class NastavnikService extends GenerickiService<Nastavnik>{
     return this.http.request<void>('DELETE', url, {
       body: userIds
     });
+  }
+
+
+  updateNastavnik(id: number | null, korisnik: Nastavnik){
+    return this.http.put(`http://localhost:8080/api/nastavnici/azuriraj/${id}`,korisnik)
   }
 
 }

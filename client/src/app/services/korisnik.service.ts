@@ -34,7 +34,6 @@ export class KorisnikService {
   }
 
   update(id:number,korisnik:RegistrovaniKorisnik){
-    console.log(korisnik.pravoPristupaSet)
     return this.http.put(`http://localhost:8080/api/korisnici/azuriaj/${id}`,korisnik)
   }
 

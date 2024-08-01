@@ -88,13 +88,14 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
   editPassword:boolean=false
 
   zvanje:Zvanje={id:null,datumIzbora:null,datumPrestanka:null,nastavnik:null,tipZvanja: {id:null,naziv:""},naucnaOblast:null}
-  noviZvanja: Zvanje[] = [];
+  noviZvanja: Zvanje[] | undefined = [];
   constructor(private injector: Injector,private messageService: MessageService, private confirmationService: ConfirmationService,private naucnaOblastService:NacunaOblastService,
   private tipZvanjaService:TipZvanjaService) {
     super();
     const service = this.injector.get(NastavnikService);
     this.initialize(service);
     this.loading=false
+    console.log(this.items)
     this.naucnaOblastService.getAll().subscribe(r=>{
       this.nasucneOblasti=r;
     })
@@ -118,14 +119,21 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
 
   editProduct(korisnik1: Nastavnik) {
     this.selektovanaZvanja=[]
-    this.nastavnik = { ...korisnik1};
+    this.nastavnik = { ...korisnik1 };
+    if (korisnik1.zvanja) {
+      this.noviZvanja = korisnik1.zvanja.map((zvanje: any) => ({
+        datumIzbora: zvanje.datumIzbora ? new Date(zvanje.datumIzbora[0], zvanje.datumIzbora[1] - 1, zvanje.datumIzbora[2], zvanje.datumIzbora[3], zvanje.datumIzbora[4]) : null,
+        datumPrestanka: zvanje.datumPrestanka ? new Date(zvanje.datumPrestanka[0], zvanje.datumPrestanka[1] - 1, zvanje.datumPrestanka[2], zvanje.datumPrestanka[3], zvanje.datumPrestanka[4]) : null,
+        naucnaOblast: zvanje.naucnaOblast || null,
+        tipZvanja: zvanje.tipZvanja || null,
+      }) as Zvanje);
+    }
     this.korisnikDialog = true;
     this.korisnikZaEditovanje= {...this.nastavnik}
-
     this.editPassword=true
 
   }
-  //todo:Treba uraditi: ADD,EDIT
+  //todo:Treba uraditi:EDIT
   deleteSelectedProducts() {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected users?',
@@ -158,32 +166,29 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Proffesor Created', life: 3000 });
       })
     } else {
-      // for (let uloga of this.selektovaneUloge) {
-      //   this.pravoPristupa.uloga=uloga;
-      //   this.pravoPristupa.registrovaniKorisnik
-      //   this.listaPristupa.push(this.pravoPristupa)
-      //   this.pravoPristupa={id:undefined,uloga:undefined,registrovaniKorisnik:null}
-      // }
-      // this.korisnik.pravoPristupaSet=this.listaPristupa;
-      //
-      // (this.service2.update(this.korisnik.id, this.korisnik) as Observable<any>).subscribe(() => {
-      //   this.update(this.service2)
-      //   this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
-      // });
-      // this.korisnikZaEditovanje = undefined
+      this.nastavnik.zvanja=this.noviZvanja
+      console.log(this.nastavnik)
+      this.service2.updateNastavnik(this.nastavnik.id,this.nastavnik).subscribe((r:Nastavnik)=>{
+        this.update(this.service2)
+      })
 
     }
     this.korisnikDialog = false;
     this.nastavnik = {id:null,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[],biografija:"",zvanja:[],jmbg:""};
+    this.noviZvanja=[]
   }
 
   dodajZvanje() {
     this.zvanje.nastavnik={...this.nastavnik}
-    this.noviZvanja.push({...this.zvanje});
+    if (this.noviZvanja) {
+      this.noviZvanja.push({...this.zvanje});
+    }
     this.zvanje={id:null,datumIzbora:null,datumPrestanka:null,nastavnik:null,tipZvanja: {id:null,naziv:""},naucnaOblast:null}
   }
   ukloniZvanje(index: number) {
-    this.noviZvanja.splice(index, 1);
+    if (this.noviZvanja) {
+      this.noviZvanja.splice(index, 1);
+    }
   }
 
 }

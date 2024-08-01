@@ -24,8 +24,8 @@ public class Zvanje {
 
     @ManyToOne
     private Nastavnik nastavnik;
-    @OneToOne
+    @ManyToOne
     private TipZvanja tipZvanja;
-    @OneToOne
+    @ManyToOne
     private NaucnaOblast naucnaOblast;
 }
