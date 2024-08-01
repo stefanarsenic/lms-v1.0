@@ -3,16 +3,15 @@ package rs.ac.singidunum.novisad.server.controllers.student;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
+import rs.ac.singidunum.novisad.server.dto.adresa.MestoDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.adresa.Adresa;
+import rs.ac.singidunum.novisad.server.model.adresa.Mesto;
 import rs.ac.singidunum.novisad.server.model.student.Student;
 import rs.ac.singidunum.novisad.server.services.adresa.AdresaService;
 import rs.ac.singidunum.novisad.server.services.student.StudentService;
@@ -39,7 +38,8 @@ public class StudentController extends GenericController<Student, Long, StudentD
     protected StudentDto convertToDto(Student entity) throws IllegalAccessException, InstantiationException {
         StudentDto studentDto = EntityDtoMapper.convertToDto(entity, StudentDto.class);
         AdresaDto adresaDto = EntityDtoMapper.convertToDto(entity.getAdresa(), AdresaDto.class);
-
+        MestoDto mestoDto=EntityDtoMapper.convertToDto(entity.getAdresa().getMesto(),MestoDto.class);
+        adresaDto.setMesto(mestoDto);
         studentDto.setAdresa(adresaDto);
 
         return studentDto;
@@ -53,5 +53,17 @@ public class StudentController extends GenericController<Student, Long, StudentD
         student.setAdresa(adresa);
 
         return student;
+    }
+
+    @Override
+    @RequestMapping(path = "/dodaj",method = RequestMethod.POST)
+    public ResponseEntity<StudentDto> create(StudentDto dto) throws IllegalAccessException, InstantiationException {
+        Mesto mesto=EntityDtoMapper.convertToEntity(dto.getAdresa().getMesto(),Mesto.class);
+        Adresa adresa=EntityDtoMapper.convertToEntity(dto.getAdresa(),Adresa.class);
+        adresa.setMesto(mesto);
+        Adresa adresa1= adresaService.save(adresa);
+        AdresaDto adresaDto=EntityDtoMapper.convertToDto(adresa1,AdresaDto.class);
+        dto.setAdresa(adresaDto);
+        return super.create(dto);
     }
 }

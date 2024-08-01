@@ -41,15 +41,19 @@ export class UverenjeOZavrsetkuStudijaComponent implements OnInit{
   getStudent(studentNaGodini: StudentNaGodini){
     this.selektovaniStudent = studentNaGodini;
     if (this.selektovaniStudent) {
-      this.form.setValue({
-        punoIme: `${this.selektovaniStudent.student.ime} ${this.selektovaniStudent.student.prezime}`,
-        brojIndeksa: this.selektovaniStudent.brojIndeksa || '',
-        datumRodjenja: parseAndFormatDate(this.selektovaniStudent.student.datumRodjenja.toString()) || '',
-        godinaStudija: this.selektovaniStudent.godinaStudija || 0,
-        studijskiProgram: this.selektovaniStudent.studijskiProgram.naziv || '',
-        skolskaGodina: new Date().getFullYear()});
-      this.getProsecnaOcenaStudenta(this.selektovaniStudent.id);
-      this.datumZavrsetkaStudija = parseAndFormatDate(this.selektovaniStudent.datumZavrsetka.toString());
+      if (this.selektovaniStudent.student.datumRodjenja){
+
+        this.form.setValue({
+          punoIme: `${this.selektovaniStudent.student.ime} ${this.selektovaniStudent.student.prezime}`,
+          brojIndeksa: this.selektovaniStudent.brojIndeksa || '',
+          datumRodjenja: parseAndFormatDate(this.selektovaniStudent.student.datumRodjenja.toString()) || '',
+          godinaStudija: this.selektovaniStudent.godinaStudija || 0,
+          studijskiProgram: this.selektovaniStudent.studijskiProgram.naziv || '',
+          skolskaGodina: new Date().getFullYear()});
+        this.getProsecnaOcenaStudenta(this.selektovaniStudent.id);
+        this.datumZavrsetkaStudija = parseAndFormatDate(this.selektovaniStudent.datumZavrsetka.toString());
+      }
+
     }
   }
   generatePDF(){

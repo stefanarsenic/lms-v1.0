@@ -31,6 +31,7 @@ import {
 } from "./components/studentska-sluzba/dokumenta/priznanje-ispita/priznanje-ispita.component";
 import {NastavnikComponent} from "./components/admin/nastavnik/nastavnik.component";
 import {UpisStudenataComponent} from "./components/studentska-sluzba/upis-studenata/upis-studenata.component";
+import {StudentiComponent} from "./components/admin/studenti/studenti.component";
 
 StudijskiProgramCrudComponent
 
@@ -125,6 +126,10 @@ export const routes: Routes = [
       {
         path: "nastavnici",
         component: NastavnikComponent
+      },
+      {
+        path: "studenti",
+        component: StudentiComponent
       }
     ],
     canActivate:[authGuard],data:{

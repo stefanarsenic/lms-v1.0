@@ -19,6 +19,6 @@ public class Adresa {
     private Long id;
     private String ulica;
     private String broj;
-    @OneToOne
+    @ManyToOne
     private Mesto mesto;
 }

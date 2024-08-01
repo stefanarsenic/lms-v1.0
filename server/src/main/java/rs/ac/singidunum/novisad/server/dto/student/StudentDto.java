@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class StudentDto implements Serializable {
     private Long id;
     private String korisnickoIme;
-    private Long jmbg;
+    private String jmbg;
     private String ime;
     private String prezime;
     private String email;

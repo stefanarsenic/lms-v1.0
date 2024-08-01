@@ -2,8 +2,6 @@ import {Component, Injector, ViewChild} from '@angular/core';
 import {AppGenerickoComponent} from "../../../../genericko/app-genericko/app-genericko.component";
 import {Nastavnik} from "../../../model/nastavnik";
 import {ConfirmationService, MessageService, PrimeTemplate} from "primeng/api";
-import {UlogaService} from "../../../services/uloga.service";
-import {KorisnikService} from "../../../services/korisnik.service";
 import {Button} from "primeng/button";
 import {ChipModule} from "primeng/chip";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
@@ -18,11 +16,7 @@ import {PasswordModule} from "primeng/password";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
-import {RegistrovaniKorisnik} from "../../../model/registrovaniKorisnik";
-import {Uloga} from "../../../model/uloga";
-import {PravoPristupa} from "../../../model/pravoPristupa";
 import {Zvanje} from "../../../model/zvanje";
-import {Observable} from "rxjs";
 import {NastavnikService} from "../../../services/nastavnik.service";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextareaModule} from "primeng/inputtextarea";
@@ -133,7 +127,6 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
     this.editPassword=true
 
   }
-  //todo:Treba uraditi:EDIT
   deleteSelectedProducts() {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected users?',

@@ -19,6 +19,6 @@ import java.util.Set;
 public class Student extends RegistrovaniKorisnik {
     private String jmbg;
     private LocalDateTime datumRodjenja;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Adresa adresa;
 }

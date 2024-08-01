@@ -3,8 +3,8 @@ import {GodinaStudija} from "./godinaStudija";
 import {RegistrovaniKorisnik} from "./registrovaniKorisnik";
 
 export interface Student extends RegistrovaniKorisnik{
-  id: number,
+  id: number|null,
   adresa: Adresa,
   jmbg: string,
-  datumRodjenja: Date
+  datumRodjenja: Date|null
 }

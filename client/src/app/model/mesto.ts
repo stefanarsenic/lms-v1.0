@@ -1,7 +1,7 @@
 import {Drzava} from "./drzava";
 
 export interface Mesto {
-  id: number,
+  id: number | null,
   naziv: string,
   drzava: Drzava
 }
