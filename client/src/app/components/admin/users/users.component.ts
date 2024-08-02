@@ -181,7 +181,7 @@ export class UsersComponent extends AppGenerickoComponent<RegistrovaniKorisnik>{
 
     }
     this.korisnikDialog = false;
-    this.korisnik = {id:0,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[]};
+    this.korisnik = {id:null,ime:"",prezime:"",email:"",korisnickoIme:"",lozinka:"",pravoPristupaSet:[]};
     }
 
 

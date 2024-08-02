@@ -153,6 +153,7 @@ export class StudentiComponent extends AppGenerickoComponent<Student>{
       this.service2.update(this.student.id,this.student).subscribe((r:Student)=>{
         console.log(r)
       })
+      this.korisnikZaEditovanje = undefined
 
     }
     this.korisnikDialog = true;

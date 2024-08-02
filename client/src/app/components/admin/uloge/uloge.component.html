@@ -1,0 +1,171 @@
+<div class="card">
+  <p-toast />
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p-button
+        severity="success"
+        label="New"
+        icon="pi pi-plus"
+        class="mr-2"
+        (onClick)="openNew()" />
+      <p-button
+        severity="danger"
+        label="Delete"
+        icon="pi pi-trash"
+        (onClick)="deleteSelectedProducts()"
+        [disabled]="!selektovaneUloge || !selektovaneUloge.length" />
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <p-fileUpload
+        mode="basic"
+        accept="image/*"
+        [maxFileSize]="1000000"
+        label="Import"
+        chooseLabel="Import"
+        class="mr-2 inline-block" />
+      <p-button
+        severity="help"
+        label="Export"
+        icon="pi pi-upload" />
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="items"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['id', 'naziv']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selektovaneUloge"
+    [rowHover]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h5 class="m-0">Administracija uloga</h5>
+        <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Filter" />
+                </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox />
+        </th>
+        <th pSortableColumn="id" style="min-width:15rem">
+          Id <p-sortIcon field="id" />
+        </th>
+        <th pSortableColumn="naziv" style="min-width:15rem">
+          Naziv <p-sortIcon field="naziv" />
+        </th>
+        <th></th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>
+          <p-columnFilter type="text" field="id" [showClearButton]="true" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="naziv" [showClearButton]="true" />
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-editing="editing">
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="product" />
+        </td>
+        <td [pEditableColumn]="product.id" pEditableColumnField="id">
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.id" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ product.id }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td [pEditableColumn]="product.naziv" pEditableColumnField="naziv">
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.naziv" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ product.naziv }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+
+
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            [outlined]="true"
+            severity="success"
+            (onClick)="editProduct(product)" />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [rounded]="true"
+            [outlined]="true"
+            (onClick)="deleteItem(product.id)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ items ? items.length : 0 }} roles.
+      </div>
+    </ng-template>
+  </p-table>
+
+  <p-dialog
+    [(visible)]="ulogeDialog"
+    [style]="{ width: '450px' }"
+    header="Korisicnike informacije"
+    [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="ime">Naziv</label>
+        <input
+          type="text"
+          pInputText
+          id="ime"
+          [(ngModel)]="uloga.naziv"
+          required
+          autofocus />
+        <small class="p-error" *ngIf="submitted && !uloga.naziv">
+          Name is required.
+        </small>
+      </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="hideDialog()" />
+      <p-button
+        label="Save"
+        icon="pi pi-check"
+        [text]="true"
+        (onClick)="saveProduct()" />
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{ width: '450px' }" />
+</div>
+

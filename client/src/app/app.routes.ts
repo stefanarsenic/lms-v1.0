@@ -32,6 +32,7 @@ import {
 import {NastavnikComponent} from "./components/admin/nastavnik/nastavnik.component";
 import {UpisStudenataComponent} from "./components/studentska-sluzba/upis-studenata/upis-studenata.component";
 import {StudentiComponent} from "./components/admin/studenti/studenti.component";
+import {UlogeComponent} from "./components/admin/uloge/uloge.component";
 
 StudijskiProgramCrudComponent
 
@@ -130,6 +131,10 @@ export const routes: Routes = [
       {
         path: "studenti",
         component: StudentiComponent
+      },
+      {
+        path: "uloge",
+        component: UlogeComponent
       }
     ],
     canActivate:[authGuard],data:{
