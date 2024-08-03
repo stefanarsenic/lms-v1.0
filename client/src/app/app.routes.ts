@@ -33,6 +33,7 @@ import {NastavnikComponent} from "./components/admin/nastavnik/nastavnik.compone
 import {UpisStudenataComponent} from "./components/studentska-sluzba/upis-studenata/upis-studenata.component";
 import {StudentiComponent} from "./components/admin/studenti/studenti.component";
 import {UlogeComponent} from "./components/admin/uloge/uloge.component";
+import {ObavestenjaComponent} from "./components/studentska-sluzba/obavestenja/obavestenja.component";
 
 StudijskiProgramCrudComponent
 
@@ -79,6 +80,10 @@ export const routes: Routes = [
       {
         path: "upis-studenata",
         component: UpisStudenataComponent
+      },
+      {
+        path: "obavestenja",
+        component: ObavestenjaComponent
       },
       {
         path: "dokumenta",
