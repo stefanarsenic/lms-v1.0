@@ -8,27 +8,26 @@ import lombok.Setter;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class StudentNaGodini {
+public class Upis {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime datumUpisa;
-    private LocalDateTime datumZavrsetka;
-    @Column(unique = true)
-    private String brojIndeksa;
     private Integer godinaStudija;
+    private Integer espbNajava;
+    private Integer espbOsvojeno;
+    private Integer kojiPut;
+    private String studijskiProgram;
     @ManyToOne
-    private Student student;
+    private StudentNaGodini student;
     @ManyToOne
-    private StudijskiProgram studijskiProgram;
-    //TODO: kolekcija predmet koje student pohadja zbog prenosenja predmeta na sledecu godinu
-    //TODO: skolska godina
+    private SkolskaGodina skolskaGodina;
+
 }

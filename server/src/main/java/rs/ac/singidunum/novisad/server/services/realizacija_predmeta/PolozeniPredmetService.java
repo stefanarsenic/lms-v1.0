@@ -16,10 +16,15 @@ public class PolozeniPredmetService extends GenericService<PolozeniPredmet, Long
         super(repository);
         this.polozeniPredmetRepository = polozeniPredmetRepository;
     }
+
     public List<PolozeniPredmet> findPolozeniPredmetsByStudentId(Long studentId){
         return polozeniPredmetRepository.findPolozeniPredmetsByStudentId(studentId);
     }
     public Optional<Double> averageKonacnaOcenaByStudentId(Long studentId) {
-        return polozeniPredmetRepository.findAverageKonacnaOcenaByStudentId(studentId);
+        return polozeniPredmetRepository.getAverageKonacnaOcenaByStudentId(studentId);
+    }
+
+    public Integer findOstvareniEspbByStudentId(Long studentId){
+        return polozeniPredmetRepository.getOstvareniEspbByStudentId(studentId).orElse(0);
     }
 }

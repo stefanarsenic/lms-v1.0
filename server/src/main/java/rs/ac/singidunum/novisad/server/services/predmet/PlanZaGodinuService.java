@@ -15,6 +15,9 @@ public class PlanZaGodinuService extends GenericService<PlanZaGodinu, Long> {
         this.planZaGodinuRepository = planZaGodinuRepository;
     }
 
+    public Integer getPotrebnoEspbByStudijskiProgramIdAndGodina(Long studijskiProgramId, Integer godina){
+        return planZaGodinuRepository.getPotrebnoEspbByStudijskiProgramIdAndGodina(studijskiProgramId, godina);
+    }
     public PlanZaGodinu findByStudijskiProgramAndGodina(StudijskiProgram studijskiProgram, Integer godina){
         return planZaGodinuRepository.findByStudijskiProgramAndGodina(studijskiProgram, godina);
     }

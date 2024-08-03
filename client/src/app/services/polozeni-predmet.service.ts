@@ -19,4 +19,7 @@ export class PolozeniPredmetService extends GenerickiService<PolozeniPredmet>{
   getProsecnaOcenaByStudentId(studentId: number){
     return this.http.get<number>(`http://localhost:8080/${this.putanja}/prosecna-ocena/student/${studentId}`);
   }
+  getUkupnoEspbByStudentId(studentId: number){
+    return this.http.get<number>(`http://localhost:8080/${this.putanja}/ukupno-espb/student/${studentId}`);
+  }
 }

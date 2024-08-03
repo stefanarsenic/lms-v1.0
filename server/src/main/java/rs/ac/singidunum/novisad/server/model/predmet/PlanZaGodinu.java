@@ -20,6 +20,8 @@ public class PlanZaGodinu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer godina;
+    private Integer potrebnoEspb;
+    private Integer ukupnoEspb;
     @OneToMany(mappedBy = "planZaGodinu")
     private Set<PredmetPlanaZaGodinu> predmetiPlanaZaGodinu;
     @ManyToOne

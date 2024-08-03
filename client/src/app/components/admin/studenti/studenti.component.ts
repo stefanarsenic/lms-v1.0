@@ -96,7 +96,7 @@ export class StudentiComponent extends AppGenerickoComponent<Student>{
 
   openNew() {
 
-    this.student = {id:null,korisnickoIme:"",lozinka:"",email:"",ime:"",prezime:"",pravoPristupaSet:[],adresa:{id:null,ulica:"",broj:"",mesto:{id:null,naziv:"",drzava:{id:null,naziv:"",mesta:[]}}},jmbg:"",datumRodjenja:null};
+    this.student = {id:0,korisnickoIme:"",lozinka:"",email:"",ime:"",prezime:"",pravoPristupaSet:[],adresa:{id:null,ulica:"",broj:"",mesto:{id:null,naziv:"",drzava:{id:null,naziv:"",mesta:[]}}},jmbg:"",datumRodjenja:null};
     this.submitted = false;
     this.korisnikDialog = true;
     this.editPassword=false
@@ -157,7 +157,7 @@ export class StudentiComponent extends AppGenerickoComponent<Student>{
 
     }
     this.korisnikDialog = true;
-    this.student = {id:null,korisnickoIme:"",lozinka:"",email:"",ime:"",prezime:"",pravoPristupaSet:[],adresa:{id:null,ulica:"",broj:"",mesto:{id:null,naziv:"",drzava:{id:null,naziv:"",mesta:[]}}},jmbg:"",datumRodjenja:null};
+    this.student = {id:0,korisnickoIme:"",lozinka:"",email:"",ime:"",prezime:"",pravoPristupaSet:[],adresa:{id:null,ulica:"",broj:"",mesto:{id:null,naziv:"",drzava:{id:null,naziv:"",mesta:[]}}},jmbg:"",datumRodjenja:null};
     this.selektovanaDrzava={id:null,naziv:"",mesta:[]}
   }
 

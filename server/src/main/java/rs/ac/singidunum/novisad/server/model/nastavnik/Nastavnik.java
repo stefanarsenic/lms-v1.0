@@ -19,6 +19,7 @@ import java.util.Set;
 public class Nastavnik extends RegistrovaniKorisnik {
 
     private String biografija;
+    @Column(unique = true)
     private String jmbg;
     @OneToMany(mappedBy = "nastavnik",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Zvanje> zvanja;

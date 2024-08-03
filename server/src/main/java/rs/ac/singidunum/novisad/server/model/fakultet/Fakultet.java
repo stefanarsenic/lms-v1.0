@@ -22,6 +22,7 @@ public class Fakultet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String naziv;
     @ManyToOne
     private Adresa adresa;

@@ -18,6 +18,7 @@ public class Drzava {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String naziv;
     @OneToMany(mappedBy = "drzava",cascade = CascadeType.ALL)
     private Set<Mesto> mesta;

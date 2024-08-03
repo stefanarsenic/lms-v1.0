@@ -17,5 +17,11 @@ public interface PolozeniPredmetRepository extends JpaRepository<rs.ac.singidunu
     @Query("SELECT AVG(pp.konacnaOcena) " +
             "FROM PolozeniPredmet pp " +
             "WHERE pp.student.id = :studentId")
-    Optional<Double> findAverageKonacnaOcenaByStudentId(@Param("studentId") Long studentId);
+    Optional<Double> getAverageKonacnaOcenaByStudentId(@Param("studentId") Long studentId);
+    @Query("SELECT SUM(p.espb) " +
+            "FROM Predmet p " +
+            "LEFT JOIN PolozeniPredmet pp " +
+            "ON p.id = pp.predmet.id " +
+            "WHERE pp.student.id = :studentId")
+    Optional<Integer> getOstvareniEspbByStudentId(@Param("studentId") Long studentId);
 }

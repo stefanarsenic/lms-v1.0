@@ -25,6 +25,13 @@ public class PolozeniPredmetController extends GenericController<PolozeniPredmet
         super(service);
         this.polozeniPredmetService = polozeniPredmetService;
     }
+
+    @GetMapping("/ukupno-espb/student/{studentId}")
+    public ResponseEntity<Integer> getUkupnoEspbStudenta(@PathVariable Long studentId){
+        Integer ukupnoEspb = polozeniPredmetService.findOstvareniEspbByStudentId(studentId);
+
+        return new ResponseEntity<>(ukupnoEspb, HttpStatus.OK);
+    }
     @GetMapping("/prosecna-ocena/student/{studentId}")
     public ResponseEntity<Optional<Double>> getProsecnaOcenaStudenta(@PathVariable Long studentId){
         Optional<Double> prosecnaOcena = polozeniPredmetService.averageKonacnaOcenaByStudentId(studentId);

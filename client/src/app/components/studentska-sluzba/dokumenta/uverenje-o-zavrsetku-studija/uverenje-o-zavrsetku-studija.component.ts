@@ -50,8 +50,14 @@ export class UverenjeOZavrsetkuStudijaComponent implements OnInit{
           godinaStudija: this.selektovaniStudent.godinaStudija || 0,
           studijskiProgram: this.selektovaniStudent.studijskiProgram.naziv || '',
           skolskaGodina: new Date().getFullYear()});
-        this.getProsecnaOcenaStudenta(this.selektovaniStudent.id);
-        this.datumZavrsetkaStudija = parseAndFormatDate(this.selektovaniStudent.datumZavrsetka.toString());
+
+        if(this.selektovaniStudent.id) {
+          this.getProsecnaOcenaStudenta(this.selektovaniStudent.id);
+        }
+        if (this.selektovaniStudent.datumZavrsetka) {
+          this.datumZavrsetkaStudija = parseAndFormatDate(this.selektovaniStudent.datumZavrsetka.toString());
+        }
+
       }
 
     }

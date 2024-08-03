@@ -13,4 +13,8 @@ export class StudentNaGodiniService extends GenerickiService<StudentNaGodini>{
     super(http);
     this.putanja = "api/student-na-godini";
   }
+
+  getAllByStudentId(studentId: number){
+    return this.http.get<StudentNaGodini[]>(`http://localhost:8080/${this.putanja}/student/${studentId}`);
+  }
 }

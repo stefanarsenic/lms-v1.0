@@ -69,6 +69,7 @@ public class StudijskiProgramController extends GenericController<StudijskiProgr
 
     @Override
     protected StudijskiProgramDto convertToDto(StudijskiProgram entity) throws IllegalAccessException, InstantiationException {
+        entity.getRukovodilac().setPravoPristupaSet(Collections.emptySet());
         StudijskiProgramDto studijskiProgramDto = EntityDtoMapper.convertToDto(entity, StudijskiProgramDto.class);
         entity.getFakultet().setStudijskiProgrami(Collections.emptySet());
         studijskiProgramDto.setFakultet(EntityDtoMapper.convertToDto(entity.getFakultet(), FakultetDto.class));

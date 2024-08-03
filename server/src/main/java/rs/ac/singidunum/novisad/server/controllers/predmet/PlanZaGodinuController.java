@@ -1,5 +1,8 @@
 package rs.ac.singidunum.novisad.server.controllers.predmet;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.predmet.PlanZaGodinuDto;
@@ -10,6 +13,7 @@ import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.predmet.PlanZaGodinu;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.model.predmet.PredmetPlanaZaGodinu;
+import rs.ac.singidunum.novisad.server.services.predmet.PlanZaGodinuService;
 import rs.ac.singidunum.novisad.server.services.predmet.PredmetPlanaZaGodinuService;
 
 import java.util.Collections;
@@ -21,9 +25,18 @@ import java.util.Set;
 public class PlanZaGodinuController extends GenericController<PlanZaGodinu, Long, PlanZaGodinuDto> {
 
     private final PredmetPlanaZaGodinuService predmetPlanaZaGodinuService;
-    public PlanZaGodinuController(GenericService<PlanZaGodinu, Long> service, PredmetPlanaZaGodinuService predmetPlanaZaGodinuService) {
+    private final PlanZaGodinuService planZaGodinuService;
+    public PlanZaGodinuController(GenericService<PlanZaGodinu, Long> service, PredmetPlanaZaGodinuService predmetPlanaZaGodinuService, PlanZaGodinuService planZaGodinuService) {
         super(service);
         this.predmetPlanaZaGodinuService = predmetPlanaZaGodinuService;
+        this.planZaGodinuService = planZaGodinuService;
+    }
+
+    @GetMapping("/uslov-espb/{studijskiProgramId}/godina/{godina}")
+    public ResponseEntity<Integer> getUslov(@PathVariable Long studijskiProgramId, @PathVariable Integer godina){
+        Integer uslovEspb = planZaGodinuService.getPotrebnoEspbByStudijskiProgramIdAndGodina(studijskiProgramId, godina);
+
+        return ResponseEntity.ok(uslovEspb);
     }
 
     @Override

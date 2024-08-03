@@ -18,6 +18,7 @@ public class Mesto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String naziv;
     @ManyToOne
     private Drzava drzava;

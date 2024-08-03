@@ -21,7 +21,6 @@ public class Zvanje {
     private Long id;
     private LocalDateTime datumIzbora;
     private LocalDateTime datumPrestanka;
-
     @ManyToOne
     private Nastavnik nastavnik;
     @ManyToOne

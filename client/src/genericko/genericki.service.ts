@@ -20,7 +20,7 @@ export class GenerickiService<T> {
   }
 
   create(objekat:T){
-    return this.http.post(`http://localhost:8080/${this.putanja}/dodaj`,objekat);
+    return this.http.post(`http://localhost:8080/${this.putanja}`,objekat);
   }
 
   delete(id:number){

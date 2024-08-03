@@ -1,1 +1,178 @@
-<p>upis-studenata works!</p>
+<body>
+<div class="flexbox">
+  <div class="left">
+    <p-toast />
+    <p-table
+      dataKey="id"
+      [value]="studenti"
+      (onRowExpand)="onRowExpand($event)"
+      (onRowCollapse)="onRowCollapse($event)">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 5rem"></th>
+          <th pSortableColumn="ime">Ime <p-sortIcon field="ime" /></th>
+          <th pSortableColumn="prezime">Prezime <p-sortIcon field="prezime" /></th>
+          <th pSortableColumn="datumRodjenja">Datum Rodjenja <p-sortIcon field="datumRodjenja" /></th>
+          <th pSortableColumn="jmbg">JMBG <p-sortIcon field="jmbg" /></th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-student let-expanded="expanded">
+        <tr>
+          <td>
+            <p-button type="button" pRipple [pRowToggler]="student" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+          </td>
+          <td>{{ student.ime }}</td>
+          <td>{{ student.prezime }}</td>
+          <td>{{ student.datumRodjenja }}</td>
+          <td>{{ student.jmbg }}</td>
+          <td><button
+            (click)="upis(student)"
+            pButton
+            pRipple
+            label="Upis"
+            class="p-button-success"
+            size="small">
+          </button></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-student>
+        <tr>
+          <td colspan="7">
+            <div class="p-3">
+              <p-table [value]="student.studentiNaGodini" dataKey="id">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th pSortableColumn="brojIndeksa">Broj Indeksa <p-sortIcon field="brojIndeksa" /></th>
+                    <th pSortableColumn="datumUpisa">Datum Upisa <p-sortIcon field="datumUpisa" /></th>
+                    <th pSortableColumn="godinaStudija">Godina Studija <p-sortIcon field="godinaStudija" /></th>
+                    <th pSortableColumn="studijskiProgram.naziv">Studijski Program <p-sortIcon field="studijskiProgram.naziv" /></th>
+                    <th></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-studentNaGodini>
+                  <tr>
+                    <td>{{ studentNaGodini.brojIndeksa }}</td>
+                    <td>{{ studentNaGodini.datumUpisa }}</td>
+                    <td>{{ studentNaGodini.godinaStudija }}</td>
+                    <td>{{ studentNaGodini.studijskiProgram.naziv }}</td>
+                    <td>
+                      <button
+                      (click)="upisNaSledecuGodinu(studentNaGodini)"
+                      pButton
+                      pRipple
+                      label="Upis u narednu godinu"
+                      class="p-button-success"
+                      size="small">
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="6">Student nije upisan ni na jednu godinu.</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div class="card flex justify-content-center">
+      <p-dialog
+        header="Upis studenta na godinu"
+        [(visible)]="upisDialog"
+        [modal]="true"
+        [style]="{ width: '30rem', height: 'auto' , overflow: 'hidden'}">
+
+        <div class="flex align-items-center gap-3 mb-3">
+          <div class="student-card" *ngIf="selektovaniStudent">
+            <div class="student-card-header">
+              <h2 class="student-name">{{ selektovaniStudent.ime }} {{ selektovaniStudent.prezime }}</h2>
+              <p class="student-id">JMBG: {{ selektovaniStudent.jmbg }}</p>
+            </div>
+            <div class="student-card-body">
+              <p><strong>Studijski Program:</strong>
+                <p-dropdown
+                  [options]="dozvoljeniStudijskiProgrami"
+                  [(ngModel)]="selektovaniStudijskiProgram"
+                  optionLabel="naziv"
+                  placeholder="Izaberi Studijski Program" />
+              </p>
+              <p><strong>Broj Indeksa: </strong></p>
+              <div class="input-wrapper">
+                <span class="fixed-part">{{ godina }}</span>
+                <input id="flat-input" [(ngModel)]="brojIndeksa" required>
+              </div>
+            </div>
+            <div *ngIf="!!dozvoljeniStudijskiProgrami">
+              <small class="info-message">Student vec pohadja sve studijske programe.</small>
+            </div>
+          </div>
+        </div>
+
+        <ng-template pTemplate="footer">
+          <p-button
+            label="Otkazi"
+            [text]="true"
+            severity="secondary"
+            (onClick)="upisDialog = false" />
+          <p-button
+            label="Sacuvaj"
+            [outlined]="true"
+            severity="primary"
+            (onClick)="sacuvaj()"
+          />
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+  <div class="card flex justify-content-center">
+    <p-dialog
+      header="Upis studenta u narednu godinu"
+      [(visible)]="upisNaSledecuGodinuDialog"
+      [modal]="true"
+      [style]="{ width: '35rem', height: 'auto' , overflow: 'hidden'}">
+      <div class="student-card" *ngIf="selektovaniStudentNaGodini">
+        <div class="student-card-header">
+          <h2 class="student-name">{{ selektovaniStudentNaGodini.student.ime }} {{ selektovaniStudentNaGodini.student.prezime }}</h2>
+          <p class="student-id">{{ selektovaniStudentNaGodini.brojIndeksa }}</p>
+        </div>
+        <div class="student-card-body">
+          <p><strong>Studijski Program:</strong> {{ selektovaniStudentNaGodini.studijskiProgram.naziv }}</p>
+          <p><strong>Godina:</strong> {{ selektovaniStudentNaGodini.godinaStudija }}</p>
+          <p><strong>Ostvareno Espb:</strong> {{ selektovaniStudentNaGodini.ostvareniEspb }}</p>
+          <p><strong>Uslov:</strong> {{ uslovEspb }}</p>
+          <p><strong>Email:</strong> {{ selektovaniStudentNaGodini.student.email }}</p>
+        </div>
+        <small class="message-container">
+          <small class="warning-message" [hidden]="hideWarningMessage">
+            Student ne ispunjava uslove za upis u narednu godinu, prema tome, studentu ce biti obnovljena godina studija!
+          </small>
+          <small class="success-message" [hidden]="hideSuccessMessage">
+            Student ispunjava uslove za upis u narednu godinu studija!
+          </small>
+        </small>
+      </div>
+      <ng-template pTemplate="footer">
+        <p-button
+          label="Otkazi"
+          [text]="true"
+          severity="secondary"
+          (onClick)="upisNaSledecuGodinuDialog = false" />
+        <p-button
+          label="Potvrdi"
+          [outlined]="true"
+          severity="primary"
+          (onClick)="potvrdi()"
+        />
+      </ng-template>
+    </p-dialog>
+  </div>
+  <div class="right">
+
+  </div>
+</div>
+</body>

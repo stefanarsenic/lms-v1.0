@@ -1,0 +1,164 @@
+body {
+  width: 100%;
+  background-color: transparent;
+}
+
+.student-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.student-card-header {
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.student-name {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.student-id {
+  font-size: 1.2em;
+  color: #555;
+  margin: 5px 0 0;
+}
+
+.student-card-body {
+  font-size: 1em;
+  color: #333;
+}
+
+.student-card-body p {
+  margin: 8px 0;
+}
+
+.student-card-body strong {
+  color: #333;
+}
+
+.message {
+  display: inline-block;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.success-message {
+  color: #155724; /* Dark green */
+  background-color: #d4edda; /* Light green */
+  border: 1px solid #c3e6cb; /* Light green border */
+}
+
+.message::before {
+  content: " ";
+  font-size: 16px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.success-message::before {
+  content: "✔️"; /* Checkmark for success */
+  color: #155724;
+}
+
+.warning-message {
+  display: inline-block;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #856404;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.warning-message::before {
+  content: "⚠️ ";
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.small-button {
+  font-size: 12px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background-color: #007bff;
+  color: white;
+}
+
+.small-button:hover {
+  background-color: #0056b3;
+}
+
+.small-button:focus {
+  outline: none;
+}
+
+.message-container {
+  font-size: 14px;
+}
+#flat-input {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  flex: 1;
+}
+
+#flat-input:focus {
+  border-color: #5b9bd5;
+  box-shadow: 0 0 5px rgba(91, 155, 213, 0.5);
+}
+
+#flat-input::placeholder {
+  color: #bbb;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.fixed-part {
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-right: 1px solid #ddd;
+  font-size: 16px;
+  color: #333;
+}
+
+.info-message {
+  display: inline-block;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.info-message::before {
+  content: "ℹ️ ";
+  font-size: 16px;
+  vertical-align: middle;
+}
