@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface PredmetRepository extends JpaRepository<Predmet, Long> {
     @Query("SELECT p.espb from Predmet p " +
             "WHERE p.id = :predmetId ")
     Integer getEspbOfPredmet(@Param("predmetId") Long predmetId);
+
+    List<Predmet> findByNastavnik(Nastavnik nastavnik);
 }

@@ -30,6 +30,8 @@ export class LoginComponent{
         this.router.navigate(["/admin"])
       }else if(this.loginService.proveraUloga(["ROLE_SLUZBA"])){
         this.router.navigate(["/studentska-sluzba"])
+      }else if(this.loginService.proveraUloga(["ROLE_NASTAVNIK"])) {
+        this.router.navigate(["/nastavnik"])
       }else {
         this.router.navigate(["/main"])
       }

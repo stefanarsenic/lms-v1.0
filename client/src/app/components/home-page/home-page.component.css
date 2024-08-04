@@ -1,7 +1,7 @@
 body {
   margin: 0 auto;
   font-family: Arial, sans-serif;
-  background-image: url("../../assets/bg-image.png");
+  background-image: url("../../../assets/bg-image.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -73,7 +73,7 @@ body {
 .logo{
   width: 60px;
   aspect-ratio: 1;
-  background-image: url("../../assets/logo.png");
+  background-image: url("../../../assets/logo.png");
   background-size: cover;
 }
 

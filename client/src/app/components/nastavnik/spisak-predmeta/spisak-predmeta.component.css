@@ -1,0 +1,29 @@
+.regular-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+/* Style the table headers */
+.regular-table thead th {
+  background-color: #f5f5f5;
+  padding: 8px;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+
+/* Style the table cells */
+.regular-table tbody td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Optional: Add zebra striping for better readability */
+.regular-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Optional: Add border around the table */
+.regular-table {
+  border: 1px solid #ddd;
+}

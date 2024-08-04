@@ -1,11 +1,9 @@
 package rs.ac.singidunum.novisad.server.controllers.predmet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
@@ -13,17 +11,18 @@ import rs.ac.singidunum.novisad.server.dto.predmet.PredmetPlanaZaGodinuDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
+import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
+import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.model.predmet.PredmetPlanaZaGodinu;
+import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikService;
+import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 import rs.ac.singidunum.novisad.server.services.predmet.IshodService;
 import rs.ac.singidunum.novisad.server.services.predmet.PredmetPlanaZaGodinuService;
 import rs.ac.singidunum.novisad.server.services.predmet.PredmetService;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/predmet")
@@ -32,6 +31,9 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
     private final IshodService ishodService;
     private final PredmetService predmetService;
     private final PredmetPlanaZaGodinuService predmetPlanaZaGodinuService;
+
+    @Autowired
+    NastavnikService nastavnikService;
     public PredmetController(GenericService<Predmet, Long> service, IshodService ishodService, PredmetService predmetService, PredmetPlanaZaGodinuService predmetPlanaZaGodinuService) {
         super(service);
         this.ishodService = ishodService;
@@ -55,6 +57,19 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
     public ResponseEntity<Integer> getEsbp(@PathVariable Long predmetId) throws IllegalAccessException, InstantiationException {
         Predmet predmet = predmetService.findById(predmetId).orElseThrow();
         return new ResponseEntity<>(predmet.getEspb(), HttpStatus.OK);
+    }
+
+    @GetMapping("/predmeti")
+    public ResponseEntity<List<PredmetDto>> getNastavnikPredmeti(@RequestParam("korisnickoIme") String korisnickoIme)
+            throws IllegalAccessException, InstantiationException {
+
+        Optional<Nastavnik> nastavnik = nastavnikService.findByKorisnickoIme(korisnickoIme);
+        List<Predmet> predmets = new ArrayList<>();
+        if (nastavnik.isPresent()) {
+            predmets = predmetService.getPredmetByNastavnik(nastavnik.get());
+        }
+
+        return PredmetiToDto(predmets);
     }
 
     @Override
@@ -126,4 +141,6 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
 
         return new ResponseEntity<>(predmetiDto, HttpStatus.OK);
     }
+
+
 }

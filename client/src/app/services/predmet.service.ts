@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import {GenerickiService} from "../../genericko/genericki.service";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Predmet} from "../model/predmet";
+import {Nastavnik} from "../model/nastavnik";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +26,10 @@ export class PredmetService extends GenerickiService<any>{
   }
   createPlanWithPredmeti(predmeti: any[], studijskiProgramId: number, godina: number){
     return this.http.post(`http://localhost:8080/api/predmet-plana-za-godinu/with-predmeti/${studijskiProgramId}/${godina}`, predmeti);
+  }
+
+  getPredmetByNastavnik(nastavnik: string): Observable<Predmet[]> {
+    const params = new HttpParams().set('korisnickoIme',nastavnik);
+    return this.http.get<Predmet[]>(`http://localhost:8080/${this.putanja}/predmeti`, { params });
   }
 }

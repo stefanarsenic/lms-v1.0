@@ -34,6 +34,8 @@ import {UpisStudenataComponent} from "./components/studentska-sluzba/upis-studen
 import {StudentiComponent} from "./components/admin/studenti/studenti.component";
 import {UlogeComponent} from "./components/admin/uloge/uloge.component";
 import {ObavestenjaComponent} from "./components/studentska-sluzba/obavestenja/obavestenja.component";
+import {NastavnikProfileComponent} from "./components/nastavnik/nastavnik/nastavnik-profile.component";
+import {SpisakPredmetaComponent} from "./components/nastavnik/spisak-predmeta/spisak-predmeta.component";
 
 StudijskiProgramCrudComponent
 
@@ -160,6 +162,20 @@ export const routes: Routes = [
       allowedRoles:["ROLE_REGULAR"]
     }
   },
+  {
+    path:"nastavnik",
+    component: NastavnikProfileComponent,
+    children:[
+      {
+        path: "spisak-predmeta",
+        component: SpisakPredmetaComponent
+      }
+    ],
+    canActivate:[authGuard],data:{
+      allowedRoles:["ROLE_NASTAVNIK"]
+    }
+  },
+
   {
     path:"register",
     component: RegisterComponent
