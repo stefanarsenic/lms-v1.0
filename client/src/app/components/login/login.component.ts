@@ -6,9 +6,9 @@ import {PasswordModule} from "primeng/password";
 import {CheckboxModule} from "primeng/checkbox";
 import {ButtonDirective} from "primeng/button";
 import {Ripple} from "primeng/ripple";
-import {LayoutTestService} from "../../services/layout-test.service";
 import {InputTextModule} from "primeng/inputtext";
 import {NgOptimizedImage} from "@angular/common";
+import {LayoutService} from "../nastavnik/nastavnik/service/app.layout.service";
 
 @Component({
   selector: 'app-login',
@@ -27,7 +27,7 @@ export class LoginComponent{
   constructor(
     private router: Router,
     private loginService:LoginService,
-    public layoutService: LayoutTestService
+    public layoutService: LayoutService
   ) {}
 
   login(){

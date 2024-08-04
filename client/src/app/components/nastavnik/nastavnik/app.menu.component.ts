@@ -4,8 +4,6 @@ import { LayoutService } from './service/app.layout.service';
 import {NgForOf, NgIf} from "@angular/common";
 import {AppMenuitemComponent} from "./app.menuitem.component";
 import {RouterLink, RouterModule, RouterOutlet} from "@angular/router";
-import {TestComponent} from "./test/test.component";
-import {LayoutTestService} from "../../../services/layout-test.service";
 
 @Component({
   selector: 'app-menu',
@@ -16,8 +14,7 @@ import {LayoutTestService} from "../../../services/layout-test.service";
     NgIf,
     RouterOutlet,
     RouterLink,
-    RouterModule,
-    TestComponent
+    RouterModule
   ],
   templateUrl: './app.menu.component.html'
 })
@@ -25,7 +22,7 @@ export class AppMenuComponent implements OnInit {
 
     model: any[] = [];
 
-    constructor(public layoutService: LayoutTestService) { }
+    constructor(public layoutService: LayoutService) { }
 
     ngOnInit() {
         this.model = [

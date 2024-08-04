@@ -1,18 +1,14 @@
 import {Component, OnDestroy, Renderer2, ViewChild} from '@angular/core';
-import {CurrencyPipe, NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
 
-import {MenuModule} from "primeng/menu";
-import {TableModule} from "primeng/table";
-import {ButtonDirective} from "primeng/button";
-import {Ripple} from "primeng/ripple";
 import {AppFooterComponent} from "./app.footer.component";
 import {AppSidebarComponent} from "./app.sidebar.component";
 import {AppTopBarComponent} from "./app.topbar.component";
 import {NavigationEnd, Router, RouterLink, RouterModule, RouterOutlet} from "@angular/router";
 import {filter} from "rxjs/operators";
 import {Subscription} from "rxjs";
-import {LayoutTestService} from "../../../services/layout-test.service";
 import {SpisakPredmetaComponent} from "../spisak-predmeta/spisak-predmeta.component";
+import {NgClass} from "@angular/common";
+import {LayoutService} from "./service/app.layout.service";
 
 @Component({
   selector: 'app-nastavnik',
@@ -41,7 +37,7 @@ export class NastavnikProfileComponent implements OnDestroy {
 
   @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
 
-  constructor(public layoutService: LayoutTestService, public renderer: Renderer2, public router: Router) {
+  constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
       if (!this.menuOutsideClickListener) {
         this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {
