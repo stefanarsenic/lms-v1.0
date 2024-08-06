@@ -36,6 +36,7 @@ import {UlogeComponent} from "./components/admin/uloge/uloge.component";
 import {ObavestenjaComponent} from "./components/studentska-sluzba/obavestenja/obavestenja.component";
 import {NastavnikProfileComponent} from "./components/nastavnik/nastavnik/nastavnik-profile.component";
 import {SpisakPredmetaComponent} from "./components/nastavnik/spisak-predmeta/spisak-predmeta.component";
+import {SpisakStudenataComponent} from "./components/nastavnik/spisak-studenata/spisak-studenata.component";
 
 StudijskiProgramCrudComponent
 
@@ -169,6 +170,10 @@ export const routes: Routes = [
       {
         path: "spisak-predmeta",
         component: SpisakPredmetaComponent
+      },
+      {
+        path: "studenti-spisak",
+        component: SpisakStudenataComponent
       }
     ],
     canActivate:[authGuard],data:{

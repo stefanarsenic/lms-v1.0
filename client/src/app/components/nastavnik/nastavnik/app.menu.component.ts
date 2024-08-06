@@ -45,7 +45,7 @@ export class AppMenuComponent implements OnInit {
           {
             label: 'Studenti',
             items: [
-              { label: 'Spisak Studenata', icon: 'pi pi-fw pi-users', routerLink: ['/studenti/spisak'] },
+              { label: 'Spisak Studenata', icon: 'pi pi-fw pi-users', routerLink: ['studenti-spisak'] },
               { label: 'Pretraga Studenata', icon: 'pi pi-fw pi-search', routerLink: ['/studenti/pretraga'] },
               { label: 'Podaci o Studentu', icon: 'pi pi-fw pi-id-card', routerLink: ['/studenti/podaci'] },
               { label: 'Unos Ocena', icon: 'pi pi-fw pi-check-square', routerLink: ['/studenti/ocene'] }

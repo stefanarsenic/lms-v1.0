@@ -1,0 +1,56 @@
+<div class="card">
+  <p-toast></p-toast>
+  <p-table #dt [value]="PodaciTabela" dataKey="predmet.id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
+    <ng-template pTemplate="caption">
+      <div class="flex flex-wrap justify-content-end gap-2">
+        <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()"></p-button>
+        <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()"></p-button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 5rem"></th>
+        <th pSortableColumn="naziv">Naziv <p-sortIcon field="naziv"></p-sortIcon></th>
+        <th pSortableColumn="esbp">ESBP <p-sortIcon field="esbp"></p-sortIcon></th>
+        <th pSortableColumn="asistent">Asistent <p-sortIcon field="asistent"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></p-button>
+        </td>
+        <td>{{ product.predmet.naziv }}</td>
+        <td>{{ product.predmet.esbp }}</td>
+        <td>test</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-product>
+      <tr>
+        <td colspan="7">
+          <div class="p-3">
+            <p-table [value]="product.studenti" dataKey="id">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="ime">Ime <p-sortIcon field="ime"></p-sortIcon></th>
+                  <th pSortableColumn="prezime">Prezime <p-sortIcon field="prezime"></p-sortIcon></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-student>
+                <tr>
+                  <td>{{student.ime}}</td>
+                  <td>{{student.prezime}}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6">There are no students for this predmet yet.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

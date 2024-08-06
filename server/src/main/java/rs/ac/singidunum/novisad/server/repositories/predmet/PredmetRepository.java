@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
+import rs.ac.singidunum.novisad.server.model.student.Student;
 
 import java.util.List;
 
@@ -30,4 +31,14 @@ public interface PredmetRepository extends JpaRepository<Predmet, Long> {
     Integer getEspbOfPredmet(@Param("predmetId") Long predmetId);
 
     List<Predmet> findByNastavnik(Nastavnik nastavnik);
+
+
+    @Query("SELECT s FROM Student s " +
+            "JOIN StudentNaGodini sng ON s.id = sng.student.id " +
+            "JOIN StudijskiProgram sp ON sng.studijskiProgram.id = sp.id " +
+            "JOIN PlanZaGodinu pzg ON sp.id = pzg.studijskiProgram.id " +
+            "JOIN PredmetPlanaZaGodinu ppg ON pzg.id = ppg.planZaGodinu.id " +
+            "JOIN Predmet p ON ppg.predmet.id = p.id " +
+            "WHERE p.id = :predmetId")
+    List<Student> findStudentsByPredmetId(@Param("predmetId") Long predmetId);
 }

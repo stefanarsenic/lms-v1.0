@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Predmet} from "../model/predmet";
 import {Nastavnik} from "../model/nastavnik";
 import {Observable} from "rxjs";
+import {Student} from "../model/student";
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,10 @@ export class PredmetService extends GenerickiService<any>{
   getPredmetByNastavnik(nastavnik: string): Observable<Predmet[]> {
     const params = new HttpParams().set('korisnickoIme',nastavnik);
     return this.http.get<Predmet[]>(`http://localhost:8080/${this.putanja}/predmeti`, { params });
+  }
+
+  getStudentiByPremdet(id:number): Observable<Student[]>{
+    const params = new HttpParams().set('predmetId',id);
+    return this.http.get<Student[]>(`http://localhost:8080/${this.putanja}/${id}/students`, { params });
   }
 }

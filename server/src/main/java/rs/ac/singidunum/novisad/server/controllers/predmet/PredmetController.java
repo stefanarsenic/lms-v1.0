@@ -8,6 +8,7 @@ import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetPlanaZaGodinuDto;
+import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
@@ -16,6 +17,7 @@ import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.model.predmet.PredmetPlanaZaGodinu;
+import rs.ac.singidunum.novisad.server.model.student.Student;
 import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikService;
 import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 import rs.ac.singidunum.novisad.server.services.predmet.IshodService;
@@ -99,6 +101,17 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         predmetDto.setPlanovi(planoviDto);
 
         return predmetDto;
+    }
+
+    //TODO:Proveri da dobavlja samo studente koji nisu polozili predmet
+    @GetMapping("/{predmetId}/students")
+    public ResponseEntity<List<StudentDto>> getStudentsByPredmet(@PathVariable Long predmetId) throws IllegalAccessException, InstantiationException {
+        List<Student> students = predmetService.getStudentsByPredmet(predmetId);
+        List<StudentDto> studentDtos=new ArrayList<>();
+        for(Student student:students){
+            studentDtos.add(EntityDtoMapper.convertToDto(student,StudentDto.class));
+        }
+        return ResponseEntity.ok(studentDtos);
     }
 
     @Override

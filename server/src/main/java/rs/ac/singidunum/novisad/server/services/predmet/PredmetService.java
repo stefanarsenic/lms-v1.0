@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
+import rs.ac.singidunum.novisad.server.model.student.Student;
 import rs.ac.singidunum.novisad.server.repositories.predmet.PredmetRepository;
 
 import java.util.List;
@@ -29,5 +30,9 @@ public class PredmetService extends GenericService<Predmet, Long> {
 
     public List<Predmet> getPredmetByNastavnik(Nastavnik nastavnik) {
         return predmetRepository.findByNastavnik(nastavnik);
+    }
+
+    public List<Student> getStudentsByPredmet(Long predmetId) {
+        return predmetRepository.findStudentsByPredmetId(predmetId);
     }
 }
