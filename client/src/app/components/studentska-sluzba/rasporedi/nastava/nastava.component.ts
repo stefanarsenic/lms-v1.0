@@ -1,11 +1,10 @@
-import {ChangeDetectorRef, Component, OnInit, signal, WritableSignal} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, signal} from '@angular/core';
 import {FullCalendarModule} from "@fullcalendar/angular";
-import {CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput} from '@fullcalendar/core';
+import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
-import { INITIAL_EVENTS, createEventId } from './event-utils';
 import {NgForOf, NgIf} from "@angular/common";
 import {DropdownModule} from "primeng/dropdown";
 import {Predmet} from "../../../../model/predmet";
@@ -18,6 +17,7 @@ import {ChipsModule} from "primeng/chips";
 import {Button} from "primeng/button";
 import {TerminNastaveService} from "../../../../services/termin-nastave.service";
 import {TerminNastave} from "../../../../model/terminNastave";
+import {formatDateFromString} from "./date-converter"
 
 @Component({
   selector: 'app-nastava',
@@ -91,21 +91,29 @@ export class NastavaComponent implements OnInit{
     this.studijskiProgramService.getAll().subscribe(data => this.studijskiProgrami = data);
   }
 
-  createTerminNastave(terminNastave: TerminNastave){
-    if(this.selectedPredmet && this.selectedPredmet.id) {
-      this.terminNastaveService.createByPredmet(this.selectedPredmet.id, terminNastave).subscribe();
+  async createTerminNastave(terminNastave: TerminNastave): Promise<any> {
+    if (this.selectedPredmet && this.selectedPredmet.id) {
+      try {
+        return await this.terminNastaveService.createByPredmet(this.selectedPredmet.id, terminNastave).toPromise();
+      } catch (error: any) {
+        throw new Error(error.message || error.toString());
+      }
+    } else {
+      throw new Error('Selected Predmet is not defined or does not have an id');
     }
   }
 
-  loadEvents() {
+  async loadEvents() {
     for(let predmet of this.predmeti) {
-      this.terminNastaveService.getAllByPredmet(predmet.id).subscribe(data => {
-        this.terminiNastave = data;
-        this.events = data.map(termin => ({
-          title: predmet.naziv,
-          start: termin.vremePocetka,
-          end: termin.vremeZavrsetka
-        }));
+      await this.terminNastaveService.getAllByPredmet(predmet.id).subscribe(data => {
+        for(let object of data){
+          this.terminiNastave.push(object);
+          this.events.push({
+            title: predmet.naziv,
+            start: formatDateFromString(object.vremePocetka.toString()),
+            end: formatDateFromString(object.vremeZavrsetka.toString())
+          });
+        }
       });
     }
   }
@@ -123,8 +131,11 @@ export class NastavaComponent implements OnInit{
     if(this.godina){
       this.predmetService.getPredmetByStudijskiProgramAndGodina(studijskiProgramId, this.godina).subscribe(data => {
         this.predmeti = data;
-        this.loadEvents();
-        console.log(this.events);
+        this.loadEvents().then(r => {
+          console.log(this.events);
+          this.calendarOptions
+          //loadovati eventove na kalendar
+        });
       });
     }
   }
@@ -149,30 +160,39 @@ export class NastavaComponent implements OnInit{
     const calendarApi = this.selectedDateInfo.view.calendar;
     //dodavati eventove preko calendarApi pri odabriu predmeta
     //formatirati datum
-    if(this.selectedPredmet) {
-      calendarApi.addEvent({
-        title: this.selectedPredmet.naziv,
-        start: this.selectedDateInfo.startStr,
-        end: this.selectedDateInfo.endStr,
-        allDay: this.selectedDateInfo.allDay
-      });
-      let terminNastave: TerminNastave = {
-        id: 0,
-        ishod: null,
-        tipNastave: null,
-        vremePocetka: new Date(this.selectedDateInfo.startStr),
-        vremeZavrsetka: new Date(this.selectedDateInfo.endStr),
-        nastavniMaterijal: null
-      }
-      this.createTerminNastave(terminNastave);
+
+    let terminNastave: TerminNastave = {
+      id: 0,
+      ishod: null,
+      tipNastave: null,
+      vremePocetka: new Date(this.selectedDateInfo.startStr),
+      vremeZavrsetka: new Date(this.selectedDateInfo.endStr),
+      nastavniMaterijal: null
     }
-    this.selectedPredmet = null;
-    this.visible = false;
+    this.createTerminNastave(terminNastave)
+      .then((createdTerminNastave: any) => {
+        console.log(createdTerminNastave);
+        if(this.selectedPredmet) {
+          calendarApi.addEvent({
+            id: createdTerminNastave.id,
+            title: this.selectedPredmet.naziv,
+            start: this.selectedDateInfo.startStr,
+            end: this.selectedDateInfo.endStr,
+            allDay: this.selectedDateInfo.allDay
+          });
+        }
+        this.selectedPredmet = null;
+        this.visible = false;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   handleEventClick(clickInfo: EventClickArg) {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
       clickInfo.event.remove();
+      this.terminNastaveService.delete(Number(clickInfo.event.id)).subscribe();
     }
   }
 
