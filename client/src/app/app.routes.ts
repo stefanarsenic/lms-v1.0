@@ -34,9 +34,13 @@ import {UpisStudenataComponent} from "./components/studentska-sluzba/upis-studen
 import {StudentiComponent} from "./components/admin/studenti/studenti.component";
 import {UlogeComponent} from "./components/admin/uloge/uloge.component";
 import {ObavestenjaComponent} from "./components/studentska-sluzba/obavestenja/obavestenja.component";
+import {NastavaComponent} from "./components/studentska-sluzba/rasporedi/nastava/nastava.component";
 import {NastavnikProfileComponent} from "./components/nastavnik/nastavnik/nastavnik-profile.component";
 import {SpisakPredmetaComponent} from "./components/nastavnik/spisak-predmeta/spisak-predmeta.component";
 import {SpisakStudenataComponent} from "./components/nastavnik/spisak-studenata/spisak-studenata.component";
+import {
+  OrganizacijaStudijskogProgramaComponent
+} from "./components/admin/organizacija-studijskog-programa/organizacija-studijskog-programa.component";
 
 StudijskiProgramCrudComponent
 
@@ -117,7 +121,11 @@ export const routes: Routes = [
             component: PriznanjeIspitaComponent
           },
         ]
-      }
+      },
+      {
+        path: "nastava",
+        component: NastavaComponent
+      },
     ]
   },
   {
@@ -143,6 +151,10 @@ export const routes: Routes = [
       {
         path: "uloge",
         component: UlogeComponent
+      },
+      {
+        path: "organizacija-studijskog-programa",
+        component: OrganizacijaStudijskogProgramaComponent
       }
     ],
     canActivate:[authGuard],data:{

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
+import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -44,4 +45,5 @@ public class Predmet {
     private Set<Predmet> preduslov = new HashSet<>();
     @ManyToMany(mappedBy = "preduslov")
     private Set<Predmet> predmeti = new HashSet<>();
+
 }

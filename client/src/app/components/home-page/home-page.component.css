@@ -9,17 +9,6 @@ body {
   overflow: auto;
 }
 
-.container {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.content {
-  padding: 100px;
-}
-
 .login-btn{
   background-color: black;
   color: white;

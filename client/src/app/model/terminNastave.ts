@@ -3,10 +3,10 @@ import {TipNastave} from "./tipNastave";
 import {NastavniMaterijal} from "./nastavniMaterijal";
 
 export interface TerminNastave {
-  id: number,
+  id: number | null,
   vremePocetka: Date,
   vremeZavrsetka: Date,
-  ishod: Ishod,
-  tipNastave: TipNastave,
-  nastavniMaterijal: NastavniMaterijal
+  ishod: Ishod | null,
+  tipNastave: TipNastave | null,
+  nastavniMaterijal: NastavniMaterijal | null
 }

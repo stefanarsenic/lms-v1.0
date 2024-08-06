@@ -22,13 +22,10 @@ import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.TerminNasta
 public class RealizacijaPredmetaController extends GenericController<RealizacijaPredmeta, Long, RealizacijaPredmetaDto> {
 
     private final PredmetService predmetService;
-    private final TerminNastaveService terminNastaveService;
-    private final EvaluacijaZnanjaService evaluacijaZnanjaService;
-    public RealizacijaPredmetaController(GenericService<RealizacijaPredmeta, Long> service, PredmetService predmetService, TerminNastaveService terminNastaveService, EvaluacijaZnanjaService evaluacijaZnanjaService) {
+    public RealizacijaPredmetaController(GenericService<RealizacijaPredmeta, Long> service, PredmetService predmetService) {
         super(service);
         this.predmetService = predmetService;
-        this.terminNastaveService = terminNastaveService;
-        this.evaluacijaZnanjaService = evaluacijaZnanjaService;
+
     }
 
     @Override
