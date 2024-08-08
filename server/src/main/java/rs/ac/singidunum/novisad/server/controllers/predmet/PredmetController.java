@@ -146,7 +146,7 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
     private ResponseEntity<List<PredmetDto>> PredmetiToDto(List<Predmet> predmeti) {
         List<PredmetDto> predmetiDto = predmeti.stream().map(predmet -> {
             try {
-                return EntityDtoMapper.convertToDto(predmet, PredmetDto.class);
+                return convertToDto(predmet);
             } catch (IllegalAccessException | InstantiationException e) {
                 throw new RuntimeException(e);
             }

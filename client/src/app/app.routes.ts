@@ -41,6 +41,8 @@ import {SpisakStudenataComponent} from "./components/nastavnik/spisak-studenata/
 import {
   OrganizacijaStudijskogProgramaComponent
 } from "./components/admin/organizacija-studijskog-programa/organizacija-studijskog-programa.component";
+import {PretragaStudenataComponent} from "./components/nastavnik/pretraga-studenata/pretraga-studenata.component";
+import {UredjivanjeSilabusaComponent} from "./components/nastavnik/uredjivanje-silabusa/uredjivanje-silabusa.component";
 
 StudijskiProgramCrudComponent
 
@@ -186,6 +188,14 @@ export const routes: Routes = [
       {
         path: "studenti-spisak",
         component: SpisakStudenataComponent
+      },
+      {
+        path: "pretraga-studenata",
+        component: PretragaStudenataComponent
+      },
+      {
+        path: "uredjivanje-silabusa",
+        component: UredjivanjeSilabusaComponent
       }
     ],
     canActivate:[authGuard],data:{

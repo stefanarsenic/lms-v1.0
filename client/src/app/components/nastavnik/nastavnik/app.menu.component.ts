@@ -36,7 +36,7 @@ export class AppMenuComponent implements OnInit {
             label: 'Predmeti',
             items: [
               { label: 'Pregled Predmeta', icon: 'pi pi-fw pi-book', routerLink: 'spisak-predmeta' },
-              { label: 'Uređivanje Silabusa', icon: 'pi pi-fw pi-pencil', routerLink: ['/predmeti/silabus'] },
+              { label: 'Uređivanje Silabusa', icon: 'pi pi-fw pi-pencil', routerLink: 'uredjivanje-silabusa' },
               { label: 'Raspored Ishoda', icon: 'pi pi-fw pi-calendar', routerLink: ['/predmeti/ishodi'] },
               { label: 'Instrumenti Evaluacije', icon: 'pi pi-fw pi-file-o', routerLink: ['/predmeti/evaluacija'] },
               { label: 'Upravljanje Obaveštenjima', icon: 'pi pi-fw pi-bell', routerLink: ['/predmeti/obavestenja'] }
@@ -46,7 +46,7 @@ export class AppMenuComponent implements OnInit {
             label: 'Studenti',
             items: [
               { label: 'Spisak Studenata', icon: 'pi pi-fw pi-users', routerLink: ['studenti-spisak'] },
-              { label: 'Pretraga Studenata', icon: 'pi pi-fw pi-search', routerLink: ['/studenti/pretraga'] },
+              { label: 'Pretraga Studenata', icon: 'pi pi-fw pi-search', routerLink: 'pretraga-studenata' },
               { label: 'Podaci o Studentu', icon: 'pi pi-fw pi-id-card', routerLink: ['/studenti/podaci'] },
               { label: 'Unos Ocena', icon: 'pi pi-fw pi-check-square', routerLink: ['/studenti/ocene'] }
             ]

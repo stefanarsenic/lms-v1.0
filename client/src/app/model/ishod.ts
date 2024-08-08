@@ -1,7 +1,7 @@
 import {Predmet} from "./predmet";
 
 export interface Ishod {
-  id: number,
+  id: number | null,
   opis: string,
-  predmet: Predmet
+  predmet: Predmet | null
 }
