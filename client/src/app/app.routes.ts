@@ -43,6 +43,9 @@ import {
 } from "./components/admin/organizacija-studijskog-programa/organizacija-studijskog-programa.component";
 import {PretragaStudenataComponent} from "./components/nastavnik/pretraga-studenata/pretraga-studenata.component";
 import {UredjivanjeSilabusaComponent} from "./components/nastavnik/uredjivanje-silabusa/uredjivanje-silabusa.component";
+import {
+  UpravljanjeObavestenjimaComponent
+} from "./components/nastavnik/upravljanje-obavestenjima/upravljanje-obavestenjima.component";
 
 StudijskiProgramCrudComponent
 
@@ -196,6 +199,10 @@ export const routes: Routes = [
       {
         path: "uredjivanje-silabusa",
         component: UredjivanjeSilabusaComponent
+      },
+      {
+        path: "uredjivanje-obavestenja",
+        component: UpravljanjeObavestenjimaComponent
       }
     ],
     canActivate:[authGuard],data:{

@@ -4,9 +4,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.ObavestenjeDto;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.RealizacijaPredmetaDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Fajl;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Obavestenje;
 
@@ -33,6 +35,9 @@ public class Obavestenja extends GenericController<Obavestenje,Long, Obavestenje
             fajlDto.setObavestenje(null);
             fajlDtos.add(fajlDto);
         }
+        RealizacijaPredmetaDto realizacijaPredmetaDto=EntityDtoMapper.convertToDto(entity.getRealizacijaPredmeta(),RealizacijaPredmetaDto.class);
+        realizacijaPredmetaDto.setObavestenja(new HashSet<>());
+        obavestenjeDto.setRealizacijaPredmeta(realizacijaPredmetaDto);
 
         obavestenjeDto.setPrilozi(fajlDtos);
 
@@ -52,6 +57,8 @@ public class Obavestenja extends GenericController<Obavestenje,Long, Obavestenje
             fajls.add(fajl);
         }
 
+        RealizacijaPredmeta realizacijaPredmeta=EntityDtoMapper.convertToDto(dto.getRealizacijaPredmeta(),RealizacijaPredmeta.class);
+        obavestenje.setRealizacijaPredmeta(realizacijaPredmeta);
         obavestenje.setPrilozi(fajls);
 
         return obavestenje;

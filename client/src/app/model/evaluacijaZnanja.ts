@@ -1,4 +1,5 @@
 import {Ishod} from "./ishod";
+import {TipEvaluacije} from "./tipEvaluacije";
 
 export interface EvaluacijaZnanja {
   id: number,

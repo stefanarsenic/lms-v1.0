@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -23,4 +25,8 @@ public class Obavestenje {
     private String naslov;
     @OneToMany(mappedBy = "obavestenje")
     private Set<Fajl> prilozi;
+    @ManyToOne
+    private RealizacijaPredmeta realizacijaPredmeta;
+
+    //todo:controlleri i test da li radi ovo sa obavestenjima za predmet
 }

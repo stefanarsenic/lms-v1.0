@@ -35,7 +35,8 @@ public class RealizacijaPredmetaService extends GenericService<RealizacijaPredme
                     realizacijaPredmeta.get().getId(),
                     realizacijaPredmeta.get().getPredmet(),
                     realizacijaPredmeta.get().getTerminiNastave(),
-                    realizacijaPredmeta.get().getEvaluacijeZnanja()
+                    realizacijaPredmeta.get().getEvaluacijeZnanja(),
+                    realizacijaPredmeta.get().getObavestenja()
             );
         }
     }

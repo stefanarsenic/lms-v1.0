@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.singidunum.novisad.server.model.obavestenje.Obavestenje;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 
 import java.util.Set;
@@ -26,4 +27,7 @@ public class RealizacijaPredmeta {
     private Set<TerminNastave> terminiNastave;
     @OneToMany(mappedBy = "realizacijaPredmeta")
     private Set<EvaluacijaZnanja> evaluacijeZnanja;
+
+    @OneToMany(mappedBy ="realizacijaPredmeta" )
+    private Set<Obavestenje> obavestenja;
 }

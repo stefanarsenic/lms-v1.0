@@ -39,7 +39,7 @@ export class AppMenuComponent implements OnInit {
               { label: 'Uređivanje Silabusa', icon: 'pi pi-fw pi-pencil', routerLink: 'uredjivanje-silabusa' },
               { label: 'Raspored Ishoda', icon: 'pi pi-fw pi-calendar', routerLink: ['/predmeti/ishodi'] },
               { label: 'Instrumenti Evaluacije', icon: 'pi pi-fw pi-file-o', routerLink: ['/predmeti/evaluacija'] },
-              { label: 'Upravljanje Obaveštenjima', icon: 'pi pi-fw pi-bell', routerLink: ['/predmeti/obavestenja'] }
+              { label: 'Upravljanje Obaveštenjima', icon: 'pi pi-fw pi-bell', routerLink: 'uredjivanje-obavestenja' }
             ]
           },
           {

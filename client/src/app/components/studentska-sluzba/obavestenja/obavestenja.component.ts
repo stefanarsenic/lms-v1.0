@@ -48,7 +48,7 @@ export class ObavestenjaComponent extends AppGenerickoComponent<Obavestenje>{
   selektovanaObavestenja:Obavestenje[]=[]
   obavestenjeDialog: boolean = false;
   obavestenja!:Obavestenje[]
-  obavestenje:Obavestenje={id:null,naslov:"",sadrzaj:"",vremePostavljanja:new Date(),prilozi:[]}
+  obavestenje:Obavestenje={id:null,naslov:"",sadrzaj:"",vremePostavljanja:new Date(),prilozi:[],realizacijaPredmeta:null};
   obavestenjeZaEdit:any=undefined;
 
   constructor(private injector: Injector,private messageService: MessageService, private confirmationService: ConfirmationService,
@@ -68,7 +68,7 @@ export class ObavestenjaComponent extends AppGenerickoComponent<Obavestenje>{
 
   openNew() {
     this.selektovanaObavestenja=[]
-    this.obavestenje={id:null,naslov:"",sadrzaj:"",vremePostavljanja:new Date(),prilozi:[]};
+    this.obavestenje={id:null,naslov:"",sadrzaj:"",vremePostavljanja:new Date(),prilozi:[],realizacijaPredmeta:null};
     this.submitted = false;
     this.obavestenjeDialog = true;
   }
@@ -120,6 +120,6 @@ export class ObavestenjaComponent extends AppGenerickoComponent<Obavestenje>{
 
     }
     this.obavestenjeDialog = false;
-    this.obavestenje={id:null,naslov:"",sadrzaj:"",vremePostavljanja:new Date(),prilozi:[]};
+    this.obavestenje={id:null,naslov:"",sadrzaj:"",vremePostavljanja:new Date(),prilozi:[],realizacijaPredmeta:null};
   }
 }

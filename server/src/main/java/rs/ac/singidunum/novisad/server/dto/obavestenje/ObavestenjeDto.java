@@ -1,6 +1,7 @@
 package rs.ac.singidunum.novisad.server.dto.obavestenje;
 
 import lombok.*;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.RealizacijaPredmetaDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,4 +17,5 @@ public class ObavestenjeDto implements Serializable {
     private String sadrzaj;
     private String naslov;
     private Set<FajlDto> prilozi;
+    private RealizacijaPredmetaDto realizacijaPredmeta;
 }
