@@ -1,6 +1,7 @@
 package rs.ac.singidunum.novisad.server.controllers.predmet;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class PlanZaGodinuController extends GenericController<PlanZaGodinu, Long
         this.predmetPlanaZaGodinuService = predmetPlanaZaGodinuService;
         this.planZaGodinuService = planZaGodinuService;
     }
+
 
     @GetMapping("/uslov-espb/{studijskiProgramId}/godina/{godina}")
     public ResponseEntity<Integer> getUslov(@PathVariable Long studijskiProgramId, @PathVariable Integer godina){

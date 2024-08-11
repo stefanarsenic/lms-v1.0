@@ -32,6 +32,9 @@ public class StudentNaGodini {
     private Student student;
     @ManyToOne
     private StudijskiProgram studijskiProgram;
-    //TODO: kolekcija predmet koje student pohadja zbog prenosenja predmeta na sledecu godinu
+
+    @OneToMany
+    Set<Predmet> predmeti;
+
     //TODO: skolska godina
 }

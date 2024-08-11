@@ -1,0 +1,66 @@
+<div *ngFor="let data of studentNaGodini" class="p-grid">
+  <p-panel class="p-col-12" header="{{ data.studijskiProgram.naziv }} - Godina {{ data.godinaStudija }}" [toggleable]="true">
+    <div class="student-info">
+      <p-card title="Informacije o programu" class="p-col-12 p-md-6 p-lg-4">
+        <div class="program-details">
+          <p>Studijski Program: {{ data.studijskiProgram.naziv }}</p>
+          <p>Godina Studija: {{ data.godinaStudija }}</p>
+        </div>
+      </p-card>
+    </div>
+
+    <p-table [value]="data.predmeti" *ngIf="data.predmeti.length > 0" responsiveLayout="scroll" class="p-col-12">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Predmet</th>
+          <th>ESP</th>
+          <th>Obavezan</th>
+          <th>Predavanja</th>
+          <th>Vezbi</th>
+          <th>Nastavnik</th>
+          <th>Asistent</th>
+          <th>Preduslov</th>
+          <th>Planovi</th>
+          <th>Silabus</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-predmet>
+        <tr>
+          <td>{{ predmet.naziv }}</td>
+          <td>{{ predmet.espb }}</td>
+          <td>{{ predmet.obavezan ? 'Da' : 'Ne' }}</td>
+          <td>{{ predmet.brojPredavanja }}</td>
+          <td>{{ predmet.brojVezbi }}</td>
+          <td>{{ predmet.nastavnik.ime }} {{ predmet.nastavnik.prezime }}</td>
+          <td>{{ predmet.asistent.ime }} {{ predmet.asistent.prezime }}</td>
+          <td>
+            <p-chip *ngFor="let pred of predmet.preduslov" label="{{ pred.naziv }}"></p-chip>
+          </td>
+          <td>
+            <p-chip *ngFor="let plan of predmet.planovi" label="{{ plan.opis }}"></p-chip>
+          </td>
+          <td>
+            <p-accordion class="p-col-12">
+              <p-accordionTab header="Pogledaj Silabus ({{ predmet.silabus.length }})">
+                <p-scroller
+                  [items]="predmet.silabus"
+                  [itemSize]="50"
+                  scrollHeight="200px"
+                  styleClass="border-1 surface-border"
+                  [style]="{'width': '100%', 'max-width': '500px', 'height': '200px'}">
+                  <ng-template pTemplate="item" let-item let-options="options">
+                    <div class="flex align-items-center p-2" [ngClass]="{ 'surface-ground': options.odd }" role="listitem" aria-label="Silabus description" style="height: 50px;">
+                      {{ item.opis }}
+                    </div>
+                  </ng-template>
+                </p-scroller>
+              </p-accordionTab>
+            </p-accordion>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-message *ngIf="data.predmeti.length === 0" severity="info" text="Trenutno nema predmeta."></p-message>
+  </p-panel>
+</div>

@@ -28,5 +28,4 @@ public class Obavestenje {
     @ManyToOne
     private RealizacijaPredmeta realizacijaPredmeta;
 
-    //todo:controlleri i test da li radi ovo sa obavestenjima za predmet
 }

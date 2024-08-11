@@ -4,7 +4,7 @@ import {LoginComponent} from "./components/login/login.component";
 import {authGuard} from "./guards/auth.guard";
 import {UserProfileComponent} from "./components/user/user-profile/user-profile.component";
 import {RegisterComponent} from "./components/user/register/register.component";
-import {MainStudentComponent} from "./components/main-student/main-student.component";
+import {MainStudentComponent} from "./components/student/main-student/main-student.component";
 import {FakultetComponent} from "./components/home-page/fakultet/fakultet.component";
 import {StudijskiProgramComponent} from "./components/home-page/studijski-program/studijski-program.component";
 import {AdminProfileComponent} from "./components/admin/admin-profile/admin-profile.component";
@@ -46,6 +46,7 @@ import {UredjivanjeSilabusaComponent} from "./components/nastavnik/uredjivanje-s
 import {
   UpravljanjeObavestenjimaComponent
 } from "./components/nastavnik/upravljanje-obavestenjima/upravljanje-obavestenjima.component";
+import {PregledPredmetaComponent} from "./components/student/pregled-predmeta/pregled-predmeta.component";
 
 StudijskiProgramCrudComponent
 
@@ -208,6 +209,16 @@ export const routes: Routes = [
     canActivate:[authGuard],data:{
       allowedRoles:["ROLE_NASTAVNIK"]
     }
+  },
+  {
+    path:"student",
+    component:MainStudentComponent,
+    children:[
+      {
+        path: "pregled-predmeta",
+        component: PregledPredmetaComponent
+      }
+    ]
   },
 
   {

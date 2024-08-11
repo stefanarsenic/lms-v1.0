@@ -163,7 +163,8 @@ export class UpisStudenataComponent implements OnInit{
         student: this.selektovaniStudent,
         studijskiProgram: this.selektovaniStudijskiProgram,
         brojIndeksa: this.godina.toString() + "/" + this.brojIndeksa?.toString(),
-        godinaStudija: 1
+        godinaStudija: 1,
+        predmeti:[]
       };
 
       this.studentNaGodiniService.create(studentNaGodini).subscribe({

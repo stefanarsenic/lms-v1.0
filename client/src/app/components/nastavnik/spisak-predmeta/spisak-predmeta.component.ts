@@ -1,5 +1,4 @@
 import {Component, Injector, ViewChild} from '@angular/core';
-import {AppGenerickoComponent} from "../../../../genericko/app-genericko/app-genericko.component";
 import {Predmet} from "../../../model/predmet";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {PredmetService} from "../../../services/predmet.service";

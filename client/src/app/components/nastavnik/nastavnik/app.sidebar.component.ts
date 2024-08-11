@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import {Component, ElementRef, Input} from '@angular/core';
 import {AppMenuComponent} from "./app.menu.component";
 import {RouterLink, RouterModule, RouterOutlet} from "@angular/router";
 import {LayoutService} from "./service/app.layout.service";
@@ -15,6 +15,11 @@ import {LayoutService} from "./service/app.layout.service";
   templateUrl: './app.sidebar.component.html'
 })
 export class AppSidebarComponent {
+
+    @Input()
+    model:any
     constructor(public layoutService: LayoutService, public el: ElementRef) { }
+
+
 }
 

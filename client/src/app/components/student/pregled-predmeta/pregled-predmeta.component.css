@@ -1,0 +1,18 @@
+.surface-border {
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.p-2 {
+  padding: 8px;
+}
+
+.surface-ground {
+  background-color: #f4f4f4; /* Light gray background for odd items */
+}
+

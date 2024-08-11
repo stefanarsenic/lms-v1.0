@@ -8,21 +8,24 @@ import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
 import rs.ac.singidunum.novisad.server.dto.adresa.MestoDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.FakultetDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
+import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
+import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
+import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
+import rs.ac.singidunum.novisad.server.dto.predmet.PredmetPlanaZaGodinuDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentNaGodiniDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
+import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
+import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.model.student.Student;
 import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
 import rs.ac.singidunum.novisad.server.services.student.StudentNaGodiniService;
 import rs.ac.singidunum.novisad.server.services.student.StudentService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/student-na-godini")
@@ -46,6 +49,19 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
 
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
+
+    @GetMapping("/student/{username}/student-na-godini")
+    public ResponseEntity<List<StudentNaGodiniDto>>findAllByStudentUsername(@PathVariable String username) throws IllegalAccessException, InstantiationException {
+        List<StudentNaGodini> studentiNaGodini = studentNaGodiniService.findAllByStudentUsername(username);
+        List<StudentNaGodiniDto> dtos = new ArrayList<>(Collections.emptySet());
+        for (StudentNaGodini entity : studentiNaGodini) {
+            StudentNaGodiniDto dto = convertToDto(entity);
+            dtos.add(dto);
+        }
+
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
 
     @PostMapping
     public ResponseEntity<StudentNaGodiniDto> create(@RequestBody StudentNaGodiniDto dto) throws IllegalAccessException, InstantiationException {
@@ -75,9 +91,40 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
     protected StudentNaGodiniDto convertToDto(StudentNaGodini entity) throws IllegalAccessException, InstantiationException {
         StudentNaGodiniDto s = EntityDtoMapper.convertToDto(entity, StudentNaGodiniDto.class);
         StudentDto studentDto = EntityDtoMapper.convertToDto(entity.getStudent(), StudentDto.class);
-
+        s.setPredmeti(new HashSet<>());
         s.setStudijskiProgram(EntityDtoMapper.convertToDto(entity.getStudijskiProgram(), StudijskiProgramDto.class));
         s.setStudent(studentDto);
+        for(Predmet predmet:entity.getPredmeti()){
+            NastavnikDto nastavnikDto = EntityDtoMapper.convertToDto(predmet.getNastavnik(), NastavnikDto.class);
+            NastavnikDto asistentDto = EntityDtoMapper.convertToDto(predmet.getAsistent(), NastavnikDto.class);
+
+            Set<IshodDto> silabusDto = new HashSet<>(Collections.emptySet());
+            Set<PredmetDto> preduslovDto = new HashSet<>(Collections.emptySet());
+            Set<PredmetPlanaZaGodinuDto> planoviDto = new HashSet<>(Collections.emptySet());
+
+            if(predmet.getSilabus() != null){
+                for(Ishod ishod : predmet.getSilabus()){
+                    ishod.setPredmet(null);
+                    silabusDto.add(EntityDtoMapper.convertToDto(ishod, IshodDto.class));
+                }
+            }
+            if(predmet.getPreduslov() != null){
+                for(Predmet predmet1 : predmet.getPreduslov()){
+                    preduslovDto.add(EntityDtoMapper.convertToDto(predmet1, PredmetDto.class));
+                }
+            }
+
+            PredmetDto predmetDto = EntityDtoMapper.convertToDto(predmet, PredmetDto.class);
+            nastavnikDto.setPravoPristupaSet(new HashSet<>());
+            asistentDto.setPravoPristupaSet(new HashSet<>());
+            predmetDto.setSilabus(silabusDto);
+            predmetDto.setPreduslov(preduslovDto);
+            predmetDto.setPlanovi(planoviDto);
+            predmetDto.setAsistent(asistentDto);
+            predmetDto.setNastavnik(nastavnikDto);
+            s.getPredmeti().add(predmetDto);
+        }
+
 
         return s;
     }

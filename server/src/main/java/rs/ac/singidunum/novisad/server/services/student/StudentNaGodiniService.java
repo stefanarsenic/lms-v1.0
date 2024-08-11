@@ -16,6 +16,7 @@ import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.PolozeniPre
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long> {
@@ -89,6 +90,11 @@ public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long
 
         return studentNaGodiniRepository.save(entity);
     }
+
+    public List<StudentNaGodini> findAllByStudentUsername(String username) {
+        return studentNaGodiniRepository.predmetiPoUsername(username);
+    }
+
 
 //TODO: setovati ostale atribute za upis - treba izdobavljati espb bodove
 //TODO: datum zavrsetka

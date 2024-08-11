@@ -17,4 +17,9 @@ export class StudentNaGodiniService extends GenerickiService<StudentNaGodini>{
   getAllByStudentId(studentId: number){
     return this.http.get<StudentNaGodini[]>(`http://localhost:8080/${this.putanja}/student/${studentId}`);
   }
+
+  getAllByStudentUsername(username:string){
+    return this.http.get<StudentNaGodini[]>(`http://localhost:8080/${this.putanja}/student/${username}/student-na-godini`);
+
+  }
 }

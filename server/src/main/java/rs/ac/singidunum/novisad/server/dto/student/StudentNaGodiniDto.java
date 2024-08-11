@@ -2,10 +2,12 @@ package rs.ac.singidunum.novisad.server.dto.student;
 
 import lombok.*;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
+import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,4 +21,6 @@ public class StudentNaGodiniDto implements Serializable {
     private Integer godinaStudija;
     private StudentDto student;
     private StudijskiProgramDto studijskiProgram;
+
+    private Set<PredmetDto> predmeti;
 }

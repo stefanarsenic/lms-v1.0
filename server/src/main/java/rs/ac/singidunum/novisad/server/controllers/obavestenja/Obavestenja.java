@@ -1,5 +1,9 @@
 package rs.ac.singidunum.novisad.server.controllers.obavestenja;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
@@ -11,6 +15,8 @@ import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Fajl;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Obavestenje;
+import rs.ac.singidunum.novisad.server.repositories.obavestenje.ObavestenjeRepository;
+import rs.ac.singidunum.novisad.server.services.obavestenje.ObavestenjeService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,9 +26,14 @@ import java.util.Set;
 @RequestMapping("/api/obavestenja")
 public class Obavestenja extends GenericController<Obavestenje,Long, ObavestenjeDto> {
 
-    public Obavestenja(GenericService<Obavestenje, Long> service) {
+    @Autowired
+    ObavestenjeService obavestenjeService;
+
+    public Obavestenja(ObavestenjeService service) {
         super(service);
+        obavestenjeService=service;
     }
+
 
     @Override
     protected ObavestenjeDto convertToDto(Obavestenje entity) throws IllegalAccessException, InstantiationException {
@@ -43,6 +54,17 @@ public class Obavestenja extends GenericController<Obavestenje,Long, Obavestenje
 
         return obavestenjeDto;
 
+    }
+
+    @PostMapping("/realizacija-predmeta")
+    public ResponseEntity<Set<ObavestenjeDto>> getObavestenjaByPredmetIds(@RequestBody List<Long> predmetIds) throws IllegalAccessException, InstantiationException {
+
+        Set<ObavestenjeDto> obavestenjeDtos=new HashSet<>();
+        Set<Obavestenje> obavestenja = this.obavestenjeService.findObavestenjaByPredmetIds(predmetIds);
+        for(Obavestenje obavestenje:obavestenja){
+            obavestenjeDtos.add(convertToDto(obavestenje));
+        }
+        return ResponseEntity.ok(obavestenjeDtos);
     }
 
     @Override

@@ -1,32 +1,27 @@
-import {Component, OnDestroy, Renderer2, ViewChild} from '@angular/core';
-
-import {AppFooterComponent} from "./app.footer.component";
-import {AppSidebarComponent} from "./app.sidebar.component";
-import {AppTopBarComponent} from "./app.topbar.component";
-import {NavigationEnd, Router, RouterLink, RouterModule, RouterOutlet} from "@angular/router";
-import {filter} from "rxjs/operators";
+import {Component, Renderer2, ViewChild} from '@angular/core';
+import {NavigationEnd, Router, RouterOutlet} from "@angular/router";
+import {AppFooterComponent} from "../../nastavnik/nastavnik/app.footer.component";
+import {AppSidebarComponent} from "../../nastavnik/nastavnik/app.sidebar.component";
+import {AppTopBarComponent} from "../../nastavnik/nastavnik/app.topbar.component";
 import {Subscription} from "rxjs";
-import {SpisakPredmetaComponent} from "../spisak-predmeta/spisak-predmeta.component";
+import {LayoutService} from "../../nastavnik/nastavnik/service/app.layout.service";
+import {filter} from "rxjs/operators";
 import {NgClass} from "@angular/common";
-import {LayoutService} from "./service/app.layout.service";
 
 @Component({
-  selector: 'app-nastavnik',
+  selector: 'app-main-student',
   standalone: true,
   imports: [
-    SpisakPredmetaComponent,
-    RouterOutlet,
     AppFooterComponent,
     AppSidebarComponent,
     AppTopBarComponent,
+    RouterOutlet,
     NgClass
-
   ],
-  templateUrl: './nastavnik-profile.component.html',
-  styleUrl: './nastavnik-profile.component.css'
+  templateUrl: './main-student.component.html',
+  styleUrl: './main-student.component.css'
 })
-export class NastavnikProfileComponent implements OnDestroy {
-
+export class MainStudentComponent {
   overlayMenuOpenSubscription: Subscription;
 
   menuOutsideClickListener: any;
@@ -37,37 +32,36 @@ export class NastavnikProfileComponent implements OnDestroy {
 
   @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
 
-  model1:any=[]
-
+  model1:any[]
   constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
     this.model1 = [
       {
         label: 'Home',
         items: [
-          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['nastavnik'] }
+          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['student'] }
         ]
       },
       {
         label: 'Predmeti',
         items: [
-          { label: 'Pregled Predmeta', icon: 'pi pi-fw pi-book', routerLink: 'spisak-predmeta' },
-          { label: 'Uređivanje Silabusa', icon: 'pi pi-fw pi-pencil', routerLink: 'uredjivanje-silabusa' },
-          { label: 'Raspored Ishoda', icon: 'pi pi-fw pi-calendar', routerLink: ['/predmeti/ishodi'] },
-          { label: 'Instrumenti Evaluacije', icon: 'pi pi-fw pi-file-o', routerLink: ['/predmeti/evaluacija'] },
-          { label: 'Upravljanje Obaveštenjima', icon: 'pi pi-fw pi-bell', routerLink: 'uredjivanje-obavestenja' }
+          { label: 'Pregled Predmeta', icon: 'pi pi-fw pi-book', routerLink: 'pregled-predmeta' },
+          { label: 'Pregled Obaveštenja', icon: 'pi pi-fw pi-bell', routerLink: 'uredjivanje-obavestenja' }
         ]
       },
       {
-        label: 'Studenti',
+        label: 'Istorija Studiranja',
         items: [
-          { label: 'Spisak Studenata', icon: 'pi pi-fw pi-users', routerLink: ['studenti-spisak'] },
-          { label: 'Pretraga Studenata', icon: 'pi pi-fw pi-search', routerLink: 'pretraga-studenata' },
-          { label: 'Podaci o Studentu', icon: 'pi pi-fw pi-id-card', routerLink: ['/studenti/podaci'] },
-          { label: 'Unos Ocena', icon: 'pi pi-fw pi-check-square', routerLink: ['/studenti/ocene'] }
+          { label: 'Istorija Studiranja', icon: 'pi pi-fw pi-id-card', routerLink: 'istorija-studiranja' }
+        ]
+      },
+      {
+        label: 'Prijava Ispita',
+        items: [
+          { label: 'Prijavi Ispite', icon: 'pi pi-fw pi-check-square', routerLink: 'prijavi-ispit' }
         ]
       }
-
     ];
+
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
       if (!this.menuOutsideClickListener) {
         this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {
@@ -101,8 +95,6 @@ export class NastavnikProfileComponent implements OnDestroy {
         this.hideMenu();
         this.hideProfileMenu();
       });
-
-
   }
 
   hideMenu() {
@@ -166,5 +158,4 @@ export class NastavnikProfileComponent implements OnDestroy {
       this.menuOutsideClickListener();
     }
   }
-
 }

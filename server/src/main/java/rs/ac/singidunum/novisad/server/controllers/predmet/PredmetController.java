@@ -78,7 +78,6 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
     protected PredmetDto convertToDto(Predmet entity) throws IllegalAccessException, InstantiationException {
         NastavnikDto nastavnikDto = EntityDtoMapper.convertToDto(entity.getNastavnik(), NastavnikDto.class);
         NastavnikDto asistentDto = EntityDtoMapper.convertToDto(entity.getAsistent(), NastavnikDto.class);
-
         Set<IshodDto> silabusDto = new HashSet<>(Collections.emptySet());
         Set<PredmetDto> preduslovDto = new HashSet<>(Collections.emptySet());
         Set<PredmetPlanaZaGodinuDto> planoviDto = new HashSet<>(Collections.emptySet());
@@ -99,6 +98,7 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         predmetDto.setSilabus(silabusDto);
         predmetDto.setPreduslov(preduslovDto);
         predmetDto.setPlanovi(planoviDto);
+
 
         return predmetDto;
     }
