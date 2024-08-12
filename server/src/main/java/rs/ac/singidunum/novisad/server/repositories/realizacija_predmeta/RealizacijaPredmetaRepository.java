@@ -11,5 +11,4 @@ import java.util.List;
 public interface RealizacijaPredmetaRepository extends JpaRepository<RealizacijaPredmeta, Long> {
 
     RealizacijaPredmeta findRealizacijaPredmetaByPredmetId(Long predmetId);
-    List<RealizacijaPredmeta> findByPredmetIdIn(List<Long> predmetIds);
-}
+    List<RealizacijaPredmeta> findByPredmetId(Long predmetId);}

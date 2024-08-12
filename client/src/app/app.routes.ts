@@ -47,6 +47,7 @@ import {
   UpravljanjeObavestenjimaComponent
 } from "./components/nastavnik/upravljanje-obavestenjima/upravljanje-obavestenjima.component";
 import {PregledPredmetaComponent} from "./components/student/pregled-predmeta/pregled-predmeta.component";
+import {PregledObavestenjaComponent} from "./components/student/pregled-obavestenja/pregled-obavestenja.component";
 
 StudijskiProgramCrudComponent
 
@@ -217,6 +218,10 @@ export const routes: Routes = [
       {
         path: "pregled-predmeta",
         component: PregledPredmetaComponent
+      },
+      {
+        path: "pregled-obavestenja",
+        component: PregledObavestenjaComponent
       }
     ]
   },

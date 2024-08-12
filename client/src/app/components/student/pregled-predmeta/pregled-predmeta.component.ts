@@ -46,7 +46,7 @@ export class PregledPredmetaComponent {
 
   predmeti!:Predmet[]
   studentUsername:any
-  predmetDetalji:any=[]
+
 
   studentNaGodini!:StudentNaGodini[]
 
@@ -73,30 +73,5 @@ export class PregledPredmetaComponent {
 
   }
 
-  expandedRows = {};
-
-
-  expandAll() {
-    this.expandedRows = this.predmeti.reduce((acc, p) => {
-      acc[p.id] = true;
-      return acc;
-    }, {} as { [key: number]: boolean });
-  }
-
-  collapseAll() {
-    this.expandedRows = {};
-  }
-
-
-
-  onRowExpand(event: TableRowExpandEvent) {
-    this.messageService.add({ severity: 'info', summary: 'Product Expanded', detail: event.data.name, life: 3000 });
-  }
-
-  onRowCollapse(event: TableRowCollapseEvent) {
-    this.messageService.add({ severity: 'success', summary: 'Product Collapsed', detail: event.data.name, life: 3000 });
-  }
-
-  protected readonly Object = Object;
 
 }

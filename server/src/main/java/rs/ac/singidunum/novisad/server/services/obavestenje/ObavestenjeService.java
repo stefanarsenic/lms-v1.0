@@ -24,8 +24,8 @@ public class ObavestenjeService extends GenericService<Obavestenje, Long> {
     }
 
 
-    public Set<Obavestenje> findObavestenjaByPredmetIds(List<Long> predmetIds) {
-        List<RealizacijaPredmeta> realizacije = realizacijaPredmeta.findByPredmetIdIn(predmetIds);
+    public Set<Obavestenje> findObavestenjaByPredmetId(Long predmetId) {
+        List<RealizacijaPredmeta> realizacije = realizacijaPredmeta.findByPredmetId(predmetId);
         return realizacije.stream()
                 .flatMap(r -> r.getObavestenja().stream())
                 .collect(Collectors.toSet());

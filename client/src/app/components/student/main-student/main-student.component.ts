@@ -45,7 +45,7 @@ export class MainStudentComponent {
         label: 'Predmeti',
         items: [
           { label: 'Pregled Predmeta', icon: 'pi pi-fw pi-book', routerLink: 'pregled-predmeta' },
-          { label: 'Pregled Obaveštenja', icon: 'pi pi-fw pi-bell', routerLink: 'uredjivanje-obavestenja' }
+          { label: 'Pregled Obaveštenja', icon: 'pi pi-fw pi-bell', routerLink: 'pregled-obavestenja' }
         ]
       },
       {

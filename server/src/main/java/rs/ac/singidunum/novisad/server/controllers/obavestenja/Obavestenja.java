@@ -2,10 +2,7 @@ package rs.ac.singidunum.novisad.server.controllers.obavestenja;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.ObavestenjeDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.RealizacijaPredmetaDto;
@@ -56,11 +53,11 @@ public class Obavestenja extends GenericController<Obavestenje,Long, Obavestenje
 
     }
 
-    @PostMapping("/realizacija-predmeta")
-    public ResponseEntity<Set<ObavestenjeDto>> getObavestenjaByPredmetIds(@RequestBody List<Long> predmetIds) throws IllegalAccessException, InstantiationException {
+    @GetMapping("/predmet/{predmetId}")
+    public ResponseEntity<Set<ObavestenjeDto>> getObavestenjaByPredmetId(@PathVariable Long predmetId) throws IllegalAccessException, InstantiationException {
 
         Set<ObavestenjeDto> obavestenjeDtos=new HashSet<>();
-        Set<Obavestenje> obavestenja = this.obavestenjeService.findObavestenjaByPredmetIds(predmetIds);
+        Set<Obavestenje> obavestenja = this.obavestenjeService.findObavestenjaByPredmetId(predmetId);
         for(Obavestenje obavestenje:obavestenja){
             obavestenjeDtos.add(convertToDto(obavestenje));
         }
