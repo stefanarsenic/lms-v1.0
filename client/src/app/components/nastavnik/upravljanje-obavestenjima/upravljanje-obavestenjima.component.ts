@@ -74,16 +74,16 @@ export class UpravljanjeObavestenjimaComponent extends AppGenerickoComponent<Rea
 
   }
 
-  init(){
+  init() {
     const token: string | null = localStorage.getItem('token');
     if (token) {
       this.nastavnikUsername = JSON.parse(atob(token.split(".")[1])).username;
     }
-    this.realiazijaPredmeta.getAll().subscribe(r=>{
-      this.reaalcijePredmeta=r;
-    })
+    this.realiazijaPredmeta.getAll().subscribe(r => {
+      this.reaalcijePredmeta = r;
+    });
 
-    console.log(this.nastavnikUsername)
+    console.log(this.nastavnikUsername);
     if (this.nastavnikUsername) {
       this.predmetService.getPredmetByNastavnik(this.nastavnikUsername).subscribe({
         next: (data) => {
@@ -93,10 +93,10 @@ export class UpravljanjeObavestenjimaComponent extends AppGenerickoComponent<Rea
             const realizacijaPredmeta = this.reaalcijePredmeta.find(rp => rp.predmet.id === predmet.id);
             return {
               ...predmet,
-              realizacijaPredmeta: realizacijaPredmeta ? realizacijaPredmeta : null
+              realizacijaPredmeta: realizacijaPredmeta || {} // Ensure it doesn't break if null
             };
           });
-          console.log(this.combinedList)
+          console.log(this.combinedList);
         },
         error: (err) => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Unable to fetch predmeti' });
@@ -108,6 +108,7 @@ export class UpravljanjeObavestenjimaComponent extends AppGenerickoComponent<Rea
       this.loading = false;
     }
   }
+
 
   expandedRows = {};
 

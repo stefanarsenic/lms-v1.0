@@ -2,6 +2,7 @@ package rs.ac.singidunum.novisad.server.controllers.realizacija_predmeta;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.ObavestenjeDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.EvaluacijaZnanjaDto;
@@ -13,6 +14,7 @@ import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.EvaluacijaZnanja;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TerminNastave;
+import rs.ac.singidunum.novisad.server.model.obavestenje.Fajl;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Obavestenje;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.services.predmet.PredmetService;
@@ -50,6 +52,9 @@ public class RealizacijaPredmetaController extends GenericController<Realizacija
             evaluacijaZnanjas.add(evaluacijaZnanjaDto);
         }
         for(Obavestenje obavestenje:entity.getObavestenja()){
+            for(Fajl fajl:obavestenje.getPrilozi()){
+                fajl.setObavestenje(null);
+            }
             ObavestenjeDto obavestenjeDto=EntityDtoMapper.convertToDto(obavestenje,ObavestenjeDto.class);
             obavestenjes.add(obavestenjeDto);
         }
