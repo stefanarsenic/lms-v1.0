@@ -1,63 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-</head>
-<body>
-<div class="dashboard-container">
-  <nav class="sidebar">
-    <div class="sidebar-header">
-      <h2>Menu</h2>
-    </div>
-    <ul class="sidebar-menu">
-      <li><a routerLink="admin">Dashboard</a></li>
-      <li><a routerLink="korisnici">Korisnici</a></li>
-      <li><a routerLink="nastavnici">Profesori</a></li>
-      <li><a routerLink="studenti">Studenti</a></li>
-      <li><a routerLink="studijski-programi">Studjiski Programi</a></li>
-      <li><a routerLink="organizacija-studijskog-programa">Organizacija</a></li>
-      <li><a routerLink="uloge">Sifarnik</a></li>
-    </ul>
-  </nav>
-  <div class="main-content">
-    <header class="topbar">
-      <h1>Dashboard</h1>
-      <div class="user-info">
-        <p>Welcome, {{username}}</p>
-        <button (click)="logout()">Logout</button>
-      </div>
-    </header>
-    <div class="content">
-
-      <div class="card">
-        <h3>Nesto</h3>
-        <p>10 active projects</p>
-      </div>
-      <div class="cards">
-        <div class="card">
-          <h3>Studenti</h3>
-          <p>{{brojStudenata}}</p>
-        </div>
-        <div class="card">
-          <h3>Profesori</h3>
-          <p>{{brojNastavnika}}</p>
-        </div>
-        <div class="card">
-          <h3>Korisnici</h3>
-          <p>{{brojKorisnika}}</p>
-        </div>
-      </div>
-      <div>
-        <router-outlet></router-outlet>
-      </div>
-    </div>
+<div class="layout-wrapper" [ngClass]="containerClass">
+  <app-topbar></app-topbar>
+  <div class="layout-sidebar">
+    <app-sidebar [model]="model1"></app-sidebar>
   </div>
+  <div class="layout-main-container">
+    <div class="layout-main">
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+  </div>
+  <div class="layout-mask"></div>
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-</body>
-</html>
-

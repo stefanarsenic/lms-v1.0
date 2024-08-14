@@ -21,9 +21,13 @@
             <i class="pi pi-user"></i>
             <span>Profile</span>
         </button>
-        <button class="p-link layout-topbar-button" [routerLink]="'/documentation'">
+        <button class="p-link layout-topbar-button" [routerLink]="'edit-profil'">
             <i class="pi pi-cog"></i>
             <span>Settings</span>
+        </button>
+        <button class="p-link layout-topbar-button p-overlay-badge p-ml-3" (click)="onLogout()">
+          <i class="pi pi-sign-out"></i>
+          <span>Logout</span>
         </button>
     </div>
 </div>

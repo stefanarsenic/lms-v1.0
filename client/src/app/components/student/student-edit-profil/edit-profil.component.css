@@ -1,0 +1,32 @@
+.p-card {
+  transition: transform 0.3s ease-in-out;
+}
+
+.p-card:hover {
+  transform: translateY(-5px);
+}
+
+.p-input-icon-left input {
+  width: 100%;
+}
+
+.p-field {
+  margin-bottom: 1rem;
+}
+
+button {
+  margin-top: 1rem;
+}
+
+h2 {
+  margin-top: 2rem;
+}
+
+.p-growl {
+  z-index: 1000;
+}
+
+.p-toggleButton {
+  background-color: #007ad9;
+  color: #ffffff;
+}

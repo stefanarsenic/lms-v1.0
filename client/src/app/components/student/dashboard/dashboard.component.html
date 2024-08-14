@@ -1,0 +1,41 @@
+<div class="dashboard p-grid p-nogutter p-align-stretch">
+
+  <!-- Header: Student Overview -->
+  <div class="p-col-12">
+    <div class="p-card p-shadow-3 p-p-4 p-d-flex p-ai-center p-jc-between">
+      <div>
+        <h2 class="p-m-0">Welcome, {{ student.ime }}</h2>
+        <p class="p-m-0">Studying {{ studentNaGodini[0].studijskiProgram.naziv }}</p>
+      </div>
+      <div>
+        <button pButton label="View Profile" icon="pi pi-user" class="p-button-outlined"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Key Information -->
+  <div class="p-col-12 p-md-4">
+    <div class="p-card p-shadow-3 p-p-4 p-d-flex p-flex-column p-ai-center">
+      <i class="pi pi-chart-bar" style="font-size: 2em; color: #42A5F5;"></i>
+      <h4>Total Credits Earned</h4>
+      <p>{{ totalCredits }} ECTS</p>
+    </div>
+  </div>
+
+  <div class="p-col-12 p-md-4">
+    <div class="p-card p-shadow-3 p-p-4 p-d-flex p-flex-column p-ai-center">
+      <i class="pi pi-calendar" style="font-size: 2em; color: #FFB74D;"></i>
+      <h4>Next Exam Date</h4>
+      <p>{{ nextExamDate | date:'longDate' }}</p>
+    </div>
+  </div>
+
+  <div class="p-col-12 p-md-4">
+    <div class="p-card p-shadow-3 p-p-4 p-d-flex p-flex-column p-ai-center">
+      <i class="pi pi-star" style="font-size: 2em; color: #FF5252;"></i>
+      <h4>Current GPA</h4>
+      <p>{{ currentGPA }}</p>
+    </div>
+  </div>
+
+</div>

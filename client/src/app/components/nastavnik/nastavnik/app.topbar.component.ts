@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {NgClass} from "@angular/common";
 
 @Component({
@@ -23,5 +23,10 @@ export class AppTopBarComponent {
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService, private router:Router) { }
+
+  onLogout(): void {
+      localStorage.removeItem("token");
+      this.router.navigate(["/login"])
+  }
 }

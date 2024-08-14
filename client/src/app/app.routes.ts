@@ -48,6 +48,8 @@ import {
 } from "./components/nastavnik/upravljanje-obavestenjima/upravljanje-obavestenjima.component";
 import {PregledPredmetaComponent} from "./components/student/pregled-predmeta/pregled-predmeta.component";
 import {PregledObavestenjaComponent} from "./components/student/pregled-obavestenja/pregled-obavestenja.component";
+import {DashboardComponent} from "./components/student/dashboard/dashboard.component";
+import {EditProfilComponent} from "./components/student/student-edit-profil/edit-profil.component";
 
 StudijskiProgramCrudComponent
 
@@ -169,17 +171,10 @@ export const routes: Routes = [
     }
   },
   {
-    path: "main",
-    component: MainStudentComponent,
-    canActivate:[authGuard],
-    data:{
-    allowedRoles:["ROLE_NASTAVNIK","ROLE_ADMIN"]
-    }},
-  {
     path:"korisnik",
     component: UserProfileComponent,
     canActivate:[authGuard],data:{
-      allowedRoles:["ROLE_REGULAR"]
+      allowedRoles:["ROLE_ADMIN"]
     }
   },
   {
@@ -216,14 +211,25 @@ export const routes: Routes = [
     component:MainStudentComponent,
     children:[
       {
+        path: "dashboard",
+        component: DashboardComponent
+      },
+      {
         path: "pregled-predmeta",
         component: PregledPredmetaComponent
       },
       {
         path: "pregled-obavestenja",
         component: PregledObavestenjaComponent
+      },
+      {
+        path: "edit-profil",
+        component: EditProfilComponent
       }
-    ]
+    ],
+    canActivate:[authGuard],data:{
+      allowedRoles:["ROLE_STUDENT"]
+    }
   },
 
   {

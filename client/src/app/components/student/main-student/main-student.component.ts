@@ -1,4 +1,4 @@
-import {Component, Renderer2, ViewChild} from '@angular/core';
+import {Component, OnDestroy, Renderer2, ViewChild} from '@angular/core';
 import {NavigationEnd, Router, RouterOutlet} from "@angular/router";
 import {AppFooterComponent} from "../../nastavnik/nastavnik/app.footer.component";
 import {AppSidebarComponent} from "../../nastavnik/nastavnik/app.sidebar.component";
@@ -21,7 +21,7 @@ import {NgClass} from "@angular/common";
   templateUrl: './main-student.component.html',
   styleUrl: './main-student.component.css'
 })
-export class MainStudentComponent {
+export class MainStudentComponent implements OnDestroy{
   overlayMenuOpenSubscription: Subscription;
 
   menuOutsideClickListener: any;
@@ -38,8 +38,10 @@ export class MainStudentComponent {
       {
         label: 'Home',
         items: [
-          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['student'] }
-        ]
+          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: 'dashboard' },
+          { label: 'Edit', icon: 'pi pi-fw pi-home', routerLink: 'edit-profil' }
+        ],
+
       },
       {
         label: 'Predmeti',

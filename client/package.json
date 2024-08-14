@@ -25,6 +25,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/list": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "chart.js": "^4.4.3",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.2",
     "jspdf": "^2.5.1",
@@ -38,7 +39,6 @@
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
-
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.1.0",
     "@angular/cli": "^18.1.0",

@@ -1,0 +1,67 @@
+<p-toast></p-toast>
+
+<div class="p-d-flex p-jc-center p-ai-center p-mt-5">
+  <p-selectButton [options]="options" [(ngModel)]="selectedOption" optionLabel="label"
+                  optionValue="value" [style]="{'width': '400px'}"
+                  [class]="{'p-button-outlined': true}">
+  </p-selectButton>
+</div>
+
+<div *ngIf="selectedOption === 'password'" class="p-d-flex p-jc-center p-mt-3">
+  <p-card header="Change Password" styleClass="p-shadow-5" [style]="{'width': '400px'}">
+    <form [formGroup]="form" (ngSubmit)="onSubmitChangePassword()" novalidate>
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="currentPassword">Current Password</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-lock"></i>
+            <input id="currentPassword" type="password" pInputText formControlName="currentPassword" placeholder="Enter current password" />
+          </span>
+          <p-message *ngIf="form.get('currentPassword')?.invalid && form.get('currentPassword')?.touched" severity="error" text="Current Password is required"></p-message>
+        </div>
+
+        <div class="p-field">
+          <label for="newPassword">New Password</label>
+          <p-password id="newPassword" formControlName="newPassword" promptLabel="Enter a password" weakLabel="Weak" mediumLabel="Medium" strongLabel="Strong"
+                      [feedback]="true" placeholder="Enter new password"></p-password>
+          <p-message *ngIf="form.get('newPassword')?.invalid && form.get('newPassword')?.touched" severity="error"
+                     text="Password must be at least 8 characters long"></p-message>
+        </div>
+
+        <div class="p-field">
+          <label for="confirmPassword">Confirm New Password</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-lock"></i>
+            <input id="confirmPassword" type="password" pInputText formControlName="confirmPassword" placeholder="Confirm new password" />
+          </span>
+          <p-message *ngIf="form.errors?.['mismatch'] && form.get('confirmPassword')?.touched" severity="error" text="Passwords do not match"></p-message>
+        </div>
+
+        <div class="p-field p-d-flex p-jc-center">
+          <button pButton type="submit" label="Submit" icon="pi pi-check" class="p-button-rounded p-button-success"></button>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>
+
+<div *ngIf="selectedOption === 'email'" class="p-d-flex p-jc-center p-mt-3">
+  <p-card header="Change Email" styleClass="p-shadow-5" [style]="{'width': '400px'}">
+    <form [formGroup]="form" (ngSubmit)="onSubmitChangeEmail()" novalidate>
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="email">New Email</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-envelope"></i>
+            <input id="email" type="email" pInputText formControlName="email" placeholder="Enter new email" />
+          </span>
+          <p-message *ngIf="form.get('email')?.invalid && form.get('email')?.touched" severity="error" text="Please enter a valid email"></p-message>
+        </div>
+
+        <div class="p-field p-d-flex p-jc-center">
+          <button pButton type="submit" label="Submit" icon="pi pi-check" class="p-button-rounded p-button-success"></button>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>
