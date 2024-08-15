@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, OnInit, signal} from '@angular/core';
-import {FullCalendarModule} from "@fullcalendar/angular";
-import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput} from '@fullcalendar/core';
+import {ChangeDetectorRef, Component, OnInit, signal, ViewChild} from '@angular/core';
+import {FullCalendarComponent, FullCalendarModule} from "@fullcalendar/angular";
+import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, Calendar} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -14,10 +14,14 @@ import {StudijskiProgramService} from "../../../../services/studijski-program.se
 import {PredmetService} from "../../../../services/predmet.service";
 import {DialogModule} from "primeng/dialog";
 import {ChipsModule} from "primeng/chips";
-import {Button} from "primeng/button";
+import {Button, ButtonDirective} from "primeng/button";
 import {TerminNastaveService} from "../../../../services/termin-nastave.service";
 import {TerminNastave} from "../../../../model/terminNastave";
 import {formatDateFromString} from "./date-converter"
+import {Ripple} from "primeng/ripple";
+import {ConfirmationService, MessageService} from "primeng/api";
+import {ConfirmPopupModule} from 'primeng/confirmpopup';
+import {ToastModule} from "primeng/toast";
 
 @Component({
   selector: 'app-nastava',
@@ -30,16 +34,17 @@ import {formatDateFromString} from "./date-converter"
     FormsModule,
     DialogModule,
     ChipsModule,
-    Button
+    Button,
+    ButtonDirective,
+    Ripple,
+    ConfirmPopupModule,
+    ToastModule
   ],
   templateUrl: './nastava.component.html',
   styleUrl: './nastava.component.css'
 })
 export class NastavaComponent implements OnInit{
 
-  events: EventInput[] = [];
-  terminiNastave: TerminNastave[] = [];
-  newTerminiNastave: TerminNastave[] = [];
   studijskiProgrami: StudijskiProgram[] = [];
   selectedStudijskiProgram!: StudijskiProgram;
   predmeti: Predmet[] = [];
@@ -48,6 +53,8 @@ export class NastavaComponent implements OnInit{
   godina: number | null = null;
   visible: boolean = false;
   selectedDateInfo!: DateSelectArg;
+
+  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
   calendarVisible = signal(true);
   calendarOptions= signal<CalendarOptions>({
@@ -63,7 +70,7 @@ export class NastavaComponent implements OnInit{
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     },
     initialView: 'dayGridMonth',
-    initialEvents: this.events, // alternatively, use the `events` setting to fetch from a feed
+    initialEvents: [],
     weekends: true,
     editable: true,
     selectable: true,
@@ -72,11 +79,6 @@ export class NastavaComponent implements OnInit{
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this)
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
   });
   currentEvents = signal<EventApi[]>([]);
 
@@ -84,7 +86,9 @@ export class NastavaComponent implements OnInit{
     private changeDetector: ChangeDetectorRef,
     private studijskiProgramService: StudijskiProgramService,
     private predmetService: PredmetService,
-    private terminNastaveService: TerminNastaveService
+    private terminNastaveService: TerminNastaveService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   )
   {}
   ngOnInit(): void {
@@ -104,21 +108,24 @@ export class NastavaComponent implements OnInit{
   }
 
   async loadEvents() {
+    const calendarApi = this.calendarComponent.getApi();
+
     for(let predmet of this.predmeti) {
       await this.terminNastaveService.getAllByPredmet(predmet.id).subscribe(data => {
         for(let object of data){
-          this.terminiNastave.push(object);
-          this.events.push({
+          calendarApi.addEvent({
+            id: object.id?.toString(),
             title: predmet.naziv,
             start: formatDateFromString(object.vremePocetka.toString()),
             end: formatDateFromString(object.vremeZavrsetka.toString())
-          });
+          })
         }
       });
     }
   }
 
   getGodineTrajanja(){
+    this.clearEvents();
     this.godineTrajanja = [];
     if(this.selectedStudijskiProgram.godineTrajanja) {
       for (let i = 1; i <= this.selectedStudijskiProgram.godineTrajanja; i++) {
@@ -128,27 +135,13 @@ export class NastavaComponent implements OnInit{
   }
 
   getPredmeti(studijskiProgramId: number){
+    this.clearEvents();
     if(this.godina){
-      this.predmetService.getPredmetByStudijskiProgramAndGodina(studijskiProgramId, this.godina).subscribe(data => {
+      this.predmetService.getPredmetByStudijskiProgramAndGodina(studijskiProgramId, this.godina).subscribe( data => {
         this.predmeti = data;
-        this.loadEvents().then(r => {
-          console.log(this.events);
-          this.calendarOptions
-          //loadovati eventove na kalendar
-        });
+        this.loadEvents();
       });
     }
-  }
-
-  handleCalendarToggle() {
-    this.calendarVisible.update((bool) => !bool);
-  }
-
-  handleWeekendsToggle() {
-    this.calendarOptions.update((options) => ({
-      ...options,
-      weekends: !options.weekends,
-    }));
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
@@ -158,8 +151,6 @@ export class NastavaComponent implements OnInit{
 
   dialogSave(){
     const calendarApi = this.selectedDateInfo.view.calendar;
-    //dodavati eventove preko calendarApi pri odabriu predmeta
-    //formatirati datum
 
     let terminNastave: TerminNastave = {
       id: 0,
@@ -189,8 +180,37 @@ export class NastavaComponent implements OnInit{
       });
   }
 
+  sacuvajIzmene(event: any){
+    const calendarApi = this.calendarComponent.getApi();
+
+    this.confirmationService.confirm({
+      acceptLabel: "Da",
+      rejectLabel: "Ne",
+      target: event.target,
+      message: 'Da li ste sigurni da zelite da nastavite?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        for(let event of calendarApi.getEvents()){
+          let terminNastave: TerminNastave = {
+            id: null,
+            ishod: null,
+            tipNastave: null,
+            vremePocetka: new Date(event.startStr),
+            vremeZavrsetka: new Date(event.endStr),
+            nastavniMaterijal: null
+          }
+          this.terminNastaveService.update(Number(event.id), terminNastave).subscribe();
+        }
+        this.messageService.add({severity:'success', summary:'Confirmed', detail:'Uspesno sacuvano'});
+      },
+      reject: () => {
+        this.messageService.add({severity:'error', summary:'Rejected', detail:'Operacija prekinuta'});
+      }
+    });
+  }
+
   handleEventClick(clickInfo: EventClickArg) {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    if (confirm(`Da li ste sigurni da zelite da obrisete ovaj dogadjaj? \n '${clickInfo.event.title}'`)) {
       clickInfo.event.remove();
       this.terminNastaveService.delete(Number(clickInfo.event.id)).subscribe();
     }
@@ -198,7 +218,12 @@ export class NastavaComponent implements OnInit{
 
   handleEvents(events: EventApi[]) {
     this.currentEvents.set(events);
-    this.changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
+    this.changeDetector.detectChanges();
+  }
+
+  clearEvents(){
+    const calendarApi = this.calendarComponent.getApi();
+    calendarApi.removeAllEvents();
   }
 
 }

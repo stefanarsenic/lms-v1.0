@@ -21,4 +21,5 @@ export class TerminNastaveService extends GenerickiService<TerminNastave> {
   getAllByPredmet(predmetId: number){
     return this.http.get<TerminNastave[]>(`http://localhost:8080/${this.putanja}/predmet/${predmetId}`);
   }
+
 }
