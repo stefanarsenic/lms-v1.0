@@ -19,7 +19,7 @@ export function formatDateFromString(dateString: string): string {
   const formattedSecond = '00'; // Seconds are not provided in the string
 
   // Construct the ISO 8601 string with time zone offset +02:00
-  const isoDateString = `${formattedYear}-${formattedMonth}-${formattedDay}T${formattedHour}:${formattedMinute}:${formattedSecond}+02:00`;
+  const isoDateString = `${formattedYear}-${formattedMonth}-${formattedDay}T${formattedHour}:${formattedMinute}:${formattedSecond}`;
 
   return isoDateString;
 }

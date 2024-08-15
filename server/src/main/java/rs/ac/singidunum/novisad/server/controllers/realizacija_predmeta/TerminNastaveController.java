@@ -28,7 +28,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/termin-nastave")
 public class TerminNastaveController extends GenericController<TerminNastave, Long, TerminNastaveDto> {
-
+    //TODO: security anotacije
     private final IshodService ishodService;
     private final TipNastaveService tipNastaveService;
     private final NastavniMaterijalService nastavniMaterijalService;
@@ -63,6 +63,19 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
         TerminNastaveDto savedDto = convertToDto(entity);
         return new ResponseEntity<>(savedDto, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TerminNastaveDto> update(@PathVariable Long id, @RequestBody TerminNastaveDto terminNastaveDto) throws IllegalAccessException, InstantiationException {
+        TerminNastave terminNastave = terminNastaveService.findById(id).orElseThrow();
+
+        terminNastave.setVremePocetka(terminNastaveDto.getVremePocetka());
+        terminNastave.setVremeZavrsetka(terminNastaveDto.getVremeZavrsetka());
+
+        TerminNastave saved = terminNastaveService.save(terminNastave);
+        TerminNastaveDto dto = convertToDto(saved);
+        return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
+    }
+
     @Override
     protected TerminNastaveDto convertToDto(TerminNastave entity) throws IllegalAccessException, InstantiationException {
         TerminNastaveDto t = EntityDtoMapper.convertToDto(entity, TerminNastaveDto.class);
