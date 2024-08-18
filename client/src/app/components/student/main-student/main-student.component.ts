@@ -41,7 +41,6 @@ export class MainStudentComponent implements OnDestroy{
           { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: 'dashboard' },
           { label: 'Edit', icon: 'pi pi-fw pi-home', routerLink: 'edit-profil' }
         ],
-
       },
       {
         label: 'Predmeti',
@@ -59,7 +58,7 @@ export class MainStudentComponent implements OnDestroy{
       {
         label: 'Prijava Ispita',
         items: [
-          { label: 'Prijavi Ispite', icon: 'pi pi-fw pi-check-square', routerLink: 'prijavi-ispit' }
+          { label: 'Prijava Ispita', icon: 'pi pi-fw pi-check-square', routerLink: 'prijava-ispita' }
         ]
       }
     ];

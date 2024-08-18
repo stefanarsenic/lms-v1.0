@@ -12,8 +12,6 @@ import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {AppGenerickoComponent} from "../../../../genericko/app-genericko/app-genericko.component";
 import {Obavestenje} from "../../../model/obavestenje";
-import {UlogaService} from "../../../services/uloga.service";
-import {KorisnikService} from "../../../services/korisnik.service";
 import {ObavestenjaService} from "../../../services/obavestenja.service";
 import {Uloga} from "../../../model/uloga";
 import {EditorModule} from "primeng/editor";
@@ -51,16 +49,17 @@ export class ObavestenjaComponent extends AppGenerickoComponent<Obavestenje>{
   obavestenje:Obavestenje={id:null,naslov:"",sadrzaj:"",vremePostavljanja:new Date(),prilozi:[],realizacijaPredmeta:null};
   obavestenjeZaEdit:any=undefined;
 
-  constructor(private injector: Injector,private messageService: MessageService, private confirmationService: ConfirmationService,
-              private obvaesenjeService:ObavestenjaService
+  constructor(
+    private injector: Injector,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private obvaesenjeService:ObavestenjaService
   ) {
     super();
     const service = this.injector.get(ObavestenjaService);
     this.initialize(service);
-    this.loading=false
-
+    this.loading=false;
   }
-
 
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);

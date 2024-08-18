@@ -1,0 +1,45 @@
+
+h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 1.5em;
+}
+
+li {
+  margin: 1.5em 0;
+  padding: 0;
+}
+
+b {
+  margin-right: 3px;
+}
+
+.dropdowns {
+  margin-bottom: 20px;
+}
+
+p-dropdown {
+  margin-right: 15px;
+}
+
+.flexbox {
+  display: flex;
+  justify-content: flex-start;
+  margin: auto;
+}
+
+.error-message {
+  color: #ff4d4d;
+  font-style: italic;
+  font-size: 0.875em;
+  margin-top: 5px;
+  display: block;
+}
+
+.fc {
+  width: 70%;
+}

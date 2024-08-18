@@ -34,7 +34,7 @@ import {UpisStudenataComponent} from "./components/studentska-sluzba/upis-studen
 import {StudentiComponent} from "./components/admin/studenti/studenti.component";
 import {UlogeComponent} from "./components/admin/uloge/uloge.component";
 import {ObavestenjaComponent} from "./components/studentska-sluzba/obavestenja/obavestenja.component";
-import {NastavaComponent} from "./components/studentska-sluzba/rasporedi/nastava/nastava.component";
+import {NastavaComponent} from "./components/studentska-sluzba/rasporedi/raspored-nastave/nastava.component";
 import {NastavnikProfileComponent} from "./components/nastavnik/nastavnik/nastavnik-profile.component";
 import {SpisakPredmetaComponent} from "./components/nastavnik/spisak-predmeta/spisak-predmeta.component";
 import {SpisakStudenataComponent} from "./components/nastavnik/spisak-studenata/spisak-studenata.component";
@@ -50,7 +50,8 @@ import {PregledPredmetaComponent} from "./components/student/pregled-predmeta/pr
 import {PregledObavestenjaComponent} from "./components/student/pregled-obavestenja/pregled-obavestenja.component";
 import {DashboardComponent} from "./components/student/dashboard/dashboard.component";
 import {EditProfilComponent} from "./components/student/student-edit-profil/edit-profil.component";
-import {IspitiComponent} from "./components/studentska-sluzba/rasporedi/ispiti/ispiti.component";
+import {IspitiComponent} from "./components/studentska-sluzba/rasporedi/raspored-ispita/ispiti.component";
+import {PrijavaIspitaComponent} from "./components/student/prijava-ispita/prijava-ispita.component";
 
 StudijskiProgramCrudComponent
 
@@ -230,6 +231,10 @@ export const routes: Routes = [
       {
         path: "edit-profil",
         component: EditProfilComponent
+      },
+      {
+        path: "prijava-ispita",
+        component: PrijavaIspitaComponent
       }
     ],
     canActivate:[authGuard],data:{

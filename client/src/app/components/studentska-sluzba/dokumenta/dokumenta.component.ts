@@ -7,6 +7,7 @@ import {FormsModule} from "@angular/forms";
 import {Student} from "../../../model/student";
 import {StudentNaGodiniService} from "../../../services/student-na-godini.service";
 import {TabelaStudenataComponent} from "./tabela-studenata/tabela-studenata.component";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-dokumenta',
@@ -18,7 +19,8 @@ import {TabelaStudenataComponent} from "./tabela-studenata/tabela-studenata.comp
     Button,
     ChipsModule,
     FormsModule,
-    TabelaStudenataComponent
+    TabelaStudenataComponent,
+    NgForOf
   ],
   templateUrl: './dokumenta.component.html',
   styleUrl: './dokumenta.component.css'
