@@ -1,11 +1,12 @@
-import {Time} from "@angular/common";
+import {IspitniRok} from "./ispitniRok";
+import {Predmet} from "./predmet";
+import {StudijskiProgram} from "./studijskiProgram";
 
 export interface Ispit {
   id: number,
-  datumPolaganja: Date,
-  termin: Date,
-  sala: string,
-  poruka: string,
+  pocetakIspita: Date,
+  krajIspita: Date,
   ispitniRok: IspitniRok,
   predmet: Predmet
+  studijskiProgram: StudijskiProgram
 }

@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
+import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,4 +32,6 @@ public class StudijskiProgram {
     private Fakultet fakultet;
     @OneToOne
     private Nastavnik rukovodilac;
+    @OneToMany(mappedBy = "studijskiProgram", cascade = CascadeType.ALL)
+    private List<StudentNaGodini> studentiNaGodini = new ArrayList<>();
 }

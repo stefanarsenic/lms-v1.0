@@ -56,53 +56,25 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th>
-          <p-tableHeaderCheckbox />
-        </th>
-        <th>
-          ID
-        </th>
-        <th>
-          NAZIV
-        </th>
-        <th>
-          OPIS
-        </th>
-        <th>
-          GODINE TRAJANJA
-        </th>
-        <th>
-          RUKOVODILAC
-        </th>
-        <th>
-          FAKULTET
-        </th>
+        <th><p-tableHeaderCheckbox /></th>
+        <th>ID</th>
+        <th>NAZIV</th>
+        <th>OPIS</th>
+        <th>GODINE TRAJANJA</th>
+        <th>RUKOVODILAC</th>
+        <th>FAKULTET</th>
         <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr>
-        <td>
-          <p-tableCheckbox [value]="item" />
-        </td>
-        <td>
-          {{ item.id }}
-        </td>
-        <td>
-          {{ item.naziv }}
-        </td>
-        <td>
-          {{ item.opis }}
-        </td>
-        <td>
-          {{ item.godineTrajanja }}
-        </td>
-        <td>
-          {{ item.rukovodilacPunoIme }}
-        </td>
-        <td>
-          {{ item.fakultet.naziv }}
-        </td>
+        <td><p-tableCheckbox [value]="item" /></td>
+        <td>{{ item.id }}</td>
+        <td>{{ item.naziv }}</td>
+        <td>{{ item.opis }}</td>
+        <td>{{ item.godineTrajanja }}</td>
+        <td>{{ item.rukovodilacPunoIme }}</td>
+        <td>{{ item.fakultet.naziv }}</td>
         <td>
           <p-button
             icon="pi pi-pencil"
@@ -133,8 +105,8 @@
      width: '450px',
      height: 'auto'
      }"
-    header="Korisicnike informacije"
     [modal]="true"
+    header="Korisicnike informacije"
     styleClass="p-fluid">
     <ng-template pTemplate="content">
       <div class="field">
@@ -142,9 +114,9 @@
           [options]="nastavnici"
           [(ngModel)]="rukovodilac"
           [filter]="true"
+          [showClear]="true"
           optionLabel="punoIme"
           filterBy="ime,prezime"
-          [showClear]="true"
           placeholder="Izaberite nastavnika">
           <ng-template pTemplate="selectedItem" let-selectedNastavnik>
             <div class="flex align-items-center gap-2">
@@ -161,9 +133,9 @@
           [options]="fakulteti"
           [(ngModel)]="fakultet"
           [filter]="true"
+          [showClear]="true"
           optionLabel="naziv"
           filterBy="naziv"
-          [showClear]="true"
           placeholder="Izaberite fakultet">
           <ng-template pTemplate="selectedItem" let-selectedFakultet>
             <div class="flex align-items-center gap-2">
@@ -178,10 +150,10 @@
       <div class="field">
         <label for="naziv">NAZIV</label>
         <input
+          [(ngModel)]="studijskiProgram.naziv"
           type="text"
           pInputText
           id="naziv"
-          [(ngModel)]="studijskiProgram.naziv"
           required
           autofocus />
         <small class="p-error" *ngIf="submitted && !studijskiProgram.naziv">
@@ -191,10 +163,10 @@
       <div class="field">
         <label for="opis">OPIS</label>
         <input
+          [(ngModel)]="studijskiProgram.opis"
           type="text"
           pInputText
           id="opis"
-          [(ngModel)]="studijskiProgram.opis"
           required
           autofocus />
         <small class="p-error" *ngIf="submitted && !studijskiProgram.opis">
@@ -204,10 +176,10 @@
       <div class="field">
         <label for="godineTrajanja">GODINE TRAJANJA</label>
         <input
-          type="text"
+          [(ngModel)]="studijskiProgram.godineTrajanja"
+          type="number"
           pInputText
           id="godineTrajanja"
-          [(ngModel)]="studijskiProgram.godineTrajanja"
           required
           autofocus />
         <small class="p-error" *ngIf="submitted && !studijskiProgram.godineTrajanja">

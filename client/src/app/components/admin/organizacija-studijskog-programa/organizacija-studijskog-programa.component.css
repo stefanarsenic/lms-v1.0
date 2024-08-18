@@ -53,3 +53,10 @@
 .drop-zone[pDroppable]:hover {
   background-color: #e9f5ff;
 }
+
+.row:hover {
+  cursor: grab;
+  background-color: lightblue;
+  transition: 0.15s ease-in;
+}
+

@@ -16,6 +16,9 @@ export class PredmetService extends GenerickiService<any>{
     this.putanja = "api/predmet"
   }
 
+  getPredmetiNotExistingInIspitiByStudijskiProgram(studijskiProgramId: number){
+    return this.http.get<Predmet[]>(`http://localhost:8080/${this.putanja}/not-existing-in-ispiti/${studijskiProgramId}`);
+  }
   getEsbpByPredmetId(predmetId: number){
     return this.http.get<number>(`http://localhost:8080/${this.putanja}/${predmetId}/esbp`);
   }
@@ -28,12 +31,10 @@ export class PredmetService extends GenerickiService<any>{
   createPlanWithPredmeti(predmeti: any[], studijskiProgramId: number, godina: number){
     return this.http.post(`http://localhost:8080/api/predmet-plana-za-godinu/with-predmeti/${studijskiProgramId}/${godina}`, predmeti);
   }
-
   getPredmetByNastavnik(nastavnik: string): Observable<Predmet[]> {
     const params = new HttpParams().set('korisnickoIme',nastavnik);
     return this.http.get<Predmet[]>(`http://localhost:8080/${this.putanja}/predmeti`, { params });
   }
-
   getStudentiByPremdet(id:number): Observable<Student[]>{
     const params = new HttpParams().set('predmetId',id);
     return this.http.get<Student[]>(`http://localhost:8080/${this.putanja}/${id}/students`, { params });

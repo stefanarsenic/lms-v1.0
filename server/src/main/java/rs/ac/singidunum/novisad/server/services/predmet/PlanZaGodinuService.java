@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.predmet.PlanZaGodinu;
+import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.repositories.predmet.PlanZaGodinuRepository;
 
 @Service
@@ -15,6 +16,9 @@ public class PlanZaGodinuService extends GenericService<PlanZaGodinu, Long> {
         this.planZaGodinuRepository = planZaGodinuRepository;
     }
 
+    public Integer getGodinaByPredmetAndStudijskiProgram(Predmet predmet, StudijskiProgram studijskiProgram){
+        return planZaGodinuRepository.getGodinaByPredmetAndStudijskiProgram(predmet.getId(), studijskiProgram.getId());
+    }
     public Integer getPotrebnoEspbByStudijskiProgramIdAndGodina(Long studijskiProgramId, Integer godina){
         return planZaGodinuRepository.getPotrebnoEspbByStudijskiProgramIdAndGodina(studijskiProgramId, godina);
     }

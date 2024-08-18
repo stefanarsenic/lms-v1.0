@@ -1,5 +1,5 @@
 .select-button {
-  background-color: #4CAF50;
+  background-color: #0074D9;
   border: none;
   color: white;
   padding: 12px 24px;
@@ -11,13 +11,13 @@
 }
 
 .select-button:hover {
-  background-color: #45a049;
+  background-color: #005db1;
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
 
 .select-button:active {
-  background-color: #3e8e41;
+  background-color: #001c3b;
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

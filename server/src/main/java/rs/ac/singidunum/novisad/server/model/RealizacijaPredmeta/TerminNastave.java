@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.ac.singidunum.novisad.server.model.nastavnik.TipNastave;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
 
 import java.time.LocalDateTime;

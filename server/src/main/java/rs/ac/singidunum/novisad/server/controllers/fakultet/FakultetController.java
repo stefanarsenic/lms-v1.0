@@ -48,6 +48,7 @@ public class FakultetController extends GenericController<Fakultet, Long, Fakult
 
         for(StudijskiProgram studijskiProgram : entity.getStudijskiProgrami()){
             studijskiProgram.setFakultet(null);
+            studijskiProgram.getRukovodilac().setPravoPristupaSet(null);
             StudijskiProgramDto studijskiProgramDto = EntityDtoMapper.convertToDto(studijskiProgram, StudijskiProgramDto.class);
             studijskiProgramDto.setRukovodilac(EntityDtoMapper.convertToDto(studijskiProgram.getRukovodilac(), NastavnikDto.class));
             studijskiProgramDtos.add(studijskiProgramDto);

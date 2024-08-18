@@ -4,18 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.TipNastaveDto;
-import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
-import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.NastavniMaterijalDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.TerminNastaveDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.NastavniMaterijal;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TerminNastave;
-import rs.ac.singidunum.novisad.server.model.nastavnik.TipNastave;
-import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
-import rs.ac.singidunum.novisad.server.services.nastavnik.TipNastaveService;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TipNastave;
+import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.TipNastaveService;
 import rs.ac.singidunum.novisad.server.services.predmet.IshodService;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.NastavniMaterijalService;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.RealizacijaPredmetaService;
@@ -23,7 +19,6 @@ import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.TerminNasta
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/termin-nastave")
@@ -44,7 +39,7 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     }
 
     @GetMapping("/predmet/{predmetId}")
-    public ResponseEntity<List<TerminNastaveDto>> findAllByPredmet(@PathVariable Long predmetId) throws IllegalAccessException, InstantiationException {
+    public ResponseEntity<List<TerminNastaveDto>> getAllByPredmet(@PathVariable Long predmetId) throws IllegalAccessException, InstantiationException {
         ArrayList<TerminNastaveDto> dtoList = new ArrayList<>();
         List<TerminNastave> original = terminNastaveService.findByPredmet(predmetId);
         for (TerminNastave entity : original) {
@@ -80,11 +75,12 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     protected TerminNastaveDto convertToDto(TerminNastave entity) throws IllegalAccessException, InstantiationException {
         TerminNastaveDto t = EntityDtoMapper.convertToDto(entity, TerminNastaveDto.class);
 //        IshodDto ishodDto = EntityDtoMapper.convertToDto(entity.getIshod(), IshodDto.class);
-//        TipNastaveDto tipNastaveDto = EntityDtoMapper.convertToDto(entity.getTipNastave(), TipNastaveDto.class);
+        if(entity.getTipNastave() != null) {
+            TipNastaveDto tipNastaveDto = EntityDtoMapper.convertToDto(entity.getTipNastave(), TipNastaveDto.class);
+            t.setTipNastave(tipNastaveDto);
+        }
 //        NastavniMaterijalDto nastavniMaterijalDto = EntityDtoMapper.convertToDto(entity.getNastavniMaterijal(), NastavniMaterijalDto.class);
-//
 //        t.setIshod(ishodDto);
-//        t.setTipNastave(tipNastaveDto);
 //        t.setNastavniMaterijal(nastavniMaterijalDto);
 
         return t;
@@ -93,12 +89,12 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     @Override
     protected TerminNastave convertToEntity(TerminNastaveDto dto) throws IllegalAccessException, InstantiationException {
 //        Ishod ishod = ishodService.findById(dto.getIshod().getId()).orElseThrow();
-//        TipNastave tipNastave = tipNastaveService.findById(dto.getTipNastave().getId()).orElseThrow();
+        TipNastave tipNastave = tipNastaveService.findById(dto.getTipNastave().getId()).orElseThrow();
 //        NastavniMaterijal nastavniMaterijal = nastavniMaterijalService.findById(dto.getNastavniMaterijal().getId()).orElseThrow();
 
         TerminNastave t = EntityDtoMapper.convertToEntity(dto, TerminNastave.class);
 //        t.setIshod(ishod);
-//        t.setTipNastave(tipNastave);
+        t.setTipNastave(tipNastave);
 //        t.setNastavniMaterijal(nastavniMaterijal);
 
         return t;

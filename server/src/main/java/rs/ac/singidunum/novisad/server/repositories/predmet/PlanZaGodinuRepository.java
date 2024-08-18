@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.predmet.PlanZaGodinu;
+import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 
 import java.util.List;
 
@@ -17,6 +18,13 @@ public interface PlanZaGodinuRepository extends JpaRepository<PlanZaGodinu, Long
             "WHERE pzg.studijskiProgram.id = :studijskiProgramId " +
             "AND pzg.godina = :godina")
     Integer getPotrebnoEspbByStudijskiProgramIdAndGodina(@Param("studijskiProgramId") Long studijskiProgramId, @Param("godina") Integer godina);
+    @Query("SELECT pzg.godina " +
+            "FROM PlanZaGodinu pzg " +
+            "LEFT JOIN PredmetPlanaZaGodinu ppzg " +
+            "ON pzg.id = ppzg.planZaGodinu.id " +
+            "WHERE ppzg.predmet.id = :predmetId " +
+            "AND pzg.studijskiProgram.id = :studijskiProgramId")
+    Integer getGodinaByPredmetAndStudijskiProgram(Long predmetId, Long studijskiProgramId);
     PlanZaGodinu findByStudijskiProgramAndGodina(StudijskiProgram studijskiProgram, Integer godina);
     List<PlanZaGodinu> findPlanZaGodinusByStudijskiProgram(StudijskiProgram studijskiProgram);
     void deletePlanZaGodinusByStudijskiProgram(StudijskiProgram studijskiProgram);

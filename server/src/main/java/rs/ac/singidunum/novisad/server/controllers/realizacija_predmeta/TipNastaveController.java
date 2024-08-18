@@ -1,13 +1,12 @@
-package rs.ac.singidunum.novisad.server.controllers.nastavnik;
+package rs.ac.singidunum.novisad.server.controllers.realizacija_predmeta;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.TipNastaveDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
-import rs.ac.singidunum.novisad.server.model.nastavnik.TipNastave;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TipNastave;
 
 @RestController
 @RequestMapping("/api/tip-nastave")

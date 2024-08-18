@@ -43,6 +43,11 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         this.predmetPlanaZaGodinuService = predmetPlanaZaGodinuService;
     }
 
+    @GetMapping("/not-existing-in-ispiti/{studijskiProgramId}")
+    public ResponseEntity<List<PredmetDto>> getPredmetiNotExistingInIspitiByStudijskiProgram(@PathVariable Long studijskiProgramId) {
+        List<Predmet> predmeti = predmetService.findPredmetiNotExistingInIspitByStudijskiProgram(studijskiProgramId);
+        return PredmetiToDto(predmeti);
+    }
     @GetMapping("/studijski-program/{studijskiProgramId}")
     public ResponseEntity<List<PredmetDto>> getPredmetiByStudijskiProgram(@PathVariable Long studijskiProgramId){
         List<Predmet> predmeti = predmetService.findPredmetiByStudijskiProgram(studijskiProgramId);

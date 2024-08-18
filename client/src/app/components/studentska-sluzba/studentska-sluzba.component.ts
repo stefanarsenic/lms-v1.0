@@ -47,7 +47,7 @@ export class StudentskaSluzbaComponent implements OnDestroy{
       {
         label: 'Rasporedi i Provere',
         items: [
-          { label: 'Formiranje Rasporeda Nastave', icon: 'pi pi-fw pi-calendar-plus', routerLink: 'nastava' },
+          { label: 'Formiranje Rasporeda Nastave', icon: 'pi pi-fw pi-calendar-plus', routerLink: 'raspored-nastave' },
           { label: 'Raspored Ispita', icon: 'pi pi-fw pi-calendar-times', routerLink: 'raspored-ispita' }
         ]
       },

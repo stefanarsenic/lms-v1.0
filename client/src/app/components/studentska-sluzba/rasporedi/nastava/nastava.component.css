@@ -60,3 +60,11 @@ p-dropdown {
   max-width: 1100px;
   margin: auto;
 }
+
+.error-message {
+  color: #ff4d4d;
+  font-style: italic;
+  font-size: 0.875em;
+  margin-top: 5px;
+  display: block;
+}

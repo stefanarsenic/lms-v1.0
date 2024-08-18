@@ -13,6 +13,17 @@ import java.util.List;
 @Repository
 public interface PredmetRepository extends JpaRepository<Predmet, Long> {
 
+    @Query("select p from Predmet p " +
+            "left join PredmetPlanaZaGodinu ppzg " +
+            "on p.id = ppzg.predmet.id " +
+            "left join PlanZaGodinu pzg " +
+            "on ppzg.planZaGodinu.id = pzg.id " +
+            "left join Ispit i " +
+            "on p.id = i.predmet.id " +
+            "where pzg.studijskiProgram.id = :studijskiProgramId " +
+            "and i.predmet.id is null")
+    List<Predmet> findPredmetiNotExistingInIspitByStudijskiProgram(Long studijskiProgramId);
+
     @Query("SELECT p FROM Predmet p " +
             "LEFT JOIN PredmetPlanaZaGodinu ppzg ON p.id = ppzg.predmet.id " +
             "LEFT JOIN PlanZaGodinu pzg ON ppzg.planZaGodinu.id = pzg.id " +
@@ -31,7 +42,6 @@ public interface PredmetRepository extends JpaRepository<Predmet, Long> {
     Integer getEspbOfPredmet(@Param("predmetId") Long predmetId);
 
     List<Predmet> findByNastavnik(Nastavnik nastavnik);
-
 
     @Query("SELECT s FROM Student s " +
             "JOIN StudentNaGodini sng ON s.id = sng.student.id " +

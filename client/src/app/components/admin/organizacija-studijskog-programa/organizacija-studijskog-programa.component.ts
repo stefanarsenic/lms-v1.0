@@ -7,6 +7,8 @@ import {StudijskiProgramService} from "../../../services/studijski-program.servi
 import {DropdownModule} from "primeng/dropdown";
 import {FormsModule} from "@angular/forms";
 import {Button} from "primeng/button";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-organizacija-studijskog-programa',
@@ -17,7 +19,8 @@ import {Button} from "primeng/button";
     TableModule,
     DropdownModule,
     FormsModule,
-    Button
+    Button,
+    ProgressSpinnerModule
   ],
   templateUrl: './organizacija-studijskog-programa.component.html',
   styleUrl: './organizacija-studijskog-programa.component.css'
@@ -57,7 +60,7 @@ export class OrganizacijaStudijskogProgramaComponent implements OnInit{
       this.pretrazi();
     }
   }
-  getPredmeti(){
+  getPredmeti() {
     this.predmetService.getAll().subscribe(data => {
       this.predmeti = data;
       this.sviPredmeti = data;

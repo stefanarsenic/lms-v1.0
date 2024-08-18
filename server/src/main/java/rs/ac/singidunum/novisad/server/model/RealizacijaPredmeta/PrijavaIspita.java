@@ -21,7 +21,6 @@ public class PrijavaIspita {
     @ManyToOne
     private StudentNaGodini student;
     @ManyToOne
-    private EvaluacijaZnanja evaluacijaZnanja;
-    @ManyToOne
-    private IspitniRok ispitniRok;
+    private Ispit ispit;
+
 }
