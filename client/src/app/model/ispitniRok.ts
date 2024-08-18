@@ -3,5 +3,4 @@ export interface IspitniRok {
   naziv: string,
   pocetak: Date,
   kraj: Date,
-  godinaStudija: GodinaStudija
 }

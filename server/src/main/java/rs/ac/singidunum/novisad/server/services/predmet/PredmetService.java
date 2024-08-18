@@ -14,9 +14,14 @@ import java.util.List;
 public class PredmetService extends GenericService<Predmet, Long> {
 
     private final PredmetRepository predmetRepository;
+
     public PredmetService(CrudRepository<Predmet, Long> repository, PredmetRepository predmetRepository) {
         super(repository);
         this.predmetRepository = predmetRepository;
+    }
+
+    public List<Predmet> findPredmetiNotExistingInIspitByStudijskiProgram(Long studijskiProgramId){
+        return predmetRepository.findPredmetiNotExistingInIspitByStudijskiProgram(studijskiProgramId);
     }
     public List<Predmet> findPredmetiByStudijskiProgramAndGodina(Long studijskiProgramId, Integer godina){
         return predmetRepository.findPredmetiByStudijskiProgramAndGodina(studijskiProgramId, godina);
@@ -31,7 +36,6 @@ public class PredmetService extends GenericService<Predmet, Long> {
     public List<Predmet> getPredmetByNastavnik(Nastavnik nastavnik) {
         return predmetRepository.findByNastavnik(nastavnik);
     }
-
     public List<Student> getStudentsByPredmet(Long predmetId) {
         return predmetRepository.findStudentsByPredmetId(predmetId);
     }

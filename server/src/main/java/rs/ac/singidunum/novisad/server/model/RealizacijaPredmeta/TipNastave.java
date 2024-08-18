@@ -1,4 +1,4 @@
-package rs.ac.singidunum.novisad.server.model.nastavnik;
+package rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

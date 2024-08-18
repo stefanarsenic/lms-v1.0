@@ -1,0 +1,73 @@
+full-calendar {
+  margin-top: 20px;
+}
+
+p-dropdown {
+  margin-right: 15px;
+}
+
+.error-message {
+  color: #ff4d4d;
+  font-style: italic;
+  font-size: 0.875em;
+  margin-top: 5px;
+  display: block;
+}
+
+.flexbox {
+  display: flex;
+}
+
+.right {
+  width: 30%;
+}
+
+.left {
+  width: 70%;
+}
+
+p-calendar {
+  margin-bottom: 10px;
+}
+
+.container {
+  padding: 0 20px 20px 20px;
+}
+
+.field {
+  padding: 0;
+}
+
+.warning-dialog .warning-content {
+  text-align: center; /* Center the message text */
+  font-size: 1.2em; /* Slightly larger text */
+  color: #d9534f; /* Red color for the warning message */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.warning-dialog .warning-icon {
+  font-size: 3em; /* Size of the warning icon */
+  color: #d9534f; /* Red color for the icon */
+  margin-bottom: 10px; /* Space between icon and text */
+}
+
+.warning-dialog .p-footer {
+  display: flex;
+  justify-content: center; /* Center the button */
+}
+
+.warning-dialog .p-button {
+  background-color: #d9534f; /* Red background for the button */
+  border-color: #d9534f; /* Match border with background */
+  color: #fff; /* White text color */
+}
+
+.warning-dialog .p-button:hover {
+  background-color: #c9302c; /* Darker red on hover */
+  border-color: #ac2925; /* Match border with hover background */
+}
+
+
+

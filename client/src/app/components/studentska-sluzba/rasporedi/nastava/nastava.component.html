@@ -38,7 +38,7 @@
     </full-calendar>
   </div>
 
-  <p-dialog header="Izaberite Predmet" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <p-dialog header="Kreairanje Termina Nastave" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
     <p-dropdown *ngIf="predmeti"
       [options]="predmeti"
       [(ngModel)]="selectedPredmet"
@@ -46,6 +46,14 @@
       optionLabel="naziv"
       placeholder="Izaberite Predmet">
     </p-dropdown>
+    <p-dropdown *ngIf="tipoviNastave"
+      [options]="tipoviNastave"
+      [(ngModel)]="selectedTipNastave"
+      appendTo="body"
+      optionLabel="naziv"
+      placeholder="Izaberite Tip Nastave">
+    </p-dropdown>
+    <small *ngIf="errorVisible" class="error-message">{{ errorMessage }}</small>
     <div class="flex justify-content-end gap-2">
       <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
       <p-button label="Save" (onClick)="dialogSave()" />

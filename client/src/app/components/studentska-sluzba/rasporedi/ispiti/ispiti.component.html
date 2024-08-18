@@ -1,0 +1,89 @@
+<p-toast></p-toast>
+<div class="flexbox">
+  <div class="left">
+    <p-dropdown
+      [options]="studijskiProgrami"
+      [(ngModel)]="selectedStudijskiProgram"
+      (onChange)="studijskiProgramChange()"
+      optionLabel="naziv"
+      placeholder="Izaberi Studijski Program" />
+
+    <p-dropdown *ngIf="selectedStudijskiProgram"
+      [options]="ispitniRokovi"
+      [(ngModel)]="selectedIspitniRok"
+      (onChange)="selektujIspitniRok()"
+      optionLabel="naziv"
+      placeholder="Izaberite ispitni rok"
+    />
+
+    <button
+      (click)="sacuvajIzmene($event)"
+      [disabled]="sacuvajIzmeneBtnDisabled"
+      pButton
+      pRipple
+      label="Sacuvaj Izmene">
+    </button>
+
+    <button
+      (click)="resetujKalendar()"
+      style="margin-left: 15px"
+      severity="secondary"
+      pButton
+      pRipple
+      label="Resetuj Kalendar">
+    </button>
+
+    <full-calendar #calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
+      <ng-template #eventContent let-arg>
+        <b>{{ arg.timeText }}</b>
+        <i>{{ arg.event.title }}</i>
+      </ng-template>
+    </full-calendar>
+  </div>
+  <div class="right">
+
+  </div>
+</div>
+<p-dialog header="Kreairanje Ispita" [modal]="true" [(visible)]="kreairanjeIspitaVisible" [style]="{ width: '25rem' }">
+  <div class="container">
+    <p-dropdown *ngIf="predmeti"
+                [options]="predmeti"
+                [(ngModel)]="selectedPredmet"
+                appendTo="body"
+                optionLabel="naziv"
+                placeholder="Izaberite Predmet">
+    </p-dropdown>
+    <small *ngIf="errorVisible" class="error-message">{{ errorMessage }}</small>
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <p-button label="Otkazi" severity="secondary" (onClick)="kreairanjeIspitaVisible = false" />
+    <p-button label="Sacuvaj" (onClick)="dialogSave()" />
+  </div>
+</p-dialog>
+
+<p-dialog header="Brisanje Ispita" [modal]="true" [(visible)]="izmenaIspitaVisible" [style]="{ width: '25rem' }">
+  <div class="flex justify-content-end gap-2">
+    <p-button label="Otkazi" severity="secondary" (onClick)="izmenaIspitaVisible = false" />
+    <p-button label="Obrisi" severity="danger" (onClick)="deleteIspit($event)" />
+  </div>
+  <p-confirmPopup></p-confirmPopup>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="showWarningDialog"
+  modal="true"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{width: '350px'}"
+  class="warning-dialog"
+>
+
+  <div class="warning-content">
+    <i class="pi pi-exclamation-triangle warning-icon"></i>
+    <p>{{ warningMessage }}</p>
+  </div>
+  <p-footer class="p-footer">
+    <button pButton type="button" label="OK" icon="pi pi-check" (click)="closeWarningDialog()"></button>
+  </p-footer>
+</p-dialog>

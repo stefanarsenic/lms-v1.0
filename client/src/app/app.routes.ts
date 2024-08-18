@@ -50,6 +50,7 @@ import {PregledPredmetaComponent} from "./components/student/pregled-predmeta/pr
 import {PregledObavestenjaComponent} from "./components/student/pregled-obavestenja/pregled-obavestenja.component";
 import {DashboardComponent} from "./components/student/dashboard/dashboard.component";
 import {EditProfilComponent} from "./components/student/student-edit-profil/edit-profil.component";
+import {IspitiComponent} from "./components/studentska-sluzba/rasporedi/ispiti/ispiti.component";
 
 StudijskiProgramCrudComponent
 
@@ -132,9 +133,13 @@ export const routes: Routes = [
         ]
       },
       {
-        path: "nastava",
+        path: "raspored-nastave",
         component: NastavaComponent
       },
+      {
+        path: "raspored-ispita",
+        component: IspitiComponent
+      }
     ]
   },
   {

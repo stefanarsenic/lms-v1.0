@@ -120,7 +120,6 @@ export class StudijskiProgramCrudComponent implements OnInit{
     this.studijskiProgramDialog = true;
   }
   editStudijskiProgram(studijskiProgram: StudijskiProgram) {
-    console.log(studijskiProgram);
     this.studijskiProgram = { ...studijskiProgram};
     this.rukovodilac = studijskiProgram.rukovodilac;
     this.fakultet = studijskiProgram.fakultet;
@@ -141,6 +140,7 @@ export class StudijskiProgramCrudComponent implements OnInit{
   }
   hideDialog() {
     this.studijskiProgramDialog = false;
+    this.studijskiProgramZaEdit = null;
     this.submitted = false;
   }
   dodajStudijskiProgram(studijskiProgram: StudijskiProgram){
@@ -149,12 +149,13 @@ export class StudijskiProgramCrudComponent implements OnInit{
       studijskiProgram.rukovodilac = this.rukovodilac;
       this.studijskiProgramService.create(studijskiProgram).subscribe(data => {
         this.getStudijskiProgrami();
+        this.studijskiProgramDialog = false;
       });
-    }
+    } //TODO: kada se klikne x na dialogu student za izmenu se ne brise pa nastaje problem 
     else{
-      console.log(studijskiProgram);
       this.studijskiProgramService.update(studijskiProgram.id, studijskiProgram).subscribe(data => {
         this.getStudijskiProgrami();
+        this.studijskiProgramDialog = false;
         this.studijskiProgramZaEdit = undefined;
       });
     }
