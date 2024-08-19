@@ -1,62 +1,18 @@
-<p-table
-  #dt1
-  dataKey="id"
-  [value]="studenti"
-  [rows]="5"
-  [rowsPerPageOptions]="[5]"
-  [paginator]="true"
-  [globalFilterFields]="['brojIndeksa', 'student.ime', 'student.prezime']"
->
-  <ng-template pTemplate="caption">
-    <div class="flex">
-      <span class="p-input-icon-left ml-auto">
-                <i class="pi pi-search"></i>
-                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Filter" />
-            </span>
+<p-dropdown
+  [options]="studenti"
+  [(ngModel)]="selectedStudent"
+  [filter]="true"
+  [showClear]="true"
+  (onChange)="selectStudent()"
+  appendTo="body"
+  filterBy="brojIndeksa,student.ime,student.prezime"
+  placeholder="Izaberite Studenta">
+  <ng-template let-student pTemplate="item">
+    {{ student.brojIndeksa }} {{ student.student.ime }} {{ student.student.prezime }}
+  </ng-template>
+  <ng-template pTemplate="selectedItem" let-student>
+    <div class="flex align-items-center gap-2">
+      <div>{{ student.brojIndeksa }} {{ student.student.ime }} {{ student.student.prezime }}</div>
     </div>
   </ng-template>
-  <ng-template pTemplate="header">
-    <tr>
-      <th>
-        <div class="flex align-items-center">
-          Broj Indeksa
-          <p-columnFilter type="text" field="brojIndeksa" display="menu" />
-        </div>
-      </th>
-      <th>
-        <div class="flex align-items-center">
-          Ime
-          <p-columnFilter type="text" field="student.ime" display="menu" />
-        </div>
-      </th>
-      <th>
-        <div class="flex align-items-center">
-          Prezime
-          <p-columnFilter type="text" field="student.prezime" display="menu" />
-        </div>
-      </th>
-      <th></th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-student>
-    <tr>
-      <td>
-        {{ student.brojIndeksa }}
-      </td>
-      <td>
-        {{ student.student.ime }}
-      </td>
-      <td>
-        {{ student.student.prezime }}
-      </td>
-      <td>
-        <button class="select-button" (click)="selectStudent(student)">Izaberi</button>
-      </td>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="7">No customers found.</td>
-    </tr>
-  </ng-template>
-</p-table>
+</p-dropdown>

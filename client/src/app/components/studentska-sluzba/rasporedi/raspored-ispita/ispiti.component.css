@@ -1,0 +1,65 @@
+full-calendar {
+  margin-top: 20px;
+}
+
+.fc {
+  width: 70%;
+}
+
+p-dropdown {
+  margin-right: 15px;
+}
+
+.error-message {
+  color: #ff4d4d;
+  font-style: italic;
+  font-size: 0.875em;
+  margin-top: 5px;
+  display: block;
+}
+
+p-calendar {
+  margin-bottom: 10px;
+}
+
+.container {
+  padding: 0 20px 20px 20px;
+}
+
+.field {
+  padding: 0;
+}
+
+.warning-dialog .warning-content {
+  text-align: center;
+  font-size: 1.2em;
+  color: #d9534f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.warning-dialog .warning-icon {
+  font-size: 3em;
+  color: #d9534f;
+  margin-bottom: 10px;
+}
+
+.warning-dialog .p-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.warning-dialog .p-button {
+  background-color: #d9534f;
+  border-color: #d9534f;
+  color: #fff;
+}
+
+.warning-dialog .p-button:hover {
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+
+
+

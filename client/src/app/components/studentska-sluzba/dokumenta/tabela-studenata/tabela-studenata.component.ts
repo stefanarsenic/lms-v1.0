@@ -4,6 +4,9 @@ import {StudentNaGodiniService} from "../../../../services/student-na-godini.ser
 import {Button} from "primeng/button";
 import {ChipsModule} from "primeng/chips";
 import {StudentNaGodini} from "../../../../model/studentNaGodini";
+import {Student} from "../../../../model/student";
+import {DropdownModule} from "primeng/dropdown";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-tabela-studenata',
@@ -11,16 +14,18 @@ import {StudentNaGodini} from "../../../../model/studentNaGodini";
   imports: [
     TableModule,
     Button,
-    ChipsModule
+    ChipsModule,
+    DropdownModule,
+    FormsModule
   ],
   templateUrl: './tabela-studenata.component.html',
   styleUrl: './tabela-studenata.component.css'
 })
 export class TabelaStudenataComponent implements OnInit{
 
-  @ViewChild('dt1') dt: Table | undefined;
   @Output() eventEmitter: EventEmitter<any> = new EventEmitter<any>();
-  studenti: any[] = [];
+  studenti: StudentNaGodini[] = [];
+  selectedStudent!: StudentNaGodini;
 
   constructor(
     private studentNaGodiniService: StudentNaGodiniService,
@@ -28,15 +33,12 @@ export class TabelaStudenataComponent implements OnInit{
   ngOnInit(): void {
     this.studentNaGodiniService.getAll().subscribe(data => {
         this.studenti = data;
+        console.log(this.studenti);
     });
   }
-  selectStudent(student: StudentNaGodini){
-    this.eventEmitter.emit(student);
-  }
-  clear(table: Table) {
-    table.clear();
-  }
-  applyFilterGlobal($event: any, stringVal: any) {
-    this.dt!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
+  selectStudent(){
+    if(this.selectedStudent) {
+      this.eventEmitter.emit(this.selectedStudent);
+    }
   }
 }

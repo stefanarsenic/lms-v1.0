@@ -26,7 +26,7 @@ import {TipNastave} from "../../../../model/tipNastave";
 import {TipNastaveService} from "../../../../services/tip-nastave.service";
 
 @Component({
-  selector: 'app-nastava',
+  selector: 'app-raspored-nastave',
   standalone: true,
   imports: [
     FullCalendarModule,
@@ -77,6 +77,7 @@ export class NastavaComponent implements OnInit{
     },
     initialView: 'dayGridMonth',
     timeZone: 'local',
+    contentHeight: 600,
     initialEvents: [],
     weekends: true,
     editable: true,

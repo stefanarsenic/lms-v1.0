@@ -1,49 +1,44 @@
 <p-toast></p-toast>
-<div class="flexbox">
-  <div class="left">
-    <p-dropdown
-      [options]="studijskiProgrami"
-      [(ngModel)]="selectedStudijskiProgram"
-      (onChange)="studijskiProgramChange()"
-      optionLabel="naziv"
-      placeholder="Izaberi Studijski Program" />
 
-    <p-dropdown *ngIf="selectedStudijskiProgram"
-      [options]="ispitniRokovi"
-      [(ngModel)]="selectedIspitniRok"
-      (onChange)="selektujIspitniRok()"
-      optionLabel="naziv"
-      placeholder="Izaberite ispitni rok"
-    />
+<p-dropdown
+  [options]="studijskiProgrami"
+  [(ngModel)]="selectedStudijskiProgram"
+  (onChange)="studijskiProgramChange()"
+  optionLabel="naziv"
+  placeholder="Izaberi Studijski Program" />
 
-    <button
-      (click)="sacuvajIzmene($event)"
-      [disabled]="sacuvajIzmeneBtnDisabled"
-      pButton
-      pRipple
-      label="Sacuvaj Izmene">
-    </button>
+<p-dropdown *ngIf="selectedStudijskiProgram"
+  [options]="ispitniRokovi"
+  [(ngModel)]="selectedIspitniRok"
+  (onChange)="selektujIspitniRok()"
+  optionLabel="naziv"
+  placeholder="Izaberite ispitni rok"
+/>
 
-    <button
-      (click)="resetujKalendar()"
-      style="margin-left: 15px"
-      severity="secondary"
-      pButton
-      pRipple
-      label="Resetuj Kalendar">
-    </button>
+<button
+  (click)="sacuvajIzmene($event)"
+  [disabled]="sacuvajIzmeneBtnDisabled"
+  pButton
+  pRipple
+  label="Sacuvaj Izmene">
+</button>
 
-    <full-calendar #calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
-      <ng-template #eventContent let-arg>
-        <b>{{ arg.timeText }}</b>
-        <i>{{ arg.event.title }}</i>
-      </ng-template>
-    </full-calendar>
-  </div>
-  <div class="right">
+<button
+  (click)="resetujKalendar()"
+  style="margin-left: 15px"
+  severity="secondary"
+  pButton
+  pRipple
+  label="Resetuj Kalendar">
+</button>
 
-  </div>
-</div>
+<full-calendar #calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
+  <ng-template #eventContent let-arg>
+    <b>{{ arg.timeText }}</b>
+    <i>{{ arg.event.title }}</i>
+  </ng-template>
+</full-calendar>
+
 <p-dialog header="Kreairanje Ispita" [modal]="true" [(visible)]="kreairanjeIspitaVisible" [style]="{ width: '25rem' }">
   <div class="container">
     <p-dropdown *ngIf="predmeti"

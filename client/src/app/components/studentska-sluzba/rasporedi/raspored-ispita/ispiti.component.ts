@@ -29,7 +29,7 @@ import {formatTimeFromString} from "../../../../utils/time-converter";
 import {Ripple} from "primeng/ripple";
 
 @Component({
-  selector: 'app-ispiti',
+  selector: 'app-raspored-ispita',
   standalone: true,
   imports: [
     DropdownModule,
