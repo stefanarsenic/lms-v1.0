@@ -15,7 +15,7 @@ export class TerminNastaveService extends GenerickiService<TerminNastave> {
 
 
   createByPredmet(predmetId: number, terminNastave: TerminNastave){
-    return this.http.post(`http://localhost:8080/${this.putanja}/predmet/${predmetId}`,terminNastave);
+    return this.http.post(`http://localhost:8080/${this.putanja}/predmet/${predmetId}`, terminNastave);
   }
 
   getAllByPredmet(predmetId: number){

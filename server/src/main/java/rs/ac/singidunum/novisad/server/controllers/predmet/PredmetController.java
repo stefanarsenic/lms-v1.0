@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.controllers.predmet;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +13,14 @@ import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
+import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.model.predmet.PredmetPlanaZaGodinu;
 import rs.ac.singidunum.novisad.server.model.student.Student;
+import rs.ac.singidunum.novisad.server.services.fakultet.StudijskiProgramService;
 import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikService;
 import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 import rs.ac.singidunum.novisad.server.services.predmet.IshodService;
@@ -33,14 +36,16 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
     private final IshodService ishodService;
     private final PredmetService predmetService;
     private final PredmetPlanaZaGodinuService predmetPlanaZaGodinuService;
+    private final StudijskiProgramService studijskiProgramService;
 
     @Autowired
     NastavnikService nastavnikService;
-    public PredmetController(GenericService<Predmet, Long> service, IshodService ishodService, PredmetService predmetService, PredmetPlanaZaGodinuService predmetPlanaZaGodinuService) {
+    public PredmetController(GenericService<Predmet, Long> service, IshodService ishodService, PredmetService predmetService, PredmetPlanaZaGodinuService predmetPlanaZaGodinuService, StudijskiProgramService studijskiProgramService) {
         super(service);
         this.ishodService = ishodService;
         this.predmetService = predmetService;
         this.predmetPlanaZaGodinuService = predmetPlanaZaGodinuService;
+        this.studijskiProgramService = studijskiProgramService;
     }
 
     @GetMapping("/not-existing-in-ispiti/{studijskiProgramId}")
@@ -51,6 +56,14 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
     @GetMapping("/studijski-program/{studijskiProgramId}")
     public ResponseEntity<List<PredmetDto>> getPredmetiByStudijskiProgram(@PathVariable Long studijskiProgramId){
         List<Predmet> predmeti = predmetService.findPredmetiByStudijskiProgram(studijskiProgramId);
+        return PredmetiToDto(predmeti);
+    }
+    @GetMapping("/studijski-program/{studijskiProgramId}/semestar/{semestar}")
+    public ResponseEntity<List<PredmetDto>> getPredmetiByStudijskiProgram(@PathVariable Long studijskiProgramId, @PathVariable Integer semestar){
+        StudijskiProgram studijskiProgram = studijskiProgramService.findById(studijskiProgramId).orElseThrow(
+                () -> new EntityNotFoundException("Studijski program not found with id: " + studijskiProgramId)
+        );
+        List<Predmet> predmeti = predmetService.findPredmetiByStudijskiProgramAndSemestar(studijskiProgram.getId(), semestar);
         return PredmetiToDto(predmeti);
     }
     @GetMapping("/studijski-program/{studijskiProgramId}/godina/{godina}")

@@ -9,4 +9,5 @@ export interface TerminNastave {
   ishod: Ishod | null,
   tipNastave: TipNastave | null,
   nastavniMaterijal: NastavniMaterijal | null
+  event?: any
 }

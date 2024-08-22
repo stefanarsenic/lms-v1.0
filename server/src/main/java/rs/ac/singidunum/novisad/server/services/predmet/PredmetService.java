@@ -20,6 +20,9 @@ public class PredmetService extends GenericService<Predmet, Long> {
         this.predmetRepository = predmetRepository;
     }
 
+    public List<Predmet> findPredmetiByStudijskiProgramAndSemestar(Long studijskiProgramId, Integer semestar){
+        return predmetRepository.findPredmetiByStudijskiProgramAndSemestar(studijskiProgramId, semestar);
+    }
     public List<Predmet> findPredmetiNotExistingInIspitByStudijskiProgram(Long studijskiProgramId){
         return predmetRepository.findPredmetiNotExistingInIspitByStudijskiProgram(studijskiProgramId);
     }

@@ -13,6 +13,7 @@ import java.util.Set;
 public class PlanZaGodinuDto implements Serializable {
     private Long id;
     private Integer godina;
+    private Integer brojSemestara;
     private Set<PredmetPlanaZaGodinuDto> predmetiPlanaZaGodinu;
     private StudijskiProgramDto studijskiProgram;
 }

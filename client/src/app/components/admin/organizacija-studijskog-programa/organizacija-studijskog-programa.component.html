@@ -1,58 +1,71 @@
 <div class="container">
-  <div class="card">
-    <p-table
-      [value]="predmeti"
-      [paginator]="true"
-      [rows]="5"
-      [rowsPerPageOptions]="[5, 10, 20]"
-      [tableStyle]="{ 'min-width': '25rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Id</th>
-          <th>Naziv</th>
-          <th>Espb</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-predmet>
-        <tr class="row" pDraggable (onDragStart)="dragStart(predmet)" (onDragEnd)="dragEnd()">
-          <td>{{ predmet.id }}</td>
-          <td>{{ predmet.naziv }}</td>
-          <td>{{ predmet.espb }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
+  <div class="header">
+    <div class="dropdown">
+      <p-dropdown
+        [options]="studijskiProgrami"
+        [disabled]="tableLoading"
+        [(ngModel)]="selektovaniStudijskiProgram"
+        (onChange)="selectStudijskiProgram()"
+        optionLabel="naziv"
+        placeholder="Izaberi studijski program" />
+    </div>
+    <div class="dropdown">
+      <p-dropdown
+        [loading]="pzgLoading"
+        [options]="planoviZaGodinu"
+        [(ngModel)]="planZaGodinu"
+        (onChange)="proveriProgram()"
+        placeholder="Izaberi godinu"
+        optionLabel="godina">
+      </p-dropdown>
+    </div>
+    <div class="btn-save">
+      <p-button
+        label="Sacuvaj"
+        (onClick)="sacuvaj()"
+      />
+    </div>
   </div>
-  <div class="dropdown">
-    <p-dropdown
-      [options]="studijskiProgrami"
-      [(ngModel)]="selektovaniStudijskiProgram"
-      (onChange)="selectStudijskiProgram()"
-      optionLabel="naziv"
-      placeholder="Izaberi studijski program" />
-  </div>
-  <div class="dropdown">
-    <p-dropdown
-      [options]="godine"
-      [(ngModel)]="godina"
-      (onChange)="proveriProgram()"
-      placeholder="Izaberi godinu">
-      <ng-template let-item pTemplate="item">
-        {{ item }}
-      </ng-template>
-    </p-dropdown>
-  </div>
-  <div>
-    <p-button
-      label="Dodaj"
-      (onClick)="dodajPlanSaPredmetima()"
-    />
-  </div>
-  <div class="drop-zone" pDroppable (onDrop)="drop()">
-    <p class="drop-zone-header">Prevuci Ovde</p>
-    <ul class="item-list" *ngIf="selektovaniPredmeti">
-      <li class="item" *ngFor="let predmet of selektovaniPredmeti">
-        {{predmet.naziv}}
-      </li>
-    </ul>
+  <div class="flexbox">
+    <div class="left">
+      <div class="card">
+        <p-table
+          [value]="predmeti"
+          [loading]="tableLoading"
+          [paginator]="true"
+          [rows]="5"
+          [rowsPerPageOptions]="[5, 10, 20]"
+          [tableStyle]="{ 'min-width': '25rem' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Id</th>
+              <th>Naziv</th>
+              <th>Espb</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-predmet>
+            <tr class="row" pDraggable (onDragStart)="dragStart(predmet)" (onDragEnd)="dragEnd()">
+              <td>{{ predmet.id }}</td>
+              <td>{{ predmet.naziv }}</td>
+              <td>{{ predmet.espb }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+    <div class="right">
+      <p-progressSpinner [hidden]="loadingHidden" ariaLabel="loading" />
+      <div *ngIf="loadingHidden" style="display: flex">
+        <div *ngFor="let semestar of semestri" class="drop-zone" pDroppable (onDrop)="drop(semestar)">
+          <p class="drop-zone-header">{{ semestar }}. Semestar</p>
+          <ul class="item-list" *ngIf="predmetiPlanaZaGodinu">
+            <li *ngFor="let ppzg of getfiltriraniPredmeti(semestar)" (click)="removePredmet(ppzg)" class="item">
+              {{ppzg.predmet.naziv}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+<p-toast></p-toast>

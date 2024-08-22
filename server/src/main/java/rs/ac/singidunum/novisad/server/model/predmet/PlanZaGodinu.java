@@ -20,6 +20,7 @@ public class PlanZaGodinu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer godina;
+    private Integer brojSemestara;
     private Integer potrebnoEspb;
     private Integer ukupnoEspb;
     @OneToMany(mappedBy = "planZaGodinu")

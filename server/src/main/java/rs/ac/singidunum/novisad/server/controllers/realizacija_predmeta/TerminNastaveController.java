@@ -50,13 +50,20 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     }
 
     @PostMapping("/predmet/{predmetId}")
-    public ResponseEntity<TerminNastaveDto> create(@PathVariable Long predmetId, @RequestBody TerminNastaveDto dto) throws IllegalAccessException, InstantiationException {
+    public ResponseEntity<List<TerminNastaveDto>> create(@PathVariable Long predmetId, @RequestBody TerminNastaveDto dto) throws IllegalAccessException, InstantiationException {
         RealizacijaPredmeta realizacijaPredmeta = realizacijaPredmetaService.findByPredmetId(predmetId);
         TerminNastave entity = convertToEntity(dto);
         entity.setRealizacijaPredmeta(realizacijaPredmeta);
-        entity = terminNastaveService.save(entity);
-        TerminNastaveDto savedDto = convertToDto(entity);
-        return new ResponseEntity<>(savedDto, HttpStatus.CREATED);
+        List<TerminNastave> created = terminNastaveService.createRepeating(entity, dto.getEvent());
+        List<TerminNastaveDto> dtos = created.stream().map(t -> {
+            try {
+                return convertToDto(t);
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+
+        return new ResponseEntity<>(dtos, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

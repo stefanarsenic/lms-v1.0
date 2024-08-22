@@ -22,14 +22,14 @@ export class PredmetService extends GenerickiService<any>{
   getEsbpByPredmetId(predmetId: number){
     return this.http.get<number>(`http://localhost:8080/${this.putanja}/${predmetId}/esbp`);
   }
+  getPredmetByStudijskiProgramAndSemestar(studijskiProgramId: number, semestar: number){
+    return this.http.get<any[]>("http://localhost:8080/" + this.putanja + `/studijski-program/${studijskiProgramId}/semestar/${semestar}`);
+  }
   getPredmetByStudijskiProgramAndGodina(studijskiProgramId: number, godina: number){
     return this.http.get<any[]>("http://localhost:8080/" + this.putanja + `/studijski-program/${studijskiProgramId}/godina/${godina}`);
   }
   getPredmetiByStudijskiProgram(studijskiProgramId: number){
     return this.http.get<any[]>("http://localhost:8080/" + this.putanja + `/studijski-program/${studijskiProgramId}`);
-  }
-  createPlanWithPredmeti(predmeti: any[], studijskiProgramId: number, godina: number){
-    return this.http.post(`http://localhost:8080/api/predmet-plana-za-godinu/with-predmeti/${studijskiProgramId}/${godina}`, predmeti);
   }
   getPredmetByNastavnik(nastavnik: string): Observable<Predmet[]> {
     const params = new HttpParams().set('korisnickoIme',nastavnik);

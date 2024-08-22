@@ -28,40 +28,11 @@ public class PredmetPlanaZaGodinuService extends GenericService<PredmetPlanaZaGo
 
     public PredmetPlanaZaGodinu findByPlanZaGodinuAndPredmet(PlanZaGodinu planZaGodinu, Predmet predmet){
         return predmetPlanaZaGodinuRepository.findByPlanZaGodinuAndPredmet(planZaGodinu, predmet);
+
     }
 
-    @Transactional
-    public void createWithPredmeti(List<Predmet> predmeti, Long studijskiProgramId, Integer godina){
-        StudijskiProgram studijskiProgram = studijskiProgramRepository.findById(studijskiProgramId).orElseThrow();
-        PlanZaGodinu planZaGodinu = planZaGodinuRepository.findByStudijskiProgramAndGodina(studijskiProgram, godina);
-        List<PlanZaGodinu> planoviZaGodine = planZaGodinuRepository.findPlanZaGodinusByStudijskiProgram(studijskiProgram);
-
-        List<PredmetPlanaZaGodinu> predmetiPlanaZaGodinu = new ArrayList<>(Collections.emptySet());
-        predmeti.forEach(predmet -> {
-            List<PredmetPlanaZaGodinu> listaPpzg = new ArrayList<>(Collections.emptySet());
-
-            planoviZaGodine.forEach(pzg -> {
-                PredmetPlanaZaGodinu ppzg = predmetPlanaZaGodinuRepository.findByPlanZaGodinuAndPredmet(pzg, predmet);
-                if(ppzg != null) {
-                    listaPpzg.add(ppzg);
-                }
-            });
-
-            if(listaPpzg.isEmpty()) {
-                PredmetPlanaZaGodinu p = predmetPlanaZaGodinuRepository.findByPlanZaGodinuAndPredmet(planZaGodinu, predmet);
-                if (p != null) {
-                    p.setPredmet(predmet);
-                    p.setPlanZaGodinu(planZaGodinu);
-                    PredmetPlanaZaGodinu saved = predmetPlanaZaGodinuRepository.save(p);
-                    predmetiPlanaZaGodinu.add(saved);
-                } else {
-                    p = new PredmetPlanaZaGodinu();
-                    p.setPredmet(predmet);
-                    p.setPlanZaGodinu(planZaGodinu);
-                    PredmetPlanaZaGodinu saved = predmetPlanaZaGodinuRepository.save(p);
-                    predmetiPlanaZaGodinu.add(saved);
-                }
-            }
-        });
+    public List<PredmetPlanaZaGodinu> findPredmetPlanaZaGodinusByPlanZaGodinu(PlanZaGodinu planZaGodinu){
+        return predmetPlanaZaGodinuRepository.findPredmetPlanaZaGodinusByPlanZaGodinu(planZaGodinu);
     }
+
 }

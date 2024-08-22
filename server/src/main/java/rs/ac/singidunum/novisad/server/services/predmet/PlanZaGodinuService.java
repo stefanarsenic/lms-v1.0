@@ -8,6 +8,8 @@ import rs.ac.singidunum.novisad.server.model.predmet.PlanZaGodinu;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.repositories.predmet.PlanZaGodinuRepository;
 
+import java.util.List;
+
 @Service
 public class PlanZaGodinuService extends GenericService<PlanZaGodinu, Long> {
     private final PlanZaGodinuRepository planZaGodinuRepository;
@@ -16,6 +18,9 @@ public class PlanZaGodinuService extends GenericService<PlanZaGodinu, Long> {
         this.planZaGodinuRepository = planZaGodinuRepository;
     }
 
+    public List<PlanZaGodinu> findByStudijskiProgram(StudijskiProgram studijskiProgram){
+        return planZaGodinuRepository.findPlanZaGodinusByStudijskiProgram(studijskiProgram);
+    }
     public Integer getGodinaByPredmetAndStudijskiProgram(Predmet predmet, StudijskiProgram studijskiProgram){
         return planZaGodinuRepository.getGodinaByPredmetAndStudijskiProgram(predmet.getId(), studijskiProgram.getId());
     }
