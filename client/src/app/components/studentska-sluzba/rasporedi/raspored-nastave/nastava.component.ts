@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, signal, ViewChild} from '@angular/core';
 import {FullCalendarComponent, FullCalendarModule} from "@fullcalendar/angular";
-import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, Calendar} from '@fullcalendar/core';
+import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, Calendar, EventChangeArg} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -59,6 +59,9 @@ export class NastavaComponent implements OnInit{
   selectedTipNastave!: any;
   errorVisible: boolean = false;
   errorMessage: string = "";
+  btnResetDisabled: boolean = true;
+  deleteNastavaVisible: boolean = false;
+  clickInfo!: EventClickArg;
 
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
@@ -84,6 +87,7 @@ export class NastavaComponent implements OnInit{
     selectable: true,
     selectMirror: true,
     dayMaxEvents: true,
+    eventChange: this.handleEventChange.bind(this),
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this)
@@ -132,6 +136,16 @@ export class NastavaComponent implements OnInit{
         }
       });
     }
+  }
+
+  handleEventChange(eventChange: EventChangeArg){
+    this.btnResetDisabled = false;
+  }
+
+  resetujKalendar(){
+    this.btnResetDisabled = true;
+    this.clearEvents();
+    this.loadEvents();
   }
 
   getGodineTrajanja(){
@@ -244,11 +258,35 @@ export class NastavaComponent implements OnInit{
     this.visible = true;
   }
 
+  deleteNastava(event: any){
+    this.confirmationService.confirm({
+      acceptLabel: "Da",
+      rejectLabel: "Ne",
+      target: event.target,
+      message: 'Da li ste sigurni da zelite da obrisete ovaj termin nastave?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.terminNastaveService.delete(Number(this.clickInfo.event.id)).subscribe({
+          next: () => {
+            this.deleteNastavaVisible = false;
+            this.resetForm();
+            this.clickInfo.event.remove();
+            this.messageService.add({severity:'success', summary:'Confirmed', detail:'Brisanje uspesno', life: 1000});
+          },
+          error: () => {
+            console.error(`Greska u brisanju ${this.clickInfo.event}`)
+          }
+        });
+      },
+      reject: () => {
+        this.messageService.add({severity:'error', summary:'Rejected', detail:'Operacija prekinuta', life: 1000});
+      }
+    });
+  }
+
   handleEventClick(clickInfo: EventClickArg) {
-    if (confirm(`Da li ste sigurni da zelite da obrisete ovaj dogadjaj? \n '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove();
-      this.terminNastaveService.delete(Number(clickInfo.event.id)).subscribe();
-    }
+    this.clickInfo = clickInfo;
+    this.deleteNastavaVisible = true;
   }
 
   handleEvents(events: EventApi[]) {
