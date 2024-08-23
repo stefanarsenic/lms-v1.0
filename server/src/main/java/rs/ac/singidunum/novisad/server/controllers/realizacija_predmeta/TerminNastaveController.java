@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.controllers.realizacija_predmeta;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +51,22 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     }
 
     @PostMapping("/predmet/{predmetId}")
-    public ResponseEntity<List<TerminNastaveDto>> create(@PathVariable Long predmetId, @RequestBody TerminNastaveDto dto) throws IllegalAccessException, InstantiationException {
+    public ResponseEntity<TerminNastaveDto> create(@PathVariable Long predmetId, @RequestBody TerminNastaveDto dto) throws IllegalAccessException, InstantiationException {
         RealizacijaPredmeta realizacijaPredmeta = realizacijaPredmetaService.findByPredmetId(predmetId);
         TerminNastave entity = convertToEntity(dto);
         entity.setRealizacijaPredmeta(realizacijaPredmeta);
-        List<TerminNastave> created = terminNastaveService.createRepeating(entity, dto.getEvent());
+        TerminNastave created = terminNastaveService.create(entity);
+        TerminNastaveDto terminNastaveDto = convertToDto(created);
+
+        return new ResponseEntity<>(terminNastaveDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/predmet/{predmetId}/recurring")
+    public ResponseEntity<List<TerminNastaveDto>> createRecurring(@PathVariable Long predmetId, @RequestBody TerminNastaveDto dto) throws IllegalAccessException, InstantiationException {
+        RealizacijaPredmeta realizacijaPredmeta = realizacijaPredmetaService.findByPredmetId(predmetId);
+        TerminNastave entity = convertToEntity(dto);
+        entity.setRealizacijaPredmeta(realizacijaPredmeta);
+        List<TerminNastave> created = terminNastaveService.createRecurring(entity, dto.getEvent());
         List<TerminNastaveDto> dtos = created.stream().map(t -> {
             try {
                 return convertToDto(t);
@@ -76,6 +88,22 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
         TerminNastave saved = terminNastaveService.save(terminNastave);
         TerminNastaveDto dto = convertToDto(saved);
         return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/delete-all-by-realizacija-predmeta/{terminNastaveId}")
+    public ResponseEntity<?> deleteAllByRealizacijaPredmeta(@PathVariable Long terminNastaveId){
+        TerminNastave terminNastave = terminNastaveService.findById(terminNastaveId).orElseThrow(
+                () -> new EntityNotFoundException("Termin nastave not found with id: " + terminNastaveId.toString())
+        );
+
+        RealizacijaPredmeta realizacijaPredmeta = terminNastave.getRealizacijaPredmeta();
+        if(realizacijaPredmeta != null){
+            terminNastaveService.deleteAllByRealizacijaPredmetaId(realizacijaPredmeta.getId());
+            return ResponseEntity.noContent().build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Realizacija predmeta for termin nastave with id: " + terminNastaveId.toString() + " doesn't exist");
+        }
     }
 
     @Override

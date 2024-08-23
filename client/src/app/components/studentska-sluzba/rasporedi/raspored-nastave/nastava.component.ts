@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, signal, ViewChild} from '@angular/core';
 import {FullCalendarComponent, FullCalendarModule} from "@fullcalendar/angular";
-import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, Calendar, EventChangeArg} from '@fullcalendar/core';
+import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, Calendar, EventChangeArg, EventHoveringArg} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -25,14 +25,13 @@ import {ToastModule} from "primeng/toast";
 import {TipNastave} from "../../../../model/tipNastave";
 import {TipNastaveService} from "../../../../services/tip-nastave.service";
 import rrulePlugin from '@fullcalendar/rrule'
-import { RRule } from 'rrule';
 import {CalendarModule} from "primeng/calendar";
 import {InputSwitchModule} from "primeng/inputswitch";
 import {EditorModule} from "primeng/editor";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {PaginatorModule} from "primeng/paginator";
 import {jsDate2Date} from "../../../../utils/jsDate2Date";
-import {lastValueFrom} from "rxjs";
+import {catchError, lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-raspored-nastave',
@@ -83,14 +82,10 @@ export class NastavaComponent implements OnInit {
   dateEnd!: Date;
   timeEnd!: Date;
   opcije = [
-    { id: 0, naziv: "Ne ponavlja se", sifra: ""},
-    { id: 1, naziv: "Radnim Danima", sifra: ""},
-    { id: 2, naziv: "Dnevno", sifra: "DAILY"},
+    { id: 0, naziv: "Ne ponavlja se", sifra: "UNDEFINED"},
     { id: 3, naziv: "Nedeljno", sifra: "WEEKLY"},
-    { id: 4, naziv: "Mesecno", sifra: "MONTHLY"},
-    { id: 5, naziv: "Godisnje", sifra: "YEARLY"},
   ];
-  selectedOpcija: any = {};
+  selectedOpcija: any = this.opcije[0];
   allDay: boolean = false;
   detalji: string = '';
   recurranceDialog: boolean = false;
@@ -105,7 +100,11 @@ export class NastavaComponent implements OnInit {
   brojPonavljanja: number = 1;
   text: string = "";
   rruleDays: string[] = [];
-  rruleObject: any = {};
+  rruleObject: any = null;
+  currentEvent!: any;
+  deleteAll: boolean = false;
+  izmenaNastaveVisible: boolean = false;
+  eventChangeInfo!: EventChangeArg;
 
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
@@ -133,6 +132,7 @@ export class NastavaComponent implements OnInit {
     selectMirror: true,
     dayMaxEvents: true,
     eventChange: this.handleEventChange.bind(this),
+    eventMouseEnter: this.handleEventHover.bind(this),
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this)
@@ -156,6 +156,7 @@ export class NastavaComponent implements OnInit {
   }
 
   async loadEvents(){
+    this.clearEvents();
     const calendarApi = this.calendarComponent.getApi();
 
     for(let predmet of this.predmeti) {
@@ -289,15 +290,14 @@ export class NastavaComponent implements OnInit {
   //TODO: resetovanje
   sacuvaj(){
     const calendarApi = this.calendarComponent.getApi();
+    let duration: number = this.dateEnd.getHours()-this.dateStart.getHours();
     if(this.selectedPredmet && this.selectedTipNastave && this.rruleObject) {
-      let duration: number = this.dateEnd.getHours()-this.dateStart.getHours();
       const event: EventInput = {
         title: `${this.selectedPredmet.naziv}`,
         description: this.selectedTipNastave.naziv,
         duration: 1000 * 60 * 60 * duration,
         rrule: this.rruleObject
       }
-      calendarApi.addEvent(event);
       const terminNastave: TerminNastave = {
         id: 0,
         tipNastave: this.selectedTipNastave,
@@ -310,13 +310,39 @@ export class NastavaComponent implements OnInit {
           duration: duration
         }
       };
-      this.createTerminNastave(terminNastave)
+      this.createTerminNastaveRecurring(terminNastave)
         .then((createdTerminiNastave: TerminNastave[]) => {
+          calendarApi.addEvent(event);
           this.messageService.add({severity: "success", summary: "Success", detail: "Termini nastave uspesno dodati", life: 1000})
         })
         .catch((error) => {
           console.error(error.message);
         })
+      this.visible = false;
+    }
+    else if(this.selectedPredmet && this.selectedTipNastave && this.selectedOpcija.sifra === "UNDEFINED"){
+      const event: EventInput = {
+        title: `${this.selectedPredmet.naziv}`,
+        description: this.selectedTipNastave.naziv,
+        duration: 1000 * 60 * 60 * duration,
+        start: this.dateStart
+      }
+      const terminNastave: TerminNastave = {
+        id: 0,
+        tipNastave: this.selectedTipNastave,
+        vremePocetka: this.dateStart,
+        ishod: null,
+        nastavniMaterijal: null,
+        vremeZavrsetka: this.dateEnd,
+      };
+      this.createTerminNastave(terminNastave)
+        .then((createdTerminNastave: TerminNastave) => {
+          calendarApi.addEvent(event);
+          this.messageService.add({severity: "success", summary: "Success", detail: "Termin nastave uspesno dodat", life: 1000})
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
       this.visible = false;
     }
   }
@@ -330,6 +356,51 @@ export class NastavaComponent implements OnInit {
     }
   }
 
+  async createTerminNastaveRecurring(terminNastave: TerminNastave): Promise<any>{
+    try{
+      return await lastValueFrom(this.terminNastaveService.createByPredmetRecurring(this.selectedPredmet.id, terminNastave));
+    }
+    catch (error: any){
+      throw new Error(error.message || error.toString());
+    }
+  }
+
+  potvrdiIzmenu(){
+    const terminNastave: TerminNastave = {
+      id: 0,
+      vremePocetka: <Date>this.eventChangeInfo.event.start,
+      vremeZavrsetka: <Date>this.eventChangeInfo.event.end,
+      tipNastave: null,
+      ishod: null,
+      event: null,
+      nastavniMaterijal: null
+    }
+
+    this.izmeniTerminNastave(Number(this.eventChangeInfo.event.id), terminNastave)
+      .then(() => {
+        this.izmenaNastaveVisible = false;
+        this.loadEvents();
+        this.messageService.add({severity: "success", summary: "Success", detail: "Termin nastave uspesno izmenjen", life: 1000})
+      })
+      .catch((error) => {
+        throw new Error(error.message || error.toString());
+      });
+  }
+
+  async izmeniTerminNastave(terminNastaveId: number, terminNastave: TerminNastave){
+    try{
+      return await lastValueFrom(this.terminNastaveService.update(terminNastaveId, terminNastave));
+    }
+    catch (error: any){
+      throw new Error(error.message || error.toString());
+    }
+  }
+
+  closeIzmenaDialog(){
+    this.loadEvents();
+    this.izmenaNastaveVisible = false;
+  }
+
   checkSelectedOpcija(){
     if(this.selectedOpcija == this.opcije.find(opcija => opcija.id === 0)){
       this.closeRecurranceDialog();
@@ -341,6 +412,10 @@ export class NastavaComponent implements OnInit {
   }
 
   handleEventChange(eventChange: EventChangeArg) {
+    this.dateStart = <Date>eventChange.event.start;
+    this.dateEnd = <Date>eventChange.event.end;
+    this.eventChangeInfo = eventChange;
+    this.izmenaNastaveVisible = true;
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
@@ -358,25 +433,62 @@ export class NastavaComponent implements OnInit {
   }
 
   deleteTerminNastave(event: any){
+    const message: string = this.deleteAll ? "Da li ste sigurni da zelite da obrisete sve termine nastave za isti predmet?" : "Da li ste sigurni da zelite da obrisete ovaj termin nastave?";
     this.confirmationService.confirm({
       acceptLabel: "Da",
       rejectLabel: "Ne",
       target: event.target,
-      message: 'Da li ste sigurni da zelite da obrisete ovaj termin nastave?',
+      message: message,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.terminNastaveService.delete(Number(this.clickInfo.event.id))
-          .subscribe({
-            next: () => {
-              this.clearEvents();
-              this.loadEvents();
-              this.deleteNastavaVisible = false;
-              this.messageService.add({severity: "success", summary: "Success", detail: "Termini nastave uspesno obrisan", life: 1000})
-            },
-            error: (error: any) => {
-              this.messageService.add({severity: "error", summary: "Error", detail: error.message.toString(), life: 1000})
-            }
-          });
+        if(this.deleteAll){
+          this.terminNastaveService.deleteGroup(Number(this.clickInfo.event.id))
+            .subscribe({
+              next: () => {
+                this.clearEvents();
+                this.loadEvents();
+                this.deleteNastavaVisible = false;
+                this.messageService.add({
+                  severity: "success",
+                  summary: "Success",
+                  detail: "Termini nastave uspesno obrisani",
+                  life: 1000
+                });
+              },
+              error: (error: any) => {
+                this.messageService.add({
+                  severity: "error",
+                  summary: "Error",
+                  detail: error.message.toString(),
+                  life: 1000
+                });
+              }
+            });
+        }
+        else {
+          this.terminNastaveService.delete(Number(this.clickInfo.event.id))
+            .subscribe({
+              next: () => {
+                this.clearEvents();
+                this.loadEvents();
+                this.deleteNastavaVisible = false;
+                this.messageService.add({
+                  severity: "success",
+                  summary: "Success",
+                  detail: "Termin nastave uspesno obrisan",
+                  life: 1000
+                });
+              },
+              error: (error: any) => {
+                this.messageService.add({
+                  severity: "error",
+                  summary: "Error",
+                  detail: error.message.toString(),
+                  life: 1000
+                });
+              }
+            });
+        }
       },
       reject: () => {
         this.messageService.add({severity:'error', summary:'Rejected', detail:'Operacija prekinuta', life: 1000});
@@ -387,6 +499,16 @@ export class NastavaComponent implements OnInit {
   handleEvents(events: EventApi[]) {
     this.currentEvents.set(events);
     this.changeDetector.detectChanges();
+  }
+
+  handleEventHover(hoverInfo: EventHoveringArg){
+    this.currentEvent = {
+      id: hoverInfo.event.id,
+      title: hoverInfo.event.title,
+      start: hoverInfo.event.startStr,
+      end: hoverInfo.event.endStr,
+      description: hoverInfo.event.extendedProps['description']
+    };
   }
 
   protected readonly String = String;

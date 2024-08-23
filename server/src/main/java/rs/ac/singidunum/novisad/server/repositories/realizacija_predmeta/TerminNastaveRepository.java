@@ -1,5 +1,7 @@
 package rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta;
 
+import jakarta.transaction.Transactional;
+import jdk.jfr.StackTrace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +17,7 @@ public interface TerminNastaveRepository extends JpaRepository<TerminNastave, Lo
             "FROM TerminNastave tn " +
             "WHERE tn.realizacijaPredmeta.predmet.id = :predmetId")
     List<TerminNastave> findTerminiNastaveByPredmetId(@Param("predmetId") Long predmetId);
+
+    @Transactional
+    void deleteAllByRealizacijaPredmetaId(Long realizacijaPredmetaId);
 }

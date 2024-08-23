@@ -8,11 +8,13 @@
 </div>
 <full-calendar #calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
   <ng-template #eventContent let-arg>
-    <span>{{ arg.timeText }}</span>
-    <br>
-    <b> {{ arg.event.title }}</b>
-    <br>
-    <i>{{ arg.event.extendedProps.description }}</i>
+      <div class="event">
+        <span>{{ arg.timeText }}</span>
+        <br>
+        <b> {{ arg.event.title }}</b>
+        <br>
+        <i>{{ arg.event.extendedProps.description }}</i>
+      </div>
   </ng-template>
 </full-calendar>
 
@@ -130,10 +132,37 @@
   <span>{{ text }}</span>
 </p-dialog>
 
-<p-dialog header="Brisanje Termina Nastave" [modal]="true" [(visible)]="deleteNastavaVisible" [style]="{ width: '25rem' }">
+<p-dialog header="Brisanje Termina Nastave" [modal]="true" [(visible)]="deleteNastavaVisible" [style]="{ width: '25rem' }" draggable="false">
+  <div class="row" style="padding: 16px;">
+    <p-inputSwitch [(ngModel)]="deleteAll"></p-inputSwitch>
+    <span style="margin-left: 8px;">Obrisi sve termine za isti predmet</span>
+  </div>
+
   <div class="flex justify-content-end gap-2">
     <p-button label="Otkazi" severity="secondary" (onClick)="deleteNastavaVisible = false" />
     <p-button label="Obrisi" severity="danger" (onClick)="deleteTerminNastave($event)" />
+  </div>
+  <p-confirmPopup></p-confirmPopup>
+</p-dialog>
+
+<p-dialog header="Izmena Termina Nastave" [modal]="true" [(visible)]="izmenaNastaveVisible" [style]="{ width: '25rem' }" draggable="false">
+
+  <div class="calendar-container">
+    <span style="margin-right: 8px">Pocetak: </span>
+    <div class="datum" style="width: auto">
+      <p-calendar [(ngModel)]="dateStart" [showIcon]="true" appendTo="body"></p-calendar>
+    </div>
+  </div>
+  <br>
+  <div class="calendar-container">
+    <span style="margin-right: 8px">Kraj: </span>
+    <div class="datum" style="width: auto; margin-bottom: 16px">
+      <p-calendar [(ngModel)]="dateEnd" [showIcon]="true" appendTo="body"></p-calendar>
+    </div>
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <p-button label="Otkazi" severity="secondary" (onClick)="closeIzmenaDialog()" />
+    <p-button label="Potvrdi" severity="info" (onClick)="potvrdiIzmenu()" />
   </div>
   <p-confirmPopup></p-confirmPopup>
 </p-dialog>

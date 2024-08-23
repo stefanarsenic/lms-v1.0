@@ -1,11 +1,14 @@
 package rs.ac.singidunum.novisad.server.services.realizacija_predmeta;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.dto.event.EventDto;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TerminNastave;
+import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.RealizacijaPredmetaRepository;
 import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.TerminNastaveRepository;
 
 import java.time.DayOfWeek;
@@ -19,13 +22,29 @@ import java.util.List;
 @Service
 public class TerminNastaveService extends GenericService<TerminNastave, Long> {
     private final TerminNastaveRepository terminNastaveRepository;
-    public TerminNastaveService(CrudRepository<TerminNastave, Long> repository, TerminNastaveRepository terminNastaveRepository) {
+    private final RealizacijaPredmetaRepository realizacijaPredmetaRepository;
+
+    public TerminNastaveService(CrudRepository<TerminNastave, Long> repository, TerminNastaveRepository terminNastaveRepository,
+                                RealizacijaPredmetaRepository realizacijaPredmetaRepository) {
         super(repository);
         this.terminNastaveRepository = terminNastaveRepository;
+        this.realizacijaPredmetaRepository = realizacijaPredmetaRepository;
+    }
+
+    public void deleteAllByRealizacijaPredmetaId(Long realizacijaPredmetaId){
+        realizacijaPredmetaRepository.findById(realizacijaPredmetaId).orElseThrow(
+            () -> new EntityNotFoundException("Realizacija predmeta not found with id: " + realizacijaPredmetaId.toString())
+        );
+
+        terminNastaveRepository.deleteAllByRealizacijaPredmetaId(realizacijaPredmetaId);
+    }
+
+    public TerminNastave create(TerminNastave terminNastave){
+        return terminNastaveRepository.save(terminNastave);
     }
 
     @Transactional
-    public List<TerminNastave> createRepeating(TerminNastave terminNastave, EventDto eventDto){
+    public List<TerminNastave> createRecurring(TerminNastave terminNastave, EventDto eventDto){
         LocalDateTime dtstart = eventDto.getDtstart();
         LocalDate until = eventDto.getUntil();
         List<DayOfWeek> recurrenceDays = parseDays(eventDto.getByweekday());
@@ -54,6 +73,10 @@ public class TerminNastaveService extends GenericService<TerminNastave, Long> {
         }
 
         return termini;
+    }
+
+    public List<TerminNastave> findByPredmet(Long predmetId){
+        return terminNastaveRepository.findTerminiNastaveByPredmetId(predmetId);
     }
 
     private List<DayOfWeek> parseDays(List<String> days) {
@@ -88,10 +111,5 @@ public class TerminNastaveService extends GenericService<TerminNastave, Long> {
         }
 
         return daysOfWeek;
-    }
-
-
-    public List<TerminNastave> findByPredmet(Long predmetId){
-        return terminNastaveRepository.findTerminiNastaveByPredmetId(predmetId);
     }
 }
