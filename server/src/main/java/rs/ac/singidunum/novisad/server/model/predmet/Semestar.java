@@ -5,22 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.ac.singidunum.novisad.server.model.predmet.PlanZaGodinu;
-import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
+import rs.ac.singidunum.novisad.server.model.student.SkolskaGodina;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PredmetPlanaZaGodinu {
+public class Semestar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer semestar;
+    private Integer redniBrojSemestra;
+    private LocalDateTime pocetakSemestra;
+    private LocalDateTime krajSemestra;
     @ManyToOne
-    private PlanZaGodinu planZaGodinu;
-    @ManyToOne
-    private Predmet predmet;
+    private SkolskaGodina skolskaGodina;
 }

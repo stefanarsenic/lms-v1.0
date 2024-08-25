@@ -1,11 +1,47 @@
 .container {
-  display: flex;
-  gap: 1rem;
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  max-width: 80%;
+  width: auto;
+  max-width: 100%;
   margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 15px;
+  width: 100%;
+}
+
+.flexbox {
+  height: 75vh;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.left {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.right {
+  flex: 1;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.dropdown {
+  display: inline-block;
+}
+
+.btn-save {
+  display: inline-block;
 }
 
 .list-container,
@@ -47,6 +83,7 @@
 }
 
 .drop-zone[pDroppable] {
+  margin-right: 10px;
   border-color: #007bff;
 }
 
@@ -58,5 +95,10 @@
   cursor: grab;
   background-color: lightblue;
   transition: 0.15s ease-in;
+}
+
+li:hover {
+  background-color: lightcoral;
+  transition: 0.15s;
 }
 

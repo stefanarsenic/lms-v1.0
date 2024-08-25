@@ -39,6 +39,7 @@ public class UniverzitetController extends GenericController<Univerzitet, Long, 
         UniverzitetDto univerzitetDto = EntityDtoMapper.convertToDto(entity, UniverzitetDto.class);
         univerzitetDto.setFakulteti(Collections.emptySet());
         univerzitetDto.setAdresa(EntityDtoMapper.convertToDto(entity.getAdresa(), AdresaDto.class));
+        entity.getRektor().setPravoPristupaSet(null);
         univerzitetDto.setRektor(EntityDtoMapper.convertToDto(entity.getRektor(), NastavnikDto.class));
 
         Set<FakultetDto> fakulteti = new java.util.HashSet<>(Collections.emptySet());
@@ -48,6 +49,7 @@ public class UniverzitetController extends GenericController<Univerzitet, Long, 
             Set<StudijskiProgramDto> studijskiProgrami = new HashSet<>(Collections.emptySet());
             for(StudijskiProgram studijskiProgram : fakultet.getStudijskiProgrami()){
                 studijskiProgram.setFakultet(null);
+                studijskiProgram.getRukovodilac().setPravoPristupaSet(null);
                 StudijskiProgramDto studijskiProgramDto = EntityDtoMapper.convertToDto(studijskiProgram, StudijskiProgramDto.class);
                 studijskiProgramDto.setRukovodilac(EntityDtoMapper.convertToDto(studijskiProgram.getRukovodilac(), NastavnikDto.class));
                 studijskiProgrami.add(studijskiProgramDto);

@@ -1,10 +1,7 @@
 package rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
 
 import java.time.LocalDateTime;
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 public class TerminNastave {
 
@@ -23,7 +21,7 @@ public class TerminNastave {
     private LocalDateTime vremeZavrsetka;
     @OneToOne
     private Ishod ishod; //obrazovni cilj dodati u ishod koji je nullable
-    @OneToOne
+    @ManyToOne
     private TipNastave tipNastave;
     @OneToOne
     private NastavniMaterijal nastavniMaterijal;

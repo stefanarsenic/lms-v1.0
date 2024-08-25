@@ -1,78 +1,168 @@
 <div class="flexbox">
   <div class="dropdowns">
-    <p-dropdown
-      [options]="studijskiProgrami"
-      [(ngModel)]="selectedStudijskiProgram"
-      (onChange)="getGodineTrajanja()"
-      optionLabel="naziv"
-      placeholder="Izaberi Studijski Program" />
-
-    <p-dropdown *ngIf="selectedStudijskiProgram"
-      [options]="godineTrajanja"
-      [(ngModel)]="godina"
-      (onChange)="getPredmeti(selectedStudijskiProgram.id)"
-      placeholder="Izaberi Godinu">
-      <ng-template let-item pTemplate="item">
-        {{ item }}
-      </ng-template>
-    </p-dropdown>
+    <p-dropdown [options]="studijskiProgrami" [(ngModel)]="selectedStudijskiProgram" optionLabel="naziv" placeholder="Izaberite Studijski Program"></p-dropdown>
+    <p-dropdown (onChange)="getPredmeti()" [options]="semestri" [(ngModel)]="selectedSemestar" optionLabel="redniBrojSemestra" placeholder="Izaberite Semestar"></p-dropdown>
   </div>
   <p-toast></p-toast>
   <p-confirmPopup></p-confirmPopup>
-  <div class="btn-save">
-    <button
-      (click)="sacuvajIzmene($event)"
-      pButton
-      pRipple
-      label="Sacuvaj Izmene">
-    </button>
-  </div>
-  <div class="btn-reset">
-    <button
-      (click)="resetujKalendar()"
-      [disabled]="btnResetDisabled"
-      style="margin-left: 15px;"
-      severity="secondary"
-      pButton
-      pRipple
-      label="Resetuj Kalendar">
-    </button>
-  </div>
 </div>
 <full-calendar #calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
   <ng-template #eventContent let-arg>
-    <b>{{ arg.timeText }}</b>
-    <i>{{ arg.event.title }}</i>
+      <div class="event">
+        <span>{{ arg.timeText }}</span>
+        <br>
+        <b> {{ arg.event.title }}</b>
+        <br>
+        <i>{{ arg.event.extendedProps.description }}</i>
+      </div>
   </ng-template>
 </full-calendar>
 
-<p-dialog header="Kreairanje Termina Nastave" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
-  <p-dropdown *ngIf="predmeti"
-    [options]="predmeti"
-    [(ngModel)]="selectedPredmet"
-    appendTo="body"
-    optionLabel="naziv"
-    placeholder="Izaberite Predmet">
-  </p-dropdown>
-  <p-dropdown *ngIf="tipoviNastave"
-    [options]="tipoviNastave"
-    [(ngModel)]="selectedTipNastave"
-    appendTo="body"
-    optionLabel="naziv"
-    placeholder="Izaberite Tip Nastave">
-  </p-dropdown>
-  <small *ngIf="errorVisible" class="error-message">{{ errorMessage }}</small>
-  <div class="flex justify-content-end gap-2">
-    <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
-    <p-button label="Save" (onClick)="dialogSave()" />
+<p-dialog
+  [showHeader]="false"
+  [(visible)]="visible"
+  [breakpoints]="{'960px': '60vw', '640px': '80vw'}"
+  [style]="{width: '30vw'}"
+  [modal]="true"
+  [draggable]="false"
+>
+  <div class="header">
+    <h3>Novi Termin Nastave</h3>
+    <span class="p-buttonset">
+    <button pButton (click)="sacuvaj()" class="p-button-sm" type="button" label="Sacuvaj" icon="pi pi-check"></button>
+    <button pButton (click)="closeDialog()" severity="secondary" class="p-button-outlined p-button-sm" type="button" label="Otkazi" icon="pi pi-times"></button>
+    </span>
+  </div>
+
+  <div class="container">
+
+    <div class="row">
+      <i class="pi pi-pencil" style="margin-right: 8px;"></i>
+      <p-dropdown [options]="predmeti" [(ngModel)]="selectedPredmet" optionLabel="naziv" placeholder="Izaberite Predmet"></p-dropdown>
+      <p-dropdown [options]="tipoviNastave" [(ngModel)]="selectedTipNastave" optionLabel="naziv" placeholder="Izaberite Tip Nastave"></p-dropdown>
+    </div>
+
+    <div class="row">
+      <i class="pi pi-calendar" style="margin-right: 8px;"></i>
+      <div class="calendar-container">
+        <div class="datum">
+          <p-calendar [(ngModel)]="dateStart" [showIcon]="true" appendTo="body"></p-calendar>
+        </div>
+        <div class="vreme">
+          <p-calendar [hidden]="allDay" [(ngModel)]="timeStart" [showTime]="true" [hourFormat]="String(12)" timeOnly="true" appendTo="body"></p-calendar>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <i class="pi pi-calendar" style="margin-right: 8px;"></i>
+      <div class="calendar-container">
+        <div class="datum">
+          <p-calendar [(ngModel)]="dateEnd" [showIcon]="true" appendTo="body"></p-calendar>
+        </div>
+        <div class="vreme">
+          <p-calendar [hidden]="allDay" [(ngModel)]="timeEnd" [showTime]="true" [hourFormat]="String(12)" timeOnly="true" appendTo="body"></p-calendar>
+        </div>
+      </div>
+      <div class="all-day-switch">
+        <p-inputSwitch [(ngModel)]="allDay" (onChange)="changeAllDay()"></p-inputSwitch>
+        <span style="margin-left: 8px;">Ceo Dan</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <i class="pi pi-refresh" style="margin-right: 8px;"></i>
+      <p-dropdown [options]="opcije" [(ngModel)]="selectedOpcija" (onChange)="showRecurranceDialog()" optionLabel="naziv" placeholder="Ne ponavlja se"></p-dropdown>
+    </div>
+
+    <div class="row">
+      <p-editor [(ngModel)]="detalji" [style]="{'height':'150px'}"></p-editor>
+    </div>
   </div>
 </p-dialog>
+<p-dialog
+  [showHeader]="false"
+  [(visible)]="recurranceDialog"
+  [breakpoints]="{'960px': '50vw', '640px': '75vw'}"
+  [style]="{width: '25vw'}"
+  [modal]="true"
+  [draggable]="false"
+>
 
-<p-dialog header="Brisanje Termina Nastave" [modal]="true" [(visible)]="deleteNastavaVisible" [style]="{ width: '25rem' }">
+  <div class="header">
+    <h4>Ponavljanje Termina</h4>
+    <span class="p-buttonset">
+    <button pButton (click)="recurranceDialogSacuvaj()" class="p-button-sm" type="button" label="Sacuvaj" icon="pi pi-check"></button>
+    <button pButton (click)="closeRecurranceDialog()" severity="secondary" class="p-button-outlined p-button-sm" type="button" label="Otkazi" icon="pi pi-times"></button>
+    </span>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="calendar-container">
+        <span style="margin-right: 8px">Pocetak: </span>
+        <div class="datum" style="width: 150px">
+          <p-calendar [(ngModel)]="dateStart" (ngModelChange)="reloadRecurranceDialog()" [showIcon]="true" appendTo="body"></p-calendar>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <span style="margin-right: 8px">Ponavljaj</span>
+      <p-inputNumber [size]="1" [(ngModel)]="brojPonavljanja" mode="decimal" [min]="1"></p-inputNumber>
+      <span style="margin-right: 8px"></span>
+      <p-dropdown (onChange)="checkSelectedOpcija()" [options]="opcije" [(ngModel)]="selectedOpcija" appendTo="body" optionLabel="naziv"></p-dropdown>
+    </div>
+    <div class="row">
+      <p-toggleButton [disabled]="dateStart && dateStart.getDay() === 7" (onChange)="changeText()" [style]="{'margin-right': '10px'}" [(ngModel)]="checkedSu" onLabel="S" offLabel="S"></p-toggleButton>
+      <p-toggleButton [disabled]="dateStart && dateStart.getDay() === 1" (onChange)="changeText()" [style]="{'margin-right': '10px'}" [(ngModel)]="checkedMo" onLabel="M" offLabel="M"></p-toggleButton>
+      <p-toggleButton [disabled]="dateStart && dateStart.getDay() === 2" (onChange)="changeText()" [style]="{'margin-right': '10px'}" [(ngModel)]="checkedTu" onLabel="T" offLabel="T"></p-toggleButton>
+      <p-toggleButton [disabled]="dateStart && dateStart.getDay() === 3" (onChange)="changeText()" [style]="{'margin-right': '10px'}" [(ngModel)]="checkedWe" onLabel="W" offLabel="W"></p-toggleButton>
+      <p-toggleButton [disabled]="dateStart && dateStart.getDay() === 4" (onChange)="changeText()" [style]="{'margin-right': '10px'}" [(ngModel)]="checkedTh" onLabel="T" offLabel="T"></p-toggleButton>
+      <p-toggleButton [disabled]="dateStart && dateStart.getDay() === 5" (onChange)="changeText()" [style]="{'margin-right': '10px'}" [(ngModel)]="checkedFr" onLabel="F" offLabel="F"></p-toggleButton>
+      <p-toggleButton [disabled]="dateStart && dateStart.getDay() === 6" (onChange)="changeText()" [style]="{'margin-right': '10px'}" [(ngModel)]="checkedSa" onLabel="S" offLabel="S"></p-toggleButton>
+    </div>
+    <div class="row">
+      <div class="calendar-container">
+        <span style="margin-right: 8px">Kraj: </span>
+        <div class="datum" style="width: 150px">
+          <p-calendar [(ngModel)]="krajPonavljanjaTermina" [showIcon]="true" appendTo="body"></p-calendar>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span>{{ text }}</span>
+</p-dialog>
+
+<p-dialog header="Brisanje Termina Nastave" [modal]="true" [(visible)]="deleteNastavaVisible" [style]="{ width: '25rem' }" draggable="false">
+  <div class="row" style="padding: 16px;">
+    <p-inputSwitch [(ngModel)]="deleteAll"></p-inputSwitch>
+    <span style="margin-left: 8px;">Obrisi sve termine za isti predmet</span>
+  </div>
+
   <div class="flex justify-content-end gap-2">
     <p-button label="Otkazi" severity="secondary" (onClick)="deleteNastavaVisible = false" />
-    <p-button label="Obrisi" severity="danger" (onClick)="deleteNastava($event)" />
+    <p-button label="Obrisi" severity="danger" (onClick)="deleteTerminNastave($event)" />
   </div>
   <p-confirmPopup></p-confirmPopup>
 </p-dialog>
 
+<p-dialog header="Izmena Termina Nastave" [modal]="true" [(visible)]="izmenaNastaveVisible" [style]="{ width: '25rem' }" draggable="false">
+
+  <div class="calendar-container">
+    <span style="margin-right: 8px">Pocetak: </span>
+    <div class="datum" style="width: auto">
+      <p-calendar [(ngModel)]="dateStart" [showIcon]="true" appendTo="body"></p-calendar>
+    </div>
+  </div>
+  <br>
+  <div class="calendar-container">
+    <span style="margin-right: 8px">Kraj: </span>
+    <div class="datum" style="width: auto; margin-bottom: 16px">
+      <p-calendar [(ngModel)]="dateEnd" [showIcon]="true" appendTo="body"></p-calendar>
+    </div>
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <p-button label="Otkazi" severity="secondary" (onClick)="closeIzmenaDialog()" />
+    <p-button label="Potvrdi" severity="info" (onClick)="potvrdiIzmenu()" />
+  </div>
+  <p-confirmPopup></p-confirmPopup>
+</p-dialog>

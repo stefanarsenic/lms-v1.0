@@ -1,6 +1,7 @@
 package rs.ac.singidunum.novisad.server.dto.realizacija_predmeta;
 
 import lombok.*;
+import rs.ac.singidunum.novisad.server.dto.event.EventDto;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.TipNastaveDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
 
@@ -18,4 +19,5 @@ public class TerminNastaveDto implements Serializable {
     private IshodDto ishod;
     private TipNastaveDto tipNastave;
     private NastavniMaterijalDto nastavniMaterijal;
+    private EventDto event;
 }
