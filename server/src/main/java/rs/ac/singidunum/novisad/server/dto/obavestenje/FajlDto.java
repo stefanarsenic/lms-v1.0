@@ -10,6 +10,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class FajlDto implements Serializable {
     private Long id;
+    private String sifra;
     private String opis;
     private String url;
     private ObavestenjeDto obavestenje;

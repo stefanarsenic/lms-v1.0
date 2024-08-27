@@ -95,8 +95,7 @@ export class IspitiComponent implements OnInit{
     eventDrop: this.handleEventDrop.bind(this),
     eventChange: this.handleEventChange.bind(this),
     eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this),
-
+    eventsSet: this.handleEvents.bind(this)
   });
   currentEvents = signal<EventApi[]>([]);
 
@@ -294,7 +293,7 @@ export class IspitiComponent implements OnInit{
       this.selectedDateInfo = selectInfo;
       this.kreairanjeIspitaVisible = true;
     } else {
-      this.warningMessage = 'Izabrani datum je van okvira ispitnog roka.';
+      this.warningMessage = "Datum nije u opsegu ispitnog roka";
       this.showWarningDialog = true;    }
   }
 

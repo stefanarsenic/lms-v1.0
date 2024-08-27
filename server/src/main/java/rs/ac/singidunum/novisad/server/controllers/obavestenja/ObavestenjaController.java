@@ -1,32 +1,28 @@
 package rs.ac.singidunum.novisad.server.controllers.obavestenja;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.ObavestenjeDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.RealizacijaPredmetaDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
-import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Fajl;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Obavestenje;
-import rs.ac.singidunum.novisad.server.repositories.obavestenje.ObavestenjeRepository;
 import rs.ac.singidunum.novisad.server.services.obavestenje.ObavestenjeService;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api/obavestenja")
-public class Obavestenja extends GenericController<Obavestenje,Long, ObavestenjeDto> {
+public class ObavestenjaController extends GenericController<Obavestenje,Long, ObavestenjeDto> {
 
     @Autowired
     ObavestenjeService obavestenjeService;
 
-    public Obavestenja(ObavestenjeService service) {
+    public ObavestenjaController(ObavestenjeService service) {
         super(service);
         obavestenjeService=service;
     }

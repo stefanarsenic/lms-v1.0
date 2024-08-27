@@ -52,6 +52,9 @@ import {DashboardComponent} from "./components/student/dashboard/dashboard.compo
 import {EditProfilComponent} from "./components/student/student-edit-profil/edit-profil.component";
 import {IspitiComponent} from "./components/studentska-sluzba/rasporedi/raspored-ispita/ispiti.component";
 import {PrijavaIspitaComponent} from "./components/student/prijava-ispita/prijava-ispita.component";
+import {
+  RasporedEvaluacijaZnanjaComponent
+} from "./components/studentska-sluzba/rasporedi/raspored-evaluacija-znanja/raspored-evaluacija-znanja.component";
 
 StudijskiProgramCrudComponent
 
@@ -140,6 +143,10 @@ export const routes: Routes = [
       {
         path: "raspored-ispita",
         component: IspitiComponent
+      },
+      {
+        path: "raspored-evaluacija-znanja",
+        component: RasporedEvaluacijaZnanjaComponent
       }
     ]
   },

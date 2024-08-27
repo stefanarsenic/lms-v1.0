@@ -16,6 +16,8 @@ public class Fajl { //TODO: file upload servis
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
+    private String sifra;
     private String opis;
     private String url;
     @ManyToOne
