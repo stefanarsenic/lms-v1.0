@@ -31,6 +31,10 @@ public class TerminNastaveService extends GenericService<TerminNastave, Long> {
         this.realizacijaPredmetaRepository = realizacijaPredmetaRepository;
     }
 
+    public List<TerminNastave> findByPredmet(Long predmetId){
+        return terminNastaveRepository.findTerminiNastaveByPredmetId(predmetId);
+    }
+
     public void deleteAllByRealizacijaPredmetaId(Long realizacijaPredmetaId){
         realizacijaPredmetaRepository.findById(realizacijaPredmetaId).orElseThrow(
             () -> new EntityNotFoundException("Realizacija predmeta not found with id: " + realizacijaPredmetaId.toString())
@@ -73,10 +77,6 @@ public class TerminNastaveService extends GenericService<TerminNastave, Long> {
         }
 
         return termini;
-    }
-
-    public List<TerminNastave> findByPredmet(Long predmetId){
-        return terminNastaveRepository.findTerminiNastaveByPredmetId(predmetId);
     }
 
     private List<DayOfWeek> parseDays(List<String> days) {

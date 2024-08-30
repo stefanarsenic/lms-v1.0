@@ -25,9 +25,9 @@ public class EvaluacijaZnanja {
     private Integer bodovi;
     @OneToOne
     private Ishod ishod;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Fajl instrumentEvaluacije;
-    @OneToOne
+    @ManyToOne
     private TipEvaluacije tipEvaluacije;
     @ManyToOne
     private RealizacijaPredmeta realizacijaPredmeta;

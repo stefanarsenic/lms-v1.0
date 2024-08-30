@@ -26,5 +26,5 @@ import {NgForOf} from "@angular/common";
   styleUrl: './dokumenta.component.css'
 })
 export class DokumentaComponent{
-
+//TODO: ubaciti biranje studijskog programa zbog dobavljanja studenata na godini
 }

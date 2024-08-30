@@ -1,6 +1,6 @@
 <div class="flexbox">
   <div class="dropdowns">
-    <p-dropdown [options]="studijskiProgrami" [(ngModel)]="selectedStudijskiProgram" optionLabel="naziv" placeholder="Izaberite Studijski Program"></p-dropdown>
+    <p-dropdown (onChange)="getPredmeti()" [options]="studijskiProgrami" [(ngModel)]="selectedStudijskiProgram" optionLabel="naziv" placeholder="Izaberite Studijski Program"></p-dropdown>
     <p-dropdown (onChange)="getPredmeti()" [options]="semestri" [(ngModel)]="selectedSemestar" optionLabel="redniBrojSemestra" placeholder="Izaberite Semestar"></p-dropdown>
   </div>
   <p-toast></p-toast>
@@ -29,8 +29,8 @@
   <div class="header">
     <h3>Novi Termin Nastave</h3>
     <span class="p-buttonset">
-    <button pButton (click)="sacuvaj()" class="p-button-sm" type="button" label="Sacuvaj" icon="pi pi-check"></button>
-    <button pButton (click)="closeDialog()" severity="secondary" class="p-button-outlined p-button-sm" type="button" label="Otkazi" icon="pi pi-times"></button>
+      <button pButton (click)="sacuvaj()" class="p-button-sm" type="button" label="Sacuvaj" icon="pi pi-check"></button>
+      <button pButton (click)="closeDialog()" severity="secondary" class="p-button-outlined p-button-sm" type="button" label="Otkazi" icon="pi pi-times"></button>
     </span>
   </div>
 
@@ -38,8 +38,16 @@
 
     <div class="row">
       <i class="pi pi-pencil" style="margin-right: 8px;"></i>
-      <p-dropdown [options]="predmeti" [(ngModel)]="selectedPredmet" optionLabel="naziv" placeholder="Izaberite Predmet"></p-dropdown>
-      <p-dropdown [options]="tipoviNastave" [(ngModel)]="selectedTipNastave" optionLabel="naziv" placeholder="Izaberite Tip Nastave"></p-dropdown>
+      <div class="dropdown-container" style="padding-right: 4px">
+        <p-dropdown [options]="predmeti" [(ngModel)]="selectedPredmet" [style]="{'width': '100%'}" optionLabel="naziv" placeholder="Izaberite Predmet"></p-dropdown>
+      </div>
+      <div class="dropdown-container" style="padding-left: 4px">
+        <p-dropdown [options]="tipoviNastave" [(ngModel)]="selectedTipNastave" [style]="{'width': '100%'}" optionLabel="naziv" placeholder="Izaberite Tip Nastave"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="row">
+      <small [hidden]="selectedPredmet && selectedTipNastave" style="color: red;">{{ errorMessage }}</small>
     </div>
 
     <div class="row">
@@ -63,20 +71,16 @@
           <p-calendar [hidden]="allDay" [(ngModel)]="timeEnd" [showTime]="true" [hourFormat]="String(12)" timeOnly="true" appendTo="body"></p-calendar>
         </div>
       </div>
-      <div class="all-day-switch">
-        <p-inputSwitch [(ngModel)]="allDay" (onChange)="changeAllDay()"></p-inputSwitch>
-        <span style="margin-left: 8px;">Ceo Dan</span>
-      </div>
     </div>
 
     <div class="row">
       <i class="pi pi-refresh" style="margin-right: 8px;"></i>
-      <p-dropdown [options]="opcije" [(ngModel)]="selectedOpcija" (onChange)="showRecurranceDialog()" optionLabel="naziv" placeholder="Ne ponavlja se"></p-dropdown>
+      <p-dropdown [options]="opcije" [(ngModel)]="selectedOpcija" (onChange)="showRecurranceDialog()" appendTo="body" optionLabel="naziv" placeholder="Ne ponavlja se"></p-dropdown>
     </div>
 
-    <div class="row">
-      <p-editor [(ngModel)]="detalji" [style]="{'height':'150px'}"></p-editor>
-    </div>
+<!--    <div class="row">-->
+<!--      <p-editor [(ngModel)]="detalji" [style]="{'height':'150px'}"></p-editor>-->
+<!--    </div>-->
   </div>
 </p-dialog>
 <p-dialog
@@ -150,14 +154,14 @@
   <div class="calendar-container">
     <span style="margin-right: 8px">Pocetak: </span>
     <div class="datum" style="width: auto">
-      <p-calendar [(ngModel)]="dateStart" [showIcon]="true" appendTo="body"></p-calendar>
+      <p-calendar [(ngModel)]="dateStart" [showTime]="true" [showIcon]="true" appendTo="body"></p-calendar>
     </div>
   </div>
   <br>
   <div class="calendar-container">
     <span style="margin-right: 8px">Kraj: </span>
     <div class="datum" style="width: auto; margin-bottom: 16px">
-      <p-calendar [(ngModel)]="dateEnd" [showIcon]="true" appendTo="body"></p-calendar>
+      <p-calendar [(ngModel)]="dateEnd" [showTime]="true" [showIcon]="true" appendTo="body"></p-calendar>
     </div>
   </div>
   <div class="flex justify-content-end gap-2">
@@ -165,4 +169,23 @@
     <p-button label="Potvrdi" severity="info" (onClick)="potvrdiIzmenu()" />
   </div>
   <p-confirmPopup></p-confirmPopup>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="showWarningDialog"
+  modal="true"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{width: '350px'}"
+  class="warning-dialog"
+>
+
+  <div class="warning-content">
+    <i class="pi pi-exclamation-triangle warning-icon"></i>
+    <p>{{ warningMessage }}</p>
+  </div>
+  <p-footer class="p-footer">
+    <button pButton type="button" label="OK" icon="pi pi-check" (click)="closeWarningDialog()"></button>
+  </p-footer>
 </p-dialog>

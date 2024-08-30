@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, signal, ViewChild} from '@angular/core';
 import {FullCalendarComponent, FullCalendarModule} from "@fullcalendar/angular";
-import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, Calendar, EventChangeArg, EventHoveringArg} from '@fullcalendar/core';
+import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, Calendar, EventChangeArg} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -62,34 +62,48 @@ export class NastavaComponent implements OnInit {
 
   studijskiProgrami: StudijskiProgram[] = [];
   selectedStudijskiProgram!: StudijskiProgram;
+
   semestri: any[] = [
-    {redniBrojSemestra: 1},
-    {redniBrojSemestra: 2}
+    { redniBrojSemestra: 1 },
+    { redniBrojSemestra: 2 }
   ];
   selectedSemestar!: any;
+
   predmeti: Predmet[] = [];
   selectedPredmet!: any;
+
   godina: number | null = null;
+
   visible: boolean = false;
-  selectedDateInfo!: DateSelectArg;
-  tipoviNastave: TipNastave[] = [];
-  selectedTipNastave!: any;
+  izmenaNastaveVisible: boolean = false;
   deleteNastavaVisible: boolean = false;
+  deleteAll: boolean = false;
+
+  selectedDateInfo!: DateSelectArg;
   clickInfo!: EventClickArg;
+  eventChangeInfo!: EventChangeArg;
+
   title: string = '';
+  text: string = '';
+
   dateStart!: Date;
   timeStart!: Date;
   dateEnd!: Date;
   timeEnd!: Date;
+  krajPonavljanjaTermina!: Date;
+
+  tipoviNastave: TipNastave[] = [];
+  selectedTipNastave!: any;
+
   opcije = [
-    { id: 0, naziv: "Ne ponavlja se", sifra: "UNDEFINED"},
-    { id: 3, naziv: "Nedeljno", sifra: "WEEKLY"},
+    { id: 0, naziv: "Ne ponavlja se", sifra: "UNDEFINED" },
+    { id: 3, naziv: "Nedeljno", sifra: "WEEKLY" },
   ];
   selectedOpcija: any = this.opcije[0];
+
   allDay: boolean = false;
-  detalji: string = '';
   recurranceDialog: boolean = false;
-  krajPonavljanjaTermina!: Date;
+
   checkedSu: boolean = false;
   checkedMo: boolean = false;
   checkedTu: boolean = false;
@@ -97,14 +111,15 @@ export class NastavaComponent implements OnInit {
   checkedTh: boolean = false;
   checkedFr: boolean = false;
   checkedSa: boolean = false;
+
   brojPonavljanja: number = 1;
-  text: string = "";
   rruleDays: string[] = [];
   rruleObject: any = null;
-  currentEvent!: any;
-  deleteAll: boolean = false;
-  izmenaNastaveVisible: boolean = false;
-  eventChangeInfo!: EventChangeArg;
+
+  showWarningDialog: boolean = false;
+  warningMessage: string = "";
+  errorMessage: string = "Predmet i Tip nastave moraju biti izabrani";
+
 
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
@@ -132,7 +147,6 @@ export class NastavaComponent implements OnInit {
     selectMirror: true,
     dayMaxEvents: true,
     eventChange: this.handleEventChange.bind(this),
-    eventMouseEnter: this.handleEventHover.bind(this),
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this)
@@ -285,6 +299,8 @@ export class NastavaComponent implements OnInit {
   }
 
   closeDialog(){
+    this.selectedPredmet = null;
+    this.selectedTipNastave = null;
     this.visible = false;
   }
   //TODO: resetovanje
@@ -313,6 +329,7 @@ export class NastavaComponent implements OnInit {
       this.createTerminNastaveRecurring(terminNastave)
         .then((createdTerminiNastave: TerminNastave[]) => {
           calendarApi.addEvent(event);
+          this.loadEvents();
           this.messageService.add({severity: "success", summary: "Success", detail: "Termini nastave uspesno dodati", life: 1000})
         })
         .catch((error) => {
@@ -321,11 +338,17 @@ export class NastavaComponent implements OnInit {
       this.visible = false;
     }
     else if(this.selectedPredmet && this.selectedTipNastave && this.selectedOpcija.sifra === "UNDEFINED"){
-      const event: EventInput = {
+      let event: EventInput = {
         title: `${this.selectedPredmet.naziv}`,
         description: this.selectedTipNastave.naziv,
         duration: 1000 * 60 * 60 * duration,
         start: this.dateStart
+      }
+      if(this.allDay){
+        event = {
+          ...event,
+          allDay: true
+        };
       }
       const terminNastave: TerminNastave = {
         id: 0,
@@ -338,6 +361,7 @@ export class NastavaComponent implements OnInit {
       this.createTerminNastave(terminNastave)
         .then((createdTerminNastave: TerminNastave) => {
           calendarApi.addEvent(event);
+          this.loadEvents();
           this.messageService.add({severity: "success", summary: "Success", detail: "Termin nastave uspesno dodat", life: 1000})
         })
         .catch((error) => {
@@ -419,12 +443,18 @@ export class NastavaComponent implements OnInit {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    this.selectedDateInfo = selectInfo;
-    this.dateStart = selectInfo.start;
-    this.dateEnd = selectInfo.end;
-    this.timeStart = selectInfo.start;
-    this.timeEnd = selectInfo.end;
-    this.visible = true;
+    if(this.selectedStudijskiProgram && this.selectedSemestar) {
+      this.selectedDateInfo = selectInfo;
+      this.dateStart = selectInfo.start;
+      this.dateEnd = selectInfo.end;
+      this.timeStart = selectInfo.start;
+      this.timeEnd = selectInfo.end;
+      this.visible = true;
+    }
+    else {
+      this.warningMessage = "Morate izabrati studijski program i semestar";
+      this.showWarningDialog = true;
+    }
   }
 
   handleEventClick(clickInfo: EventClickArg) {
@@ -501,14 +531,9 @@ export class NastavaComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  handleEventHover(hoverInfo: EventHoveringArg){
-    this.currentEvent = {
-      id: hoverInfo.event.id,
-      title: hoverInfo.event.title,
-      start: hoverInfo.event.startStr,
-      end: hoverInfo.event.endStr,
-      description: hoverInfo.event.extendedProps['description']
-    };
+  closeWarningDialog(){
+    this.warningMessage = "";
+    this.showWarningDialog = false;
   }
 
   protected readonly String = String;
