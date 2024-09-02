@@ -11,7 +11,6 @@ import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import java.util.Set;
 
 
-//TODO:Proveriti za svaku kolonu da ne sme biti null itd (za sve entitete)
 @Getter
 @Setter
 @NoArgsConstructor

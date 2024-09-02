@@ -1,0 +1,67 @@
+<p-toast></p-toast>
+<p-dropdown
+  [options]="predmeti"
+  [(ngModel)]="selectedPredmet"
+  (onChange)="loadEvents()"
+  optionLabel="naziv"
+  placeholder="Izaberite Predmet"
+>
+
+</p-dropdown>
+
+<full-calendar #calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
+  <ng-template #eventContent let-arg>
+    <b>{{ arg.timeText }}</b>
+    <i>{{ arg.event.title }}</i>
+    <br>
+    <i>{{ arg.event.extendedProps.description }}</i>
+  </ng-template>
+</full-calendar>
+
+<p-dialog
+  [visible]="visible"
+  [showHeader]="false"
+  [style]="{width: '35vw'}"
+  [modal]="true"
+  [draggable]="false">
+
+  <div class="header">
+    <div class="row">
+      <h3>Ishod</h3>
+      <div>
+        <span class="p-buttonset">
+        <button pButton (click)="sacuvaj()" class="p-button-sm" type="button" label="Sacuvaj" icon="pi pi-check"></button>
+        <button pButton (click)="otkazi()" severity="secondary" class="p-button-outlined p-button-sm" type="button" label="Otkazi" icon="pi pi-times"></button>
+      </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <div class="form-group">
+      <label>Novi Obrazovni Cilj</label>
+    </div>
+    <form [formGroup]="form">
+      <div formArrayName="items">
+        <div *ngFor="let item of items.controls; let i = index">
+          <input [formControlName]="i" placeholder="Enter text here">
+          <button class="remove" type="button" (click)="removeItem(i)">Ukloni</button>
+        </div>
+      </div>
+      <button class="add" type="button" (click)="addItem()">+ Dodaj</button>
+    </form>
+
+    <p>Obrazovni ciljevi: {{ form.value.items | json }}</p>
+
+    <div class="form-group">
+      <label>Izaberite nastavni materijal:</label>
+      <p-dropdown placeholder="Izaberite Nastavni Materijal" appendTo="body"></p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label for="editor">Opis Ishoda:</label>
+      <textarea [(ngModel)]="opis" id="editor"></textarea>
+    </div>
+  </div>
+
+</p-dialog>

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {GenerickiService} from "../../genericko/genericki.service";
 import {TerminNastave} from "../model/terminNastave";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {Ishod} from "../model/ishod";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,14 @@ export class TerminNastaveService extends GenerickiService<TerminNastave> {
   constructor(protected override http: HttpClient) {
     super(http);
     this.putanja = "api/termin-nastave";
+  }
+
+  updateIshod(terminNastaveId: number, params: HttpParams, ishod: Ishod){
+    return this.http.put<TerminNastave>(`http://localhost:8080/${this.putanja}/${terminNastaveId}/ishod?${params}`, ishod);
+  }
+
+  getAllByNastavnikAndPredmet(params: HttpParams){
+    return this.http.get<TerminNastave[]>(`http://localhost:8080/${this.putanja}/by-nastavnik-and-predmet?${params}`);
   }
 
   deleteGroup(terminNastaveId: number){

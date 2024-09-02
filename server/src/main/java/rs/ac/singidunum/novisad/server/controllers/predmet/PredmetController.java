@@ -1,6 +1,8 @@
 package rs.ac.singidunum.novisad.server.controllers.predmet;
 
+import ch.qos.logback.core.model.processor.AppenderRefDependencyAnalyser;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +50,12 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         this.studijskiProgramService = studijskiProgramService;
     }
 
-    @GetMapping("/not-existing-in-ispiti/{studijskiProgramId}")
-    public ResponseEntity<List<PredmetDto>> getPredmetiNotExistingInIspitiByStudijskiProgram(@PathVariable Long studijskiProgramId) {
-        List<Predmet> predmeti = predmetService.findPredmetiNotExistingInIspitByStudijskiProgram(studijskiProgramId);
+    @GetMapping("/nepolozeni-predmeti")
+    public ResponseEntity<?> getNepolozeniPredmeti(
+        @PathParam("studentId") Long studentId,
+        @PathParam("studijskiProgramId") Long studijskiProgramId
+    ){
+        List<Predmet> predmeti = predmetService.findAllNePolozeniPredmetiByStudentAndStudijskiProgram(studentId, studijskiProgramId);
         return PredmetiToDto(predmeti);
     }
     @GetMapping("/studijski-program/{studijskiProgramId}")
@@ -78,7 +83,6 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         Predmet predmet = predmetService.findById(predmetId).orElseThrow();
         return new ResponseEntity<>(predmet.getEspb(), HttpStatus.OK);
     }
-
     @GetMapping("/predmeti")
     public ResponseEntity<List<PredmetDto>> getNastavnikPredmeti(@RequestParam("korisnickoIme") String korisnickoIme)
             throws IllegalAccessException, InstantiationException {
@@ -92,10 +96,32 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         return PredmetiToDto(predmets);
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<PredmetDto> createPredmet(
+        @PathParam("nastavnikId") Long nastavnikId,
+        @PathParam("asistentId") Long asistentId,
+        @RequestBody PredmetDto predmetDto
+    ) throws IllegalAccessException, InstantiationException {
+
+        Predmet predmet = convertToEntity(predmetDto);
+        Nastavnik nastavnik = nastavnikService.findById(nastavnikId).orElseThrow(() -> new EntityNotFoundException("Nastavnik not found with id: " + nastavnikId.toString()));
+        Nastavnik asistent = nastavnikService.findById(asistentId).orElseThrow(() -> new EntityNotFoundException("Asistent not found with id: " + asistentId.toString()));
+
+        predmet.setNastavnik(nastavnik);
+        predmet.setAsistent(asistent);
+
+        Predmet created = predmetService.createPredmet(predmet, nastavnik, asistent);
+        PredmetDto dto = convertToDto(created);
+
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
+
     @Override
     protected PredmetDto convertToDto(Predmet entity) throws IllegalAccessException, InstantiationException {
         NastavnikDto nastavnikDto = EntityDtoMapper.convertToDto(entity.getNastavnik(), NastavnikDto.class);
+        nastavnikDto.setPravoPristupaSet(null);
         NastavnikDto asistentDto = EntityDtoMapper.convertToDto(entity.getAsistent(), NastavnikDto.class);
+        asistentDto.setPravoPristupaSet(null);
         Set<IshodDto> silabusDto = new HashSet<>(Collections.emptySet());
         Set<PredmetDto> preduslovDto = new HashSet<>(Collections.emptySet());
         Set<PredmetPlanaZaGodinuDto> planoviDto = new HashSet<>(Collections.emptySet());
@@ -116,7 +142,8 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         predmetDto.setSilabus(silabusDto);
         predmetDto.setPreduslov(preduslovDto);
         predmetDto.setPlanovi(planoviDto);
-
+        predmetDto.setNastavnik(nastavnikDto);
+        predmetDto.setAsistent(asistentDto);
 
         return predmetDto;
     }

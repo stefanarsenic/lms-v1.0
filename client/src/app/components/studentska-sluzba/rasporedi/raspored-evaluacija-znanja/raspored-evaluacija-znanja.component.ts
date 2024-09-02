@@ -283,10 +283,6 @@ export class RasporedEvaluacijaZnanjaComponent implements OnInit{
     this.clickInfo = clickInfo;
   }
 
-  handleEventDrop(eventDropInfo: EventDropArg){
-
-  }
-
   handleEventChange(eventChange: EventChangeArg){
     const evaluacijaZnanja = this.evaluacijeZnanja.find(e => e.id = Number(eventChange.event.id));
     if(evaluacijaZnanja){

@@ -15,18 +15,21 @@ import {StudijskiProgram} from "../../../../model/studijskiProgram";
 import {Predmet} from "../../../../model/predmet";
 import {PredmetService} from "../../../../services/predmet.service";
 import {StudijskiProgramService} from "../../../../services/studijski-program.service";
-import {IspitService} from "../../../../services/ispit.service";
 import {Button} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {CalendarModule} from "primeng/calendar";
-import {Ispit} from "../../../../model/ispit";
-import {lastValueFrom} from "rxjs";
 import {HttpParams} from "@angular/common/http";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {ConfirmPopupModule} from "primeng/confirmpopup";
 import {ToastModule} from "primeng/toast";
 import {formatTimeFromString} from "../../../../utils/time-converter";
 import {Ripple} from "primeng/ripple";
+import {EvaluacijaZnanjaService} from "../../../../services/evaluacija-znanja.service";
+import {EvaluacijaZnanja} from "../../../../model/evaluacijaZnanja";
+import {InputNumberModule} from "primeng/inputnumber";
+import {TipEvaluacije} from "../../../../model/tipEvaluacije";
+import {TipEvaluacijeService} from "../../../../services/tip-evaluacije.service";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-raspored-ispita',
@@ -41,31 +44,43 @@ import {Ripple} from "primeng/ripple";
     CalendarModule,
     ConfirmPopupModule,
     ToastModule,
-    Ripple
+    Ripple,
+    InputNumberModule
   ],
   templateUrl: './ispiti.component.html',
   styleUrl: './ispiti.component.css'
 })
 export class IspitiComponent implements OnInit{
 
-  ispiti: Ispit[] = [];
+  ispiti: EvaluacijaZnanja[] = [];
+
+  tipoviEvaluacije: TipEvaluacije[] = [];
+  selectedTipEvaluacije!: any;
+
   predmeti: Predmet[] = [];
   selectedPredmet!: any;
+
   studijskiProgrami: StudijskiProgram[] = [];
   selectedStudijskiProgram!: StudijskiProgram;
-  godineTrajanja: number[] = [];
-  godina: number | null = null;
+
   ispitniRokovi: IspitniRok[] = [];
   selectedIspitniRok!: IspitniRok;
-  kreairanjeIspitaVisible: boolean = false;
-  izmenaIspitaVisible: boolean = false;
+
   selectedDateInfo!: DateSelectArg;
   clickInfo!: EventClickArg;
+
+  visible: boolean = false;
   errorVisible: boolean = false;
-  errorMessage: string = "";
   showWarningDialog: boolean = false;
+  deleteEvaluacijaVisible: boolean = false;
+
+  errorMessage: string = "";
   warningMessage: string = '';
-  sacuvajIzmeneBtnDisabled: boolean = true;
+
+  pocetak!: Date;
+  kraj!: Date;
+  bodovi!: number;
+  opis: string = "";
 
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
@@ -101,15 +116,19 @@ export class IspitiComponent implements OnInit{
 
   constructor(
     private ispitniRokService: IspitniRokService,
+    private evaluacijaZnanjaService: EvaluacijaZnanjaService,
     private changeDetector: ChangeDetectorRef,
     private predmetService: PredmetService,
     private studijskiProgramService: StudijskiProgramService,
-    private ispitService: IspitService,
+    private tipEvaluacijeService: TipEvaluacijeService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
     ) {}
 
   ngOnInit(): void {
+    this.tipEvaluacijeService.getAll().subscribe((data) => {
+      this.selectedTipEvaluacije = data.find(t => t.id === 2);
+    });
     this.ispitniRokService.getAll().subscribe(data => this.ispitniRokovi = data);
     this.studijskiProgramService.getAll().subscribe(data => this.studijskiProgrami = data);
   }
@@ -117,23 +136,116 @@ export class IspitiComponent implements OnInit{
   async loadEvents() {
     const calendarApi = this.calendarComponent.getApi();
 
-    this.ispitService.getAllByIspitniRokAndStudijskiProgram(this.selectedIspitniRok.id, this.selectedStudijskiProgram.id).subscribe(
+    let params: HttpParams = new HttpParams()
+      .set("studijskiProgramId", this.selectedStudijskiProgram.id)
+      .set("ispitniRokId", this.selectedIspitniRok.id);
+
+    this.evaluacijaZnanjaService.getAllIspitiByStudijskiProgram(params).subscribe(
       data => {
         this.ispiti = data;
-        for(let ispit of data){
+        for(let evaluacijaZnanja of data){
           calendarApi.addEvent({
-            id: ispit.id.toString(),
-            title: `${ispit.predmet.naziv} - ${formatTimeFromString(ispit.pocetakIspita.toString())}`,
-            start: formatDateFromString(ispit.pocetakIspita.toString()),
-            end: formatDateFromString(ispit.krajIspita.toString()),
+            id: evaluacijaZnanja.id.toString(),
+            title: `${evaluacijaZnanja.realizacijaPredmeta?.predmet.naziv}`,
+            start: formatDateFromString(evaluacijaZnanja.vremePocetka.toString()),
+            end: formatDateFromString(evaluacijaZnanja.vremeZavrsetka.toString()),
           });
         }
       }
     )
   }
 
+  async createIspit(evaluacijaZnanja: EvaluacijaZnanja): Promise<any>{
+    const params = new HttpParams()
+      .set('predmetId', this.selectedPredmet.id)
+      .set('ispitniRokId', this.selectedIspitniRok.id)
+      .set('studijskiProgramId', this.selectedStudijskiProgram.id);
+
+    try {
+      return await lastValueFrom(this.evaluacijaZnanjaService.createIspit(evaluacijaZnanja, params));
+    }
+    catch (error: any) {
+      throw new Error(error.message || error.toString());
+    }
+  }
+
+  sacuvaj(){
+    const calendarApi = this.calendarComponent.getApi();
+
+    if(!this.selectedPredmet){
+      this.setErrorMessage();
+      return
+    }
+
+    const evaluacijaZnanja: EvaluacijaZnanja = {
+      id: 0,
+      vremePocetka: this.pocetak,
+      vremeZavrsetka: this.kraj,
+      bodovi: this.bodovi,
+      ishod: {
+        id: 0,
+        predmet: this.selectedPredmet,
+        opis: this.opis
+      },
+      tipEvaluacije: this.selectedTipEvaluacije
+    }
+
+    this.createIspit(evaluacijaZnanja)
+      .then(
+        (createdIspit: EvaluacijaZnanja) => {
+          this.getPredmeti();
+          this.addEventToCalendar(calendarApi, createdIspit.id);
+          this.resetForm();
+          this.messageService.add({severity:'success', summary:'Confirmed', detail:'Kreiranje uspesno'});
+        })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  closeDialog(){
+    this.visible = false;
+  }
+
+  deleteEvaluacijaZnanja(event: any){
+    this.confirmationService.confirm({
+      acceptLabel: "Da",
+      rejectLabel: "Ne",
+      target: event.target,
+      message: "Da li ste sigurni da zelite da obrisete ovu evaluaciju znanja?",
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.evaluacijaZnanjaService.delete(Number(this.clickInfo.event.id))
+          .subscribe({
+            next: () => {
+              this.clearEvents();
+              this.loadEvents();
+              this.deleteEvaluacijaVisible = false;
+              this.messageService.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Evaluacija znanja uspesno obrisana",
+                life: 1000
+              });
+            },
+            error: (error: any) => {
+              this.messageService.add({
+                severity: "error",
+                summary: "Error",
+                detail: error.message.toString(),
+                life: 1000
+              });
+            }
+          });
+
+      },
+      reject: () => {
+        this.messageService.add({severity:'error', summary:'Rejected', detail:'Operacija prekinuta', life: 1000});
+      }
+    });
+  }
+
   resetujKalendar(){
-    this.sacuvajIzmeneBtnDisabled = true;
     this.clearEvents();
     this.loadEvents();
   }
@@ -148,7 +260,7 @@ export class IspitiComponent implements OnInit{
 
   getPredmeti(){
     if(this.selectedStudijskiProgram){
-      this.predmetService.getPredmetiNotExistingInIspitiByStudijskiProgram(this.selectedStudijskiProgram.id).subscribe( data => {
+      this.predmetService.getPredmetiByStudijskiProgram(this.selectedStudijskiProgram.id).subscribe( data => {
         this.predmeti = data;
       });
     }
@@ -159,109 +271,11 @@ export class IspitiComponent implements OnInit{
     this.loadEvents();
   }
 
-  async createIspit(ispit: Ispit): Promise<any>{
-    const params = new HttpParams()
-      .set('predmetId', this.selectedPredmet.id)
-      .set('ispitniRokId', this.selectedIspitniRok.id)
-      .set('studijskiProgramId', this.selectedStudijskiProgram.id);
-
-    try {
-     return await lastValueFrom(this.ispitService.createIspit(ispit, params));
-    }
-    catch (error: any) {
-     throw new Error(error.message || error.toString());
-    }
-  }
-  //TODO: request procesing neka animacija, loading
-  dialogSave(){
-    const calendarApi = this.calendarComponent.getApi();
-
-    if(!this.selectedPredmet){
-      this.setErrorMessage();
-      return
-    }
-
-    const ispit: Ispit = {
-      id: 0,
-      pocetakIspita: new Date(this.selectedDateInfo.startStr),
-      krajIspita: new Date(this.selectedDateInfo.endStr),
-      predmet: this.selectedPredmet,
-      ispitniRok: this.selectedIspitniRok,
-      studijskiProgram: this.selectedStudijskiProgram
-    }
-
-    this.createIspit(ispit)
-      .then(
-        (createdIspit: Ispit) => {
-          this.getPredmeti();
-          this.addEventToCalendar(calendarApi, createdIspit.id);
-          this.resetForm();
-          this.messageService.add({severity:'success', summary:'Confirmed', detail:'Kreiranje uspesno'});
-        })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
-  sacuvajIzmene(event: any){
-    const calendarApi = this.calendarComponent.getApi();
-
-    this.confirmationService.confirm({
-      acceptLabel: "Da",
-      rejectLabel: "Ne",
-      target: event.target,
-      message: 'Da li ste sigurni da zelite da nastavite?',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        const events = calendarApi.getEvents().slice(1);
-        for(let event of events){
-
-          const pocetakIspita: Date = new Date(event.startStr)
-          const krajIspita: Date = new Date(event.endStr)
-
-          this.ispitService.updatePocetakIKraj(Number(event.id), pocetakIspita, krajIspita).subscribe();
-        }
-        this.sacuvajIzmeneBtnDisabled = true;
-        this.messageService.add({severity:'success', summary:'Confirmed', detail:'Uspesno sacuvano'});
-      },
-      reject: () => {
-        this.messageService.add({severity:'error', summary:'Rejected', detail:'Operacija prekinuta'});
-      }
-    });
-  }
-
-  deleteIspit(event: any){
-    this.confirmationService.confirm({
-      acceptLabel: "Da",
-      rejectLabel: "Ne",
-      target: event.target,
-      message: 'Da li ste sigurni da zelite da obrisete ovaj ispit?',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.ispitService.delete(Number(this.clickInfo.event.id)).subscribe({
-          next: () => {
-            this.resetForm();
-            this.getPredmeti();
-            this.clickInfo.event.remove();
-            this.messageService.add({severity:'success', summary:'Confirmed', detail:'Brisanje uspesno', life: 1000});
-          },
-          error: () => {
-            console.error(`Greska u brisanju ${this.clickInfo.event}`)
-          }
-        });
-      },
-      reject: () => {
-        this.messageService.add({severity:'error', summary:'Rejected', detail:'Operacija prekinuta', life: 1000});
-      }
-    });
-  }
-
   resetForm(){
     this.selectedPredmet = null;
     this.errorMessage = "";
     this.errorVisible = false;
-    this.kreairanjeIspitaVisible = false;
-    this.izmenaIspitaVisible = false;
+    this.visible = false;
   }
 
   addEventToCalendar(calendarApi: any, eventId: any){
@@ -291,7 +305,9 @@ export class IspitiComponent implements OnInit{
 
     if (startDate >= rokStart && endDate <= rokEnd) {
       this.selectedDateInfo = selectInfo;
-      this.kreairanjeIspitaVisible = true;
+      this.visible = true;
+      this.pocetak = startDate;
+      this.kraj = endDate;
     } else {
       this.warningMessage = "Datum nije u opsegu ispitnog roka";
       this.showWarningDialog = true;    }
@@ -303,7 +319,7 @@ export class IspitiComponent implements OnInit{
 
   handleEventClick(clickInfo: EventClickArg) {
     this.clickInfo = clickInfo;
-    this.izmenaIspitaVisible = true;
+    this.deleteEvaluacijaVisible = true;
   }
 
   handleEventDrop(eventDropInfo: EventDropArg){
@@ -311,7 +327,6 @@ export class IspitiComponent implements OnInit{
     const newStartDate = event.start;
     const newEndDate = event.end;
 
-    console.log(this.selectedIspitniRok);
     if (newStartDate != null && !this.isDateInRange(newStartDate) || (newEndDate && !this.isDateInRange(newEndDate))) {
       eventDropInfo.revert();
       this.warningMessage = "Datum nije u opsegu ispitnog roka";
@@ -324,7 +339,29 @@ export class IspitiComponent implements OnInit{
   }
 
   handleEventChange(eventChange: EventChangeArg){
-    this.sacuvajIzmeneBtnDisabled = false;
+    const evaluacijaZnanja = this.ispiti.find(e => e.id = Number(eventChange.event.id));
+    if(evaluacijaZnanja){
+      evaluacijaZnanja.vremePocetka = <Date>eventChange.event.start;
+      evaluacijaZnanja.vremeZavrsetka = <Date>eventChange.event.end;
+
+      this.evaluacijaZnanjaService.update(Number(eventChange.event.id), evaluacijaZnanja).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: "success",
+            summary: "Success",
+            detail: "Evaluacija znanja uspesno izmenjena",
+            life: 1000
+          });        },
+        error: (error: any) => {
+          this.messageService.add({
+            severity: "error",
+            summary: "Error",
+            detail: error.message,
+            life: 1000
+          });
+        }
+      });
+    }
   }
 
   handleEvents(events: EventApi[]) {

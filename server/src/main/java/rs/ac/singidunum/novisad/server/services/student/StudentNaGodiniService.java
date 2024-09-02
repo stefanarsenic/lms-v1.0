@@ -96,6 +96,4 @@ public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long
     }
 
 
-//TODO: setovati ostale atribute za upis - treba izdobavljati espb bodove
-//TODO: datum zavrsetka
 }

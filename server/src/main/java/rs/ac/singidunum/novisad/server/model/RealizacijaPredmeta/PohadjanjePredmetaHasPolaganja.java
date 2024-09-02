@@ -5,23 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
-import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PolozeniPredmet {
+public class PohadjanjePredmetaHasPolaganja {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer konacnaOcena;
     @ManyToOne
-    private StudentNaGodini student;
+    private PohadjanjePredmeta pohadjanjePredmeta;
     @ManyToOne
-    private Predmet predmet;
-
+    private Polaganje polaganje;
 }

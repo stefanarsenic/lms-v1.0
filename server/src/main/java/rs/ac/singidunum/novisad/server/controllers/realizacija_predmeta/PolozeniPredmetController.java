@@ -11,7 +11,7 @@ import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.PolozeniPredmetD
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.PolozeniPredmet;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.PohadjanjePredmeta;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.PolozeniPredmetService;
 
 import java.util.List;
@@ -19,9 +19,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/polozeni-predmeti")
-public class PolozeniPredmetController extends GenericController<PolozeniPredmet, Long, PolozeniPredmetDto> {
+public class PolozeniPredmetController extends GenericController<PohadjanjePredmeta, Long, PolozeniPredmetDto> {
     private final PolozeniPredmetService polozeniPredmetService;
-    public PolozeniPredmetController(GenericService<PolozeniPredmet, Long> service, PolozeniPredmetService polozeniPredmetService) {
+    public PolozeniPredmetController(GenericService<PohadjanjePredmeta, Long> service, PolozeniPredmetService polozeniPredmetService) {
         super(service);
         this.polozeniPredmetService = polozeniPredmetService;
     }
@@ -40,7 +40,7 @@ public class PolozeniPredmetController extends GenericController<PolozeniPredmet
     }
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<PolozeniPredmetDto>> getPolozeniPredmetiByStudentBrojIndeksa(@PathVariable Long studentId){
-        List<PolozeniPredmet> polozeniPredmeti = polozeniPredmetService.findPolozeniPredmetsByStudentId(studentId);
+        List<PohadjanjePredmeta> polozeniPredmeti = polozeniPredmetService.findPolozeniPredmetsByStudentId(studentId);
         List<PolozeniPredmetDto> dtos = polozeniPredmeti.stream().map(polozeniPredmet -> {
             try {
                 PolozeniPredmetDto dto = EntityDtoMapper.convertToDto(polozeniPredmet, PolozeniPredmetDto.class);
@@ -55,12 +55,12 @@ public class PolozeniPredmetController extends GenericController<PolozeniPredmet
     }
 
     @Override
-    protected PolozeniPredmetDto convertToDto(PolozeniPredmet entity) throws IllegalAccessException, InstantiationException {
+    protected PolozeniPredmetDto convertToDto(PohadjanjePredmeta entity) throws IllegalAccessException, InstantiationException {
         return null;
     }
 
     @Override
-    protected PolozeniPredmet convertToEntity(PolozeniPredmetDto dto) throws IllegalAccessException, InstantiationException {
+    protected PohadjanjePredmeta convertToEntity(PolozeniPredmetDto dto) throws IllegalAccessException, InstantiationException {
         return null;
     }
 }

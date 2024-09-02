@@ -1,0 +1,103 @@
+.form-container {
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.row {
+  width: 100%;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+#editor {
+  height: 200px;
+  resize: none;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header {
+  padding-top: 30px;
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header h3 {
+  margin: 0;
+  color: #3b444b;
+}
+
+.form-container button {
+  box-shadow: none;
+  color: white;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+.add:hover {
+  background-color: #2980b9;
+  color: white;
+}
+
+.remove {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.remove:hover {
+  background-color: #c0392b;
+  color: white;
+}
+
+
+

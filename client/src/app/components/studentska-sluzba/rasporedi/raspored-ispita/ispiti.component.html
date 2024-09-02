@@ -16,14 +16,6 @@
 />
 
 <button
-  (click)="sacuvajIzmene($event)"
-  [disabled]="sacuvajIzmeneBtnDisabled"
-  pButton
-  pRipple
-  label="Sacuvaj Izmene">
-</button>
-
-<button
   (click)="resetujKalendar()"
   style="margin-left: 15px"
   severity="secondary"
@@ -39,27 +31,59 @@
   </ng-template>
 </full-calendar>
 
-<p-dialog header="Kreairanje Ispita" [modal]="true" [(visible)]="kreairanjeIspitaVisible" [style]="{ width: '25rem' }">
-  <div class="container">
-    <p-dropdown *ngIf="predmeti"
-                [options]="predmeti"
-                [(ngModel)]="selectedPredmet"
-                appendTo="body"
-                optionLabel="naziv"
-                placeholder="Izaberite Predmet">
-    </p-dropdown>
-    <small *ngIf="errorVisible" class="error-message">{{ errorMessage }}</small>
+<p-dialog
+  [visible]="visible"
+  [showHeader]="false"
+  [style]="{width: '35vw'}"
+  [modal]="true"
+  [draggable]="false">
+
+  <div class="header">
+    <div class="row">
+      <h3>Nova Evaluacija Znanja</h3>
+      <div>
+        <span class="p-buttonset">
+        <button pButton (click)="sacuvaj()" class="p-button-sm" type="button" label="Sacuvaj" icon="pi pi-check"></button>
+        <button pButton (click)="closeDialog()" severity="secondary" class="p-button-outlined p-button-sm" type="button" label="Otkazi" icon="pi pi-times"></button>
+      </span>
+      </div>
+    </div>
   </div>
-  <div class="flex justify-content-end gap-2">
-    <p-button label="Otkazi" severity="secondary" (onClick)="kreairanjeIspitaVisible = false" />
-    <p-button label="Sacuvaj" (onClick)="dialogSave()" />
+
+  <div class="form-container">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Pocetak:</label>
+        <p-calendar [(ngModel)]="pocetak" [showTime]="true" appendTo="body"></p-calendar>
+      </div>
+      <div class="form-group">
+        <label>Kraj:</label>
+        <p-calendar [(ngModel)]="kraj" [showTime]="true" appendTo="body"></p-calendar>
+      </div>
+      <div class="form-group">
+        <label>Bodovi:</label>
+        <p-inputNumber [(ngModel)]="bodovi" mode="decimal" [showButtons]="true" [min]="0" [max]="30"></p-inputNumber>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <p-dropdown [style]="{'width': '100%'}" [options]="predmeti" [(ngModel)]="selectedPredmet" placeholder="Izaberite Predmet" optionLabel="naziv" [showClear]="true" appendTo="body"></p-dropdown>
+      </div>
+      <div class="form-group">
+        <p-dropdown [style]="{'width': '100%'}" [options]="tipoviEvaluacije" [(ngModel)]="selectedTipEvaluacije" [disabled]="true" [placeholder]="selectedTipEvaluacije.naziv" optionLabel="naziv" [showClear]="true" appendTo="body"></p-dropdown>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="editor">Opis Ishoda:</label>
+      <textarea [(ngModel)]="opis" id="editor"></textarea>
+    </div>
   </div>
 </p-dialog>
 
-<p-dialog header="Brisanje Ispita" [modal]="true" [(visible)]="izmenaIspitaVisible" [style]="{ width: '25rem' }">
+<p-dialog header="Brisanje Evaluacije Znanja" [modal]="true" [(visible)]="deleteEvaluacijaVisible" [style]="{ width: '25rem' }" draggable="false">
   <div class="flex justify-content-end gap-2">
-    <p-button label="Otkazi" severity="secondary" (onClick)="izmenaIspitaVisible = false" />
-    <p-button label="Obrisi" severity="danger" (onClick)="deleteIspit($event)" />
+    <p-button label="Otkazi" severity="secondary" (onClick)="deleteEvaluacijaVisible = false" />
+    <p-button label="Obrisi" severity="danger" (onClick)="deleteEvaluacijaZnanja($event)" />
   </div>
   <p-confirmPopup></p-confirmPopup>
 </p-dialog>

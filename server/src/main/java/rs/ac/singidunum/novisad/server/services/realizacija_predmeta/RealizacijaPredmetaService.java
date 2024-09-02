@@ -31,13 +31,15 @@ public class RealizacijaPredmetaService extends GenericService<RealizacijaPredme
             return rp;
         }
         else {
-            return new RealizacijaPredmeta(
+            RealizacijaPredmeta newRp = new RealizacijaPredmeta(
                     realizacijaPredmeta.get().getId(),
                     realizacijaPredmeta.get().getPredmet(),
                     realizacijaPredmeta.get().getTerminiNastave(),
                     realizacijaPredmeta.get().getEvaluacijeZnanja(),
                     realizacijaPredmeta.get().getObavestenja()
             );
+
+            return newRp;
         }
     }
 }
