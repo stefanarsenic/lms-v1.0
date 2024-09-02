@@ -13,6 +13,14 @@ import java.util.List;
 @Repository
 public interface TerminNastaveRepository extends JpaRepository<TerminNastave, Long> {
 
+
+    @Query("select tn from TerminNastave tn " +
+            "left join RealizacijaPredmeta rp on tn.realizacijaPredmeta.id = rp.id " +
+            "left join NastavnikNaRealizaciji nnr on rp.id = nnr.realizacijaPredmeta.id " +
+            "left join TipNastave tip on nnr.tipNastave.id = tip.id " +
+            "where nnr.id = :nastavnikId and rp.predmet.id = :predmetId")
+    List<TerminNastave> findTerminiNastaveByNastavnikAndPredmet(Long nastavnikId, Long predmetId);
+
     @Query("SELECT tn " +
             "FROM TerminNastave tn " +
             "WHERE tn.realizacijaPredmeta.predmet.id = :predmetId")

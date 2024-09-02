@@ -20,11 +20,9 @@ public class TerminNastave {
     private LocalDateTime vremePocetka;
     private LocalDateTime vremeZavrsetka;
     @OneToOne
-    private Ishod ishod; //obrazovni cilj dodati u ishod koji je nullable
+    private Ishod ishod;
     @ManyToOne
     private TipNastave tipNastave;
-    @OneToOne
-    private NastavniMaterijal nastavniMaterijal;
     @ManyToOne
     private RealizacijaPredmeta realizacijaPredmeta;
 }

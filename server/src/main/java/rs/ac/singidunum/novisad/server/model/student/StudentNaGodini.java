@@ -36,5 +36,4 @@ public class StudentNaGodini {
     @OneToMany
     Set<Predmet> predmeti;
 
-    //TODO: skolska godina
 }

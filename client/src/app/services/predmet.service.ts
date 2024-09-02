@@ -16,8 +16,11 @@ export class PredmetService extends GenerickiService<any>{
     this.putanja = "api/predmet"
   }
 
-  getPredmetiNotExistingInIspitiByStudijskiProgram(studijskiProgramId: number){
-    return this.http.get<Predmet[]>(`http://localhost:8080/${this.putanja}/not-existing-in-ispiti/${studijskiProgramId}`);
+  createPredmet(predmet: Predmet, params: HttpParams){
+    return this.http.post<Predmet>(`http://localhost:8080/${this.putanja}/create?${params}`, predmet)
+  }
+  getNepolozeniPredmeti(params: HttpParams){
+    return this.http.get<Predmet[]>(`http://localhost:8080/${this.putanja}/nepolozeni-predmeti?${params}`)
   }
   getEsbpByPredmetId(predmetId: number){
     return this.http.get<number>(`http://localhost:8080/${this.putanja}/${predmetId}/esbp`);

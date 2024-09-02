@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.singidunum.novisad.server.model.student.SkolskaGodina;
 
 import java.time.LocalDate;
 
@@ -21,4 +22,6 @@ public class IspitniRok {
     private String naziv;
     private LocalDate pocetak;
     private LocalDate kraj;
+    @ManyToOne
+    private SkolskaGodina skolskaGodina;
 }

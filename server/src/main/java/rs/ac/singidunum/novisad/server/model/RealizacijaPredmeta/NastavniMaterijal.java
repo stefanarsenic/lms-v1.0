@@ -25,6 +25,6 @@ public class NastavniMaterijal {
     private LocalDateTime godinaIzdavanja;
     @OneToMany
     private Set<Nastavnik> autori;
-    @OneToOne
+    @ManyToOne
     private Fajl fajl;
 }

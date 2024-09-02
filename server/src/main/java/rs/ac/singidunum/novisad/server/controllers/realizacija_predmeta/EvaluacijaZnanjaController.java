@@ -1,6 +1,7 @@
 package rs.ac.singidunum.novisad.server.controllers.realizacija_predmeta;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +13,19 @@ import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.TipEvaluacijeDto
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.EvaluacijaZnanja;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TerminNastave;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TipEvaluacije;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.*;
+import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Fajl;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
+import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.EvaluacijaZnanjaRepository;
+import rs.ac.singidunum.novisad.server.services.fakultet.StudijskiProgramService;
 import rs.ac.singidunum.novisad.server.services.obavestenje.FajlService;
 import rs.ac.singidunum.novisad.server.services.predmet.IshodService;
+import rs.ac.singidunum.novisad.server.services.predmet.PlanZaGodinuService;
+import rs.ac.singidunum.novisad.server.services.predmet.PredmetService;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.EvaluacijaZnanjaService;
+import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.IspitniRokService;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.RealizacijaPredmetaService;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.TipEvaluacijeService;
 
@@ -38,9 +42,13 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
     private final FajlService fajlService;
     private final TipEvaluacijeService tipEvaluacijeService;
     private final EvaluacijaZnanjaRepository evaluacijaZnanjaRepository;
+    private final PredmetService predmetService;
+    private final StudijskiProgramService studijskiProgramService;
+    private final IspitniRokService ispitniRokService;
+    private final PlanZaGodinuService planZaGodinuService;
 
     public EvaluacijaZnanjaController(GenericService<EvaluacijaZnanja, Long> service, EvaluacijaZnanjaService evaluacijaZnanjaService, RealizacijaPredmetaService realizacijaPredmetaService, IshodService ishodService, FajlService fajlService, TipEvaluacijeService tipEvaluacijeService,
-                                      EvaluacijaZnanjaRepository evaluacijaZnanjaRepository) {
+                                      EvaluacijaZnanjaRepository evaluacijaZnanjaRepository, PredmetService predmetService, StudijskiProgramService studijskiProgramService, IspitniRokService ispitniRokService, PlanZaGodinuService planZaGodinuService) {
         super(service);
         this.evaluacijaZnanjaService = evaluacijaZnanjaService;
         this.realizacijaPredmetaService = realizacijaPredmetaService;
@@ -48,6 +56,24 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
         this.fajlService = fajlService;
         this.tipEvaluacijeService = tipEvaluacijeService;
         this.evaluacijaZnanjaRepository = evaluacijaZnanjaRepository;
+        this.predmetService = predmetService;
+        this.studijskiProgramService = studijskiProgramService;
+        this.ispitniRokService = ispitniRokService;
+        this.planZaGodinuService = planZaGodinuService;
+    }
+
+    @GetMapping("/ispit-by-predmet-and-ispitni-rok")
+    public ResponseEntity<EvaluacijaZnanjaDto> getIspitByPredmetAndIspitniRok(
+        @PathParam("predmetId") Long predmetId,
+        @PathParam("ispitniRokId") Long ispitniRokId
+    ) throws IllegalAccessException, InstantiationException {
+        RealizacijaPredmeta realizacijaPredmeta = realizacijaPredmetaService.findByPredmetId(predmetId);
+        IspitniRok ispitniRok = ispitniRokService.findById(ispitniRokId).orElseThrow(() -> new EntityNotFoundException("Ispitni rok not found with id: " + ispitniRokId.toString()));
+
+        EvaluacijaZnanja evaluacijaZnanja = evaluacijaZnanjaService.findIspitByRealizacijaPredmetaAndIspitniRok(realizacijaPredmeta, ispitniRok);
+        EvaluacijaZnanjaDto dto = convertToDto(evaluacijaZnanja);
+
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/predmet/{predmetId}")
@@ -59,6 +85,73 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
             dtoList.add(dto);
         }
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/ispiti")
+    public ResponseEntity<List<EvaluacijaZnanjaDto>> getAllIspiti(
+            @PathParam("studijskiProgramId") Long studijskiProgramId,
+            @PathParam("ispitniRokId") Long ispitniRokId
+    ) throws IllegalAccessException, InstantiationException {
+        ArrayList<EvaluacijaZnanjaDto> dtoList = new ArrayList<>();
+        List<EvaluacijaZnanja> original = evaluacijaZnanjaService.findAllByStudijskiProgramAndTipEvaluacijeAndIspitniRok(studijskiProgramId, ispitniRokId);
+        for (EvaluacijaZnanja entity : original) {
+            EvaluacijaZnanjaDto dto = convertToDto(entity);
+            dtoList.add(dto);
+        }
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
+    @PostMapping("/ispit")
+    public ResponseEntity<?> createIspit(
+            @RequestParam Long predmetId,
+            @RequestParam Long ispitniRokId,
+            @RequestParam Long studijskiProgramId,
+            @RequestBody EvaluacijaZnanjaDto dto) throws IllegalAccessException, InstantiationException {
+
+        try {
+            Predmet predmet = predmetService.findById(predmetId).orElseThrow(() -> new RuntimeException("Predmet not found"));
+            RealizacijaPredmeta realizacijaPredmeta = realizacijaPredmetaService.findByPredmetId(predmet.getId());
+            TipEvaluacije tipEvaluacije = tipEvaluacijeService.findById(dto.getTipEvaluacije().getId()).orElseThrow();
+            StudijskiProgram studijskiProgram = studijskiProgramService.findById(studijskiProgramId).orElseThrow(() -> new RuntimeException("Studijski program not found"));
+            IspitniRok ispitniRok = ispitniRokService.findById(ispitniRokId).orElseThrow(() -> new RuntimeException("Ispitni rok not found"));
+
+            Integer godinaPredmetaIspita = planZaGodinuService.getGodinaByPredmetAndStudijskiProgram(predmet, studijskiProgram);
+            List<EvaluacijaZnanja> postojeciIspiti  = evaluacijaZnanjaService.findAllByStudijskiProgramAndTipEvaluacijeAndIspitniRok(studijskiProgram.getId(), ispitniRok.getId());
+
+            EvaluacijaZnanja entity = convertToEntity(dto);
+            entity.setRealizacijaPredmeta(realizacijaPredmeta);
+            entity.setTipEvaluacije(tipEvaluacije);
+            entity.setIspitniRok(ispitniRok);
+
+            Ishod ishod = new Ishod();
+            ishod.setOpis(dto.getIshod().getOpis());
+            ishod.setPredmet(realizacijaPredmeta.getPredmet());
+            Ishod createdIshod = ishodService.save(ishod);
+
+            entity.setIshod(createdIshod);
+
+            if (entity.getVremeZavrsetka().isBefore(ispitniRok.getPocetak().atStartOfDay()) || entity.getVremePocetka().isAfter(ispitniRok.getKraj().plusDays(1).atStartOfDay())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Datumi ispita nisu u okviru ispitnog roka.");
+            }
+
+            if(!postojeciIspiti.isEmpty()) {
+                for (EvaluacijaZnanja e : postojeciIspiti) {
+                    Integer godina = planZaGodinuService.getGodinaByPredmetAndStudijskiProgram(e.getRealizacijaPredmeta().getPredmet(), studijskiProgram);
+                    if (godinaPredmetaIspita.equals(godina) && entity.getVremePocetka().isAfter(e.getVremeZavrsetka()) && entity.getVremeZavrsetka().isBefore(e.getVremePocetka())) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Ispiti predmeta koji se pohadjaju na istoj godini studijskog programa ne smeju da budu u istom danu.");
+                    }
+                    if(entity.getRealizacijaPredmeta().getPredmet().equals(e.getRealizacijaPredmeta().getPredmet()) && entity.getIspitniRok().equals(e.getIspitniRok())){
+                        return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Ispit za ovaj predmet u ovom ispitnom roku vec postoji.");
+                    }
+                }
+            }
+
+            EvaluacijaZnanjaDto evaluacijaZnanjaDto = convertToDto(evaluacijaZnanjaService.save(entity));
+            return new ResponseEntity<>(dto, HttpStatus.CREATED);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PostMapping("/predmet/{predmetId}")
@@ -100,6 +193,17 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
         EvaluacijaZnanja saved = evaluacijaZnanjaService.save(evaluacijaZnanja);
         EvaluacijaZnanjaDto dto = convertToDto(saved);
         return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
+    }
+
+    private List<EvaluacijaZnanjaDto> ListToDto(List<EvaluacijaZnanja> entities) throws IllegalAccessException, InstantiationException {
+        List<EvaluacijaZnanjaDto> dtoList = new ArrayList<>();
+
+        for (EvaluacijaZnanja entity : entities) {
+            EvaluacijaZnanjaDto dto = convertToDto(entity);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 
     @Override

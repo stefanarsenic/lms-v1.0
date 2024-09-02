@@ -1,26 +1,28 @@
 package rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.ac.singidunum.novisad.server.model.student.Student;
-import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
+import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PrijavaIspita {
+public class NastavnikNaRealizaciji {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer brojCasova;
     @ManyToOne
-    private StudentNaGodini student;
+    private Nastavnik nastavnik;
     @ManyToOne
-    private Ispit ispit;
-
+    private TipNastave tipNastave;
+    @ManyToOne
+    private RealizacijaPredmeta realizacijaPredmeta;
 }

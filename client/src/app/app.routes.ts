@@ -55,6 +55,9 @@ import {PrijavaIspitaComponent} from "./components/student/prijava-ispita/prijav
 import {
   RasporedEvaluacijaZnanjaComponent
 } from "./components/studentska-sluzba/rasporedi/raspored-evaluacija-znanja/raspored-evaluacija-znanja.component";
+import {IstorijaStudiranjaComponent} from "./components/student/istorija-studiranja/istorija-studiranja.component";
+import {RasporedIshodaComponent} from "./components/nastavnik/raspored-ishoda/raspored-ishoda.component";
+import {PredmetiComponent} from "./components/admin/predmeti/predmeti.component";
 
 StudijskiProgramCrudComponent
 
@@ -177,6 +180,10 @@ export const routes: Routes = [
       {
         path: "organizacija-studijskog-programa",
         component: OrganizacijaStudijskogProgramaComponent
+      },
+      {
+        path: "predmeti",
+        component: PredmetiComponent
       }
     ],
     canActivate:[authGuard],data:{
@@ -213,6 +220,10 @@ export const routes: Routes = [
       {
         path: "uredjivanje-obavestenja",
         component: UpravljanjeObavestenjimaComponent
+      },
+      {
+        path: "raspored-ishoda",
+        component: RasporedIshodaComponent
       }
     ],
     canActivate:[authGuard],data:{
@@ -242,6 +253,10 @@ export const routes: Routes = [
       {
         path: "prijava-ispita",
         component: PrijavaIspitaComponent
+      },
+      {
+        path: "istorija-studiranja",
+        component: IstorijaStudiranjaComponent
       }
     ],
     canActivate:[authGuard],data:{

@@ -1,1 +1,40 @@
-<p>prijava-ispita works!</p>
+<div *ngFor="let s of studijskiProgrami">
+  <p-panel [header]="s.naziv" [toggleable]="true">
+    <h3>Ispiti koje mogu da prijavim</h3>
+    <p-table
+      [value]="getPredmeti(s.id)"
+      [tableStyle]="{'min-width': '50rem', 'max-width': '70rem'}">
+      styleClass="p-datatable-striped"
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Naziv</th>
+          <th>Tip Prijave</th>
+          <th>Espb</th>
+          <th>Nastavnik</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-predmet>
+        <tr>
+          <td>{{ predmet.naziv }}</td>
+          <td>{{ predmet.obavezan ? "Obavezan Predmet" : "Izborni Predmet" }}</td>
+          <td>{{ predmet.espb }}</td>
+          <td>{{ predmet.nastavnik.ime }} {{ predmet.nastavnik.prezime }}</td>
+          <td><p-button (onClick)="prijaviIspit(predmet)" styleClass="p-button-sm" label="Prijavi"></p-button></td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <h3>Prijavljeni Ispiti</h3>
+  </p-panel>
+</div>
+
+<p-dialog header="Prijava Ispita" [visible]="visible" [modal]="true" [draggable]="false" [closeIcon]="undefined">
+  <p-dropdown [options]="ispitniRokovi" [(ngModel)]="selectedIspitniRok" optionLabel="naziv" placeholder="Izaberite Ispitni Rok" appendTo="body"></p-dropdown>
+
+  <ng-template pTemplate="footer">
+    <p-button (onClick)="otkaziPrijavu()" severity="secondary" label="Otkazi" icon="pi pi-check" styleClass="p-button-sm"></p-button>
+    <p-button (onClick)="potvrdiPrijavu()" severity="primary" label="Potvrdi" icon="pi pi-check" styleClass="p-button-sm"></p-button>
+  </ng-template>
+</p-dialog>
+

@@ -1,0 +1,137 @@
+<p-toast></p-toast>
+
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"></button>
+      <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedPredmeti || !selectedPredmeti.length"></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [loading]="loading"
+    [value]="predmeti"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['naziv','espb','obavezan','brojPredavanja', 'brojVezbi', 'drugiObliciNastave', 'istrazivackiRad', 'ostaliCasovi', 'nastavnik.ime', 'nastavnik.prezime', 'asistent.ime', 'asistent.prezime']"
+    [(selection)]="selectedPredmeti"
+    [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h5 class="p-m-0">Manage Products</h5>
+        <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Pretraga..." />
+                </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="naziv">Naziv <p-sortIcon field="naziv"></p-sortIcon></th>
+        <th pSortableColumn="espb">Espb <p-sortIcon field="espb"></p-sortIcon></th>
+        <th pSortableColumn="obavezan">Obavezan <p-sortIcon field="obavezan"></p-sortIcon></th>
+        <th pSortableColumn="brojPredavanja">Broj Predavanja <p-sortIcon field="brojPredavanja"></p-sortIcon></th>
+        <th pSortableColumn="brojVezbi">Broj Vezbi <p-sortIcon field="brojVezbi"></p-sortIcon></th>
+        <th pSortableColumn="drugiObliciNastave">Drugi Oblici Nastave <p-sortIcon field="drugiObliciNastave"></p-sortIcon></th>
+        <th pSortableColumn="istrazivackiRad">Istrazivacki Rad <p-sortIcon field="istrazivackiRad"></p-sortIcon></th>
+        <th pSortableColumn="ostaliCasovi">Ostali Casovi <p-sortIcon field="ostaliCasovi"></p-sortIcon></th>
+        <th pSortableColumn="nastavnik">Nastavnik <p-sortIcon field="nastavnik"></p-sortIcon></th>
+        <th pSortableColumn="asistent">Asistent <p-sortIcon field="asistent"></p-sortIcon></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-predmet>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="predmet"></p-tableCheckbox>
+        </td>
+        <td>{{predmet.naziv}}</td>
+        <td>{{predmet.espb}}</td>
+        <td>{{predmet.obavezan ? "Obavezan" : "Izborni"}}</td>
+        <td>{{predmet.brojPredavanja}}</td>
+        <td>{{predmet.brojVezbi}}</td>
+        <td>{{predmet.drugiObliciNastave}}</td>
+        <td>{{predmet.istrazivackiRad}}</td>
+        <td>{{predmet.ostaliCasovi}}</td>
+        <td>{{predmet.nastavnik.ime}} {{predmet.nastavnik.prezime}}</td>
+        <td>{{predmet.asistent.ime}} {{predmet.asistent.prezime}}</td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editProduct(predmet)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(predmet)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{predmeti ? predmeti.length : 0 }} products.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="Add/Edit Entity" [(visible)]="predmetDialog" [modal]="true" [closable]="false" [responsive]="true" [style]="{width: '500px'}">
+  <div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col-12">
+      <label for="naziv">Naziv</label>
+      <input id="naziv" type="text" pInputText [(ngModel)]="predmet.naziv" />
+    </div>
+
+    <div class="p-field p-col-12">
+      <label for="espb">Espb</label>
+      <input id="espb" type="number" pInputText [(ngModel)]="predmet.espb" />
+    </div>
+
+    <div class="p-field p-col-12">
+      <label>Obavezan</label>
+      <p-selectButton [options]="[{label: 'Da', value: true}, {label: 'Ne', value: false}]" [(ngModel)]="predmet.obavezan"></p-selectButton>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <label for="brojPredavanja">Broj Predavanja</label>
+      <input id="brojPredavanja" type="number" pInputText [(ngModel)]="predmet.brojPredavanja" />
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <label for="brojVezbi">Broj Vežbi</label>
+      <input id="brojVezbi" type="number" pInputText [(ngModel)]="predmet.brojVezbi" />
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <label for="drugiObliciNastave">Drugi Oblici Nastave</label>
+      <input id="drugiObliciNastave" type="number" pInputText [(ngModel)]="predmet.drugiObliciNastave" />
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <label for="istrazivackiRad">Istraživački Rad</label>
+      <input id="istrazivackiRad" type="number" pInputText [(ngModel)]="predmet.istrazivackiRad" />
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <label for="ostaliCasovi">Ostali Časovi</label>
+      <input id="ostaliCasovi" type="number" pInputText [(ngModel)]="predmet.ostaliCasovi" />
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <label>Nastavnik</label>
+      <p-dropdown [options]="nastavnici" [(ngModel)]="predmet.nastavnik" optionLabel="ime" placeholder="Izaberite nastavnika" appendTo="body"></p-dropdown>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <label>Asistent</label>
+      <p-dropdown [options]="nastavnici" [(ngModel)]="predmet.asistent" optionLabel="ime" placeholder="Izaberite asistenta" appendTo="body"></p-dropdown>
+    </div>
+  </div>
+
+  <p-footer>
+    <button pButton label="Save" icon="pi pi-check" (click)="sacuvajPredmet()" class="p-button-success"></button>
+    <button pButton label="Cancel" icon="pi pi-times" (click)="otkazi()" class="p-button-secondary"></button>
+  </p-footer>
+</p-dialog>
+
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

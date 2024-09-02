@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Fajl { //TODO: file upload servis
+public class Fajl {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

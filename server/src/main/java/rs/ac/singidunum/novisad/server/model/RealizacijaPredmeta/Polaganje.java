@@ -23,5 +23,4 @@ public class Polaganje {
     private StudentNaGodini student;
     @ManyToOne
     private EvaluacijaZnanja evaluacijaZnanja;
-
 }

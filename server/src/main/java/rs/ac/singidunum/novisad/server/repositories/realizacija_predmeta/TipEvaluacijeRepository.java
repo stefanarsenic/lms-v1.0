@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TipEvaluacije;
 @Repository
 public interface TipEvaluacijeRepository extends JpaRepository<TipEvaluacije, Long> {
+
+    TipEvaluacije findByNaziv(String naziv);
 }

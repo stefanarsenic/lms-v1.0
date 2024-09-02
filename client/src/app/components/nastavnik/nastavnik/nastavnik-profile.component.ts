@@ -52,7 +52,7 @@ export class NastavnikProfileComponent implements OnDestroy {
         items: [
           { label: 'Pregled Predmeta', icon: 'pi pi-fw pi-book', routerLink: 'spisak-predmeta' },
           { label: 'Uređivanje Silabusa', icon: 'pi pi-fw pi-pencil', routerLink: 'uredjivanje-silabusa' },
-          { label: 'Raspored Ishoda', icon: 'pi pi-fw pi-calendar', routerLink: ['/predmeti/ishodi'] },
+          { label: 'Raspored Ishoda', icon: 'pi pi-fw pi-calendar', routerLink: ['raspored-ishoda'] },
           { label: 'Instrumenti Evaluacije', icon: 'pi pi-fw pi-file-o', routerLink: ['/predmeti/evaluacija'] },
           { label: 'Upravljanje Obaveštenjima', icon: 'pi pi-fw pi-bell', routerLink: 'uredjivanje-obavestenja' }
         ]

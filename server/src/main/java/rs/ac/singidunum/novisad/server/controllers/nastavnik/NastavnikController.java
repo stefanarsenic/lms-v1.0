@@ -1,5 +1,7 @@
 package rs.ac.singidunum.novisad.server.controllers.nastavnik;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +51,15 @@ public class NastavnikController extends GenericController<Nastavnik, Long, Nast
 
     @Autowired
     TipZvanjaService tipZvanjaService;
+
+    @GetMapping("/korisnickoIme")
+    public ResponseEntity<NastavnikDto> getByKorisnickoIme(@PathParam("korisnickoIme") String korisnickoIme) throws IllegalAccessException, InstantiationException {
+        Nastavnik nastavnik = nastavnikService.findByKorisnickoIme(korisnickoIme).orElseThrow(() -> new EntityNotFoundException("Nastavnik not found with korisnicko ime: " + korisnickoIme));
+        NastavnikDto dto = convertToDto(nastavnik);
+
+        return ResponseEntity.ok(dto);
+    }
+
 
     @Override
     protected NastavnikDto convertToDto(Nastavnik entity) throws IllegalAccessException, InstantiationException {

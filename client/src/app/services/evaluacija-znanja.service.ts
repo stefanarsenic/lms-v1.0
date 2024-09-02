@@ -15,6 +15,14 @@ export class EvaluacijaZnanjaService extends GenerickiService<EvaluacijaZnanja>{
     this.putanja = "api/evaluacija-znanja"
   }
 
+  createIspit(evaluacijaZnanja: EvaluacijaZnanja, params: HttpParams){
+    return this.http.post(`http://localhost:8080/${this.putanja}/ispit?${params}`, evaluacijaZnanja);
+  }
+
+  getAllIspitiByStudijskiProgram(params: HttpParams){
+    return this.http.get<EvaluacijaZnanja[]>(`http://localhost:8080/${this.putanja}/ispiti?${params}`);
+  }
+
   getAllByPredmet(predmetId: number){
     return this.http.get<EvaluacijaZnanja[]>(`http://localhost:8080/${this.putanja}/predmet/${predmetId}`);
   }

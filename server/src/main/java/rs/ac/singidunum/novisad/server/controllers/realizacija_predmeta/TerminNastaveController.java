@@ -1,17 +1,24 @@
 package rs.ac.singidunum.novisad.server.controllers.realizacija_predmeta;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.TipNastaveDto;
+import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
+import rs.ac.singidunum.novisad.server.dto.predmet.ObrazovniCiljDto;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.EvaluacijaZnanjaDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.TerminNastaveDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TerminNastave;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TipNastave;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.*;
+import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
+import rs.ac.singidunum.novisad.server.model.predmet.ObrazovniCilj;
+import rs.ac.singidunum.novisad.server.model.predmet.ObrazovniCiljRepository;
+import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
+import rs.ac.singidunum.novisad.server.repositories.predmet.PredmetRepository;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.TipNastaveService;
 import rs.ac.singidunum.novisad.server.services.predmet.IshodService;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.NastavniMaterijalService;
@@ -30,13 +37,32 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     private final NastavniMaterijalService nastavniMaterijalService;
     private final TerminNastaveService terminNastaveService;
     private final RealizacijaPredmetaService realizacijaPredmetaService;
-    public TerminNastaveController(GenericService<TerminNastave, Long> service, IshodService ishodService, TipNastaveService tipNastaveService, NastavniMaterijalService nastavniMaterijalService, TerminNastaveService terminNastaveService, RealizacijaPredmetaService realizacijaPredmetaService) {
+    private final PredmetRepository predmetRepository;
+    private final ObrazovniCiljRepository obrazovniCiljRepository;
+
+    public TerminNastaveController(GenericService<TerminNastave, Long> service, IshodService ishodService, TipNastaveService tipNastaveService, NastavniMaterijalService nastavniMaterijalService, TerminNastaveService terminNastaveService, RealizacijaPredmetaService realizacijaPredmetaService,
+                                   PredmetRepository predmetRepository,
+                                   ObrazovniCiljRepository obrazovniCiljRepository) {
         super(service);
         this.ishodService = ishodService;
         this.tipNastaveService = tipNastaveService;
         this.nastavniMaterijalService = nastavniMaterijalService;
         this.terminNastaveService = terminNastaveService;
         this.realizacijaPredmetaService = realizacijaPredmetaService;
+        this.predmetRepository = predmetRepository;
+        this.obrazovniCiljRepository = obrazovniCiljRepository;
+    }
+
+    @GetMapping("/by-nastavnik-and-predmet")
+    public ResponseEntity<List<TerminNastaveDto>> getAllByNastavnikAndPredmet(
+        @PathParam("nastavnikId") Long nastavnikId,
+        @PathParam("predmetId") Long predmetId
+    ) throws IllegalAccessException, InstantiationException {
+
+        List<TerminNastave> termini = terminNastaveService.findTerminiNastaveByNastavnikAndPredmet(nastavnikId, predmetId);
+        List<TerminNastaveDto> dtos = ListToDto(termini);
+
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/predmet/{predmetId}")
@@ -76,6 +102,46 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
         }).toList();
 
         return new ResponseEntity<>(dtos, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{terminNastaveId}/ishod")
+    public ResponseEntity<?> updateIshod(
+            @PathVariable Long terminNastaveId,
+            @PathParam("predmetId") Long predmetId,
+            @PathParam("nastavniMaterijalId") Long nastavniMaterijalId,
+            @RequestBody IshodDto ishodDto) throws IllegalAccessException, InstantiationException {
+
+        TerminNastave terminNastave = terminNastaveService.findById(terminNastaveId).orElseThrow(() -> new EntityNotFoundException("Termin nastave not found with id: " + terminNastaveId.toString()));
+        Predmet predmet = predmetRepository.findById(predmetId).orElseThrow(() -> new EntityNotFoundException("Predmet not found with id: " + predmetId.toString()));
+        NastavniMaterijal nastavniMaterijal = new NastavniMaterijal();
+
+        Ishod ishod = new Ishod();
+
+        if(ishodDto.getNastavniMaterijal() != null) {
+            nastavniMaterijal = nastavniMaterijalService.findById(ishodDto.getNastavniMaterijal().getId()).orElseThrow(() -> new EntityNotFoundException("Nastavni materijal not found with id: " + nastavniMaterijalId.toString()));
+            ishod.setNastavniMaterijal(nastavniMaterijal);
+        }
+
+        ishod.setOpis(ishodDto.getOpis());
+        ishod.setPredmet(predmet);
+        Ishod savedIshod = ishodService.save(ishod);
+
+
+        if(!ishodDto.getObrazovniCiljevi().isEmpty()){
+            for(ObrazovniCiljDto o : ishodDto.getObrazovniCiljevi()){
+                ObrazovniCilj obrazovniCilj = new ObrazovniCilj();
+                obrazovniCilj.setOpis(o.getOpis());
+                obrazovniCilj.setIshod(savedIshod);
+
+                obrazovniCiljRepository.save(obrazovniCilj);
+            }
+        }
+
+        terminNastave.setIshod(savedIshod);
+        TerminNastave saved = terminNastaveService.save(terminNastave);
+        TerminNastaveDto dto = convertToDto(saved);
+
+        return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/{id}")
@@ -119,6 +185,17 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
 //        t.setNastavniMaterijal(nastavniMaterijalDto);
 
         return t;
+    }
+
+    private List<TerminNastaveDto> ListToDto(List<TerminNastave> entities) throws IllegalAccessException, InstantiationException {
+        List<TerminNastaveDto> dtoList = new ArrayList<>();
+
+        for (TerminNastave entity : entities) {
+            TerminNastaveDto dto = convertToDto(entity);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 
     @Override

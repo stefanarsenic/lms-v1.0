@@ -5,7 +5,7 @@ import {PredmetPlanaZaGodinu} from "./predmetPlanaZaGodinu";
 export interface Predmet {
   id: number,
   naziv: string,
-  esbp: number,
+  espb: number,
   obavezan: boolean,
   brojPredavanja: number,
   brojVezbi: number,
@@ -14,7 +14,6 @@ export interface Predmet {
   ostaliCasovi: number,
   nastavnik: Nastavnik,
   asistent: Nastavnik,
-  silabus: Ishod[],
-  preduslov: Predmet[],
-  planovi: PredmetPlanaZaGodinu[]
+  silabus?: Ishod[],
+  preduslov?: Predmet[],
 }
