@@ -12,11 +12,13 @@ import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetPlanaZaGodinuDto;
+import rs.ac.singidunum.novisad.server.dto.student.PohadjanjePredmetaDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentNaGodiniDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.PohadjanjePredmeta;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
@@ -91,40 +93,44 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
     protected StudentNaGodiniDto convertToDto(StudentNaGodini entity) throws IllegalAccessException, InstantiationException {
         StudentNaGodiniDto s = EntityDtoMapper.convertToDto(entity, StudentNaGodiniDto.class);
         StudentDto studentDto = EntityDtoMapper.convertToDto(entity.getStudent(), StudentDto.class);
-        s.setPredmeti(new HashSet<>());
+        s.setPredmeti(Collections.emptyList());
         s.setStudijskiProgram(EntityDtoMapper.convertToDto(entity.getStudijskiProgram(), StudijskiProgramDto.class));
         s.setStudent(studentDto);
-        for(Predmet predmet:entity.getPredmeti()){
-            NastavnikDto nastavnikDto = EntityDtoMapper.convertToDto(predmet.getNastavnik(), NastavnikDto.class);
-            NastavnikDto asistentDto = EntityDtoMapper.convertToDto(predmet.getAsistent(), NastavnikDto.class);
+
+        List<PohadjanjePredmetaDto> pohadjanjaDto = new ArrayList<>();
+
+        for(PohadjanjePredmeta pohadjanje : entity.getPredmeti()){
+            NastavnikDto nastavnikDto = EntityDtoMapper.convertToDto(pohadjanje.getPredmet().getNastavnik(), NastavnikDto.class);
+            NastavnikDto asistentDto = EntityDtoMapper.convertToDto(pohadjanje.getPredmet().getAsistent(), NastavnikDto.class);
 
             Set<IshodDto> silabusDto = new HashSet<>(Collections.emptySet());
             Set<PredmetDto> preduslovDto = new HashSet<>(Collections.emptySet());
             Set<PredmetPlanaZaGodinuDto> planoviDto = new HashSet<>(Collections.emptySet());
 
-            if(predmet.getSilabus() != null){
-                for(Ishod ishod : predmet.getSilabus()){
+            if(pohadjanje.getPredmet().getSilabus() != null){
+                for(Ishod ishod : pohadjanje.getPredmet().getSilabus()){
                     ishod.setPredmet(null);
                     silabusDto.add(EntityDtoMapper.convertToDto(ishod, IshodDto.class));
                 }
             }
-            if(predmet.getPreduslov() != null){
-                for(Predmet predmet1 : predmet.getPreduslov()){
+            if(pohadjanje.getPredmet().getPreduslov() != null){
+                for(Predmet predmet1 : pohadjanje.getPredmet().getPreduslov()){
                     preduslovDto.add(EntityDtoMapper.convertToDto(predmet1, PredmetDto.class));
                 }
             }
 
-            PredmetDto predmetDto = EntityDtoMapper.convertToDto(predmet, PredmetDto.class);
+            PohadjanjePredmetaDto dto = EntityDtoMapper.convertToDto(pohadjanje, PohadjanjePredmetaDto.class);
             nastavnikDto.setPravoPristupaSet(new HashSet<>());
             asistentDto.setPravoPristupaSet(new HashSet<>());
-            predmetDto.setSilabus(silabusDto);
-            predmetDto.setPreduslov(preduslovDto);
-            predmetDto.setPlanovi(planoviDto);
-            predmetDto.setAsistent(asistentDto);
-            predmetDto.setNastavnik(nastavnikDto);
-            s.getPredmeti().add(predmetDto);
+            dto.getPredmet().setSilabus(silabusDto);
+            dto.getPredmet().setPreduslov(preduslovDto);
+            dto.getPredmet().setPlanovi(planoviDto);
+            dto.getPredmet().setAsistent(asistentDto);
+            dto.getPredmet().setNastavnik(nastavnikDto);
+            pohadjanjaDto.add(dto);
         }
 
+        s.setPredmeti(pohadjanjaDto);
 
         return s;
     }

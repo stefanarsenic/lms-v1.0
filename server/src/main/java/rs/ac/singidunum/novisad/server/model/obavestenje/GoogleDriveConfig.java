@@ -36,7 +36,7 @@ public class GoogleDriveConfig {
     }
 
     private Credential getCredentials(HttpTransport httpTransport) throws IOException {
-        GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream("C:\\Users\\stefa\\Desktop\\lms_projekat\\learning-management-system\\server\\src\\main\\java\\rs\\ac\\singidunum\\novisad\\server\\model\\obavestenje\\client_secret_1010100917967-235ij32pnd2mlds02reg93soadn252im.apps.googleusercontent.com.json"))
+        GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream("C:\\Users\\Lenovo\\Desktop\\lms\\learning-management-system\\server\\src\\main\\java\\rs\\ac\\singidunum\\novisad\\server\\model\\obavestenje\\client_secret_1010100917967-235ij32pnd2mlds02reg93soadn252im.apps.googleusercontent.com.json"))
                 .createScoped(Collections.singleton(DriveScopes.DRIVE));
 
         return credential;

@@ -7,6 +7,7 @@ import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -21,6 +22,5 @@ public class StudentNaGodiniDto implements Serializable {
     private Integer godinaStudija;
     private StudentDto student;
     private StudijskiProgramDto studijskiProgram;
-
-    private Set<PredmetDto> predmeti;
+    private List<PohadjanjePredmetaDto> predmeti;
 }

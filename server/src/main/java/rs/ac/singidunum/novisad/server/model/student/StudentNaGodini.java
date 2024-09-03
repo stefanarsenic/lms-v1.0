@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.PohadjanjePredmeta;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -33,7 +35,7 @@ public class StudentNaGodini {
     @ManyToOne
     private StudijskiProgram studijskiProgram;
 
-    @OneToMany
-    Set<Predmet> predmeti;
+    @OneToMany(mappedBy = "student")
+    List<PohadjanjePredmeta> predmeti;
 
 }
