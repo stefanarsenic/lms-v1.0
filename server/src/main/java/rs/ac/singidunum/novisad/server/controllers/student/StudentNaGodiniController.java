@@ -94,7 +94,9 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
         StudentNaGodiniDto s = EntityDtoMapper.convertToDto(entity, StudentNaGodiniDto.class);
         StudentDto studentDto = EntityDtoMapper.convertToDto(entity.getStudent(), StudentDto.class);
         s.setPredmeti(Collections.emptyList());
-        s.setStudijskiProgram(EntityDtoMapper.convertToDto(entity.getStudijskiProgram(), StudijskiProgramDto.class));
+        if(entity.getStudijskiProgram() != null) {
+            s.setStudijskiProgram(EntityDtoMapper.convertToDto(entity.getStudijskiProgram(), StudijskiProgramDto.class));
+        }
         s.setStudent(studentDto);
 
         List<PohadjanjePredmetaDto> pohadjanjaDto = new ArrayList<>();
@@ -120,6 +122,7 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
             }
 
             PohadjanjePredmetaDto dto = EntityDtoMapper.convertToDto(pohadjanje, PohadjanjePredmetaDto.class);
+            dto.setPredmet(EntityDtoMapper.convertToDto(pohadjanje.getPredmet(), PredmetDto.class));
             nastavnikDto.setPravoPristupaSet(new HashSet<>());
             asistentDto.setPravoPristupaSet(new HashSet<>());
             dto.getPredmet().setSilabus(silabusDto);

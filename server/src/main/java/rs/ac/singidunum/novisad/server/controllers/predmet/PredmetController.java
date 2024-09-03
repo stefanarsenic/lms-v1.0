@@ -19,6 +19,7 @@ import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
+import rs.ac.singidunum.novisad.server.model.predmet.ObrazovniCilj;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.model.predmet.PredmetPlanaZaGodinu;
 import rs.ac.singidunum.novisad.server.model.student.Student;
@@ -128,6 +129,9 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
 
         if(entity.getSilabus() != null){
             for(Ishod ishod : entity.getSilabus()){
+                for(ObrazovniCilj o : ishod.getObrazovniCiljevi()){
+                    o.setIshod(null);
+                }
                 ishod.setPredmet(null);
                 silabusDto.add(EntityDtoMapper.convertToDto(ishod, IshodDto.class));
             }

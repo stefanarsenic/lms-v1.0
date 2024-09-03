@@ -6,12 +6,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.NastavnikNaRealizaciji;
-import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.NastavnikNaRealizacijiRepository;
+import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.NastavnikNaRealizacijiRepository;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.RealizacijaPredmeta;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
-import rs.ac.singidunum.novisad.server.model.predmet.PredmetPlanaZaGodinu;
 import rs.ac.singidunum.novisad.server.model.student.Student;
 import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
 import rs.ac.singidunum.novisad.server.repositories.fakultet.StudijskiProgramRepository;
@@ -20,9 +19,7 @@ import rs.ac.singidunum.novisad.server.repositories.predmet.PredmetRepository;
 import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.RealizacijaPredmetaRepository;
 import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.TipNastaveRepository;
 import rs.ac.singidunum.novisad.server.repositories.student.StudentNaGodiniRepository;
-import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.TipNastaveService;
 
-import javax.print.attribute.standard.MediaSize;
 import java.util.List;
 
 @Service

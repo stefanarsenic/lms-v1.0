@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.TipNastaveDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.ObrazovniCiljDto;
-import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.EvaluacijaZnanjaDto;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.NastavniMaterijalDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.TerminNastaveDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
@@ -16,7 +16,7 @@ import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.*;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
 import rs.ac.singidunum.novisad.server.model.predmet.ObrazovniCilj;
-import rs.ac.singidunum.novisad.server.model.predmet.ObrazovniCiljRepository;
+import rs.ac.singidunum.novisad.server.repositories.predmet.ObrazovniCiljRepository;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.repositories.predmet.PredmetRepository;
 import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.TipNastaveService;
@@ -27,6 +27,7 @@ import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.TerminNasta
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/termin-nastave")
@@ -115,6 +116,32 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
         Predmet predmet = predmetRepository.findById(predmetId).orElseThrow(() -> new EntityNotFoundException("Predmet not found with id: " + predmetId.toString()));
         NastavniMaterijal nastavniMaterijal = new NastavniMaterijal();
 
+        Optional<Ishod> i = ishodService.findById(ishodDto.getId());
+        if(i.isPresent()){
+            Ishod newIshod = new Ishod();
+            newIshod.setId(i.get().getId());
+            newIshod.setOpis(ishodDto.getOpis());
+            if(ishodDto.getNastavniMaterijal() != null) {
+                nastavniMaterijal = nastavniMaterijalService.findById(ishodDto.getNastavniMaterijal().getId()).orElseThrow(() -> new EntityNotFoundException("Nastavni materijal not found with id: " + nastavniMaterijalId.toString()));
+                newIshod.setNastavniMaterijal(nastavniMaterijal);
+            }
+            if(!ishodDto.getObrazovniCiljevi().isEmpty()){
+                obrazovniCiljRepository.deleteAllByIshodId(i.get().getId());
+
+                for(ObrazovniCiljDto o : ishodDto.getObrazovniCiljevi()){
+                    ObrazovniCilj obrazovniCilj = new ObrazovniCilj();
+                    obrazovniCilj.setId(o.getId());
+                    obrazovniCilj.setOpis(o.getOpis());
+                    obrazovniCilj.setIshod(newIshod);
+
+                    obrazovniCiljRepository.save(obrazovniCilj);
+                }
+            }
+
+            Ishod saved = ishodService.save(newIshod);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+
         Ishod ishod = new Ishod();
 
         if(ishodDto.getNastavniMaterijal() != null) {
@@ -175,14 +202,29 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     @Override
     protected TerminNastaveDto convertToDto(TerminNastave entity) throws IllegalAccessException, InstantiationException {
         TerminNastaveDto t = EntityDtoMapper.convertToDto(entity, TerminNastaveDto.class);
-//        IshodDto ishodDto = EntityDtoMapper.convertToDto(entity.getIshod(), IshodDto.class);
+        if(entity.getIshod() != null){
+            IshodDto ishodDto = EntityDtoMapper.convertToDto(entity.getIshod(), IshodDto.class);
+            List<ObrazovniCiljDto> dtos = new ArrayList<>();
+            if(!entity.getIshod().getObrazovniCiljevi().isEmpty()) {
+                for (ObrazovniCilj o : entity.getIshod().getObrazovniCiljevi()) {
+                    o.setIshod(null);
+                    dtos.add(EntityDtoMapper.convertToDto(o, ObrazovniCiljDto.class));
+                }
+
+                ishodDto.setObrazovniCiljevi(dtos);
+                t.setIshod(ishodDto);
+            }
+
+            if(entity.getIshod().getNastavniMaterijal() != null) {
+                NastavniMaterijalDto nastavniMaterijalDto = EntityDtoMapper.convertToDto(entity.getIshod().getNastavniMaterijal(), NastavniMaterijalDto.class);
+                t.setNastavniMaterijal(nastavniMaterijalDto);
+            }
+
+        }
         if(entity.getTipNastave() != null) {
             TipNastaveDto tipNastaveDto = EntityDtoMapper.convertToDto(entity.getTipNastave(), TipNastaveDto.class);
             t.setTipNastave(tipNastaveDto);
         }
-//        NastavniMaterijalDto nastavniMaterijalDto = EntityDtoMapper.convertToDto(entity.getNastavniMaterijal(), NastavniMaterijalDto.class);
-//        t.setIshod(ishodDto);
-//        t.setNastavniMaterijal(nastavniMaterijalDto);
 
         return t;
     }

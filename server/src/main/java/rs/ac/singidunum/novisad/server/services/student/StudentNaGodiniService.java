@@ -49,7 +49,7 @@ public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long
         Long studijskiProgramId = entity.getStudijskiProgram().getId();
         Long studentId = entity.getStudent().getId();
 
-        List<Predmet> predmeti = predmetRepository.findPredmetiByStudijskiProgram(studijskiProgramId);
+        List<Predmet> predmeti = predmetRepository.findPredmetiByStudijskiProgramAndGodina(studijskiProgramId, entity.getGodinaStudija());
         List<PohadjanjePredmeta> pohadjanja = new ArrayList<>();
 
         List<StudentNaGodini> existingStudentNaGodiniList = studentNaGodiniRepository.findStudentNaGodiniByStudijskiProgramIdAndStudentId(studentId, studijskiProgramId);

@@ -41,17 +41,13 @@
     <div class="form-group">
       <label>Novi Obrazovni Cilj</label>
     </div>
-    <form [formGroup]="form">
-      <div formArrayName="items">
-        <div *ngFor="let item of items.controls; let i = index">
-          <input [formControlName]="i" placeholder="Enter text here">
-          <button class="remove" type="button" (click)="removeItem(i)">Ukloni</button>
-        </div>
+    <div class="form-group">
+      <div *ngFor="let item of items; let i = index">
+        <input [(ngModel)]="item.opis" placeholder="Unesite opis">
+        <button class="remove" type="button" (click)="removeItem(i)">Ukloni</button>
       </div>
       <button class="add" type="button" (click)="addItem()">+ Dodaj</button>
-    </form>
-
-    <p>Obrazovni ciljevi: {{ form.value.items | json }}</p>
+    </div>
 
     <div class="form-group">
       <label>Izaberite nastavni materijal:</label>
