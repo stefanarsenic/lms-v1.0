@@ -4,34 +4,40 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
+import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.PohadjanjePredmeta;
+import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
 import rs.ac.singidunum.novisad.server.model.student.Upis;
 import rs.ac.singidunum.novisad.server.repositories.predmet.PlanZaGodinuRepository;
-import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.PolozeniPredmetRepository;
+import rs.ac.singidunum.novisad.server.repositories.predmet.PredmetRepository;
+import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.PohadjanjePredmetaRepository;
 import rs.ac.singidunum.novisad.server.repositories.student.SkolskaGodinaRepository;
 import rs.ac.singidunum.novisad.server.repositories.student.StudentNaGodiniRepository;
 import rs.ac.singidunum.novisad.server.repositories.student.UpisRepository;
-import rs.ac.singidunum.novisad.server.services.realizacija_predmeta.PolozeniPredmetService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long> {
     private final StudentNaGodiniRepository studentNaGodiniRepository;
     private final UpisRepository upisRepository;
-    private final PolozeniPredmetService polozeniPredmetService;
+    private final PohadjanjePredmetaService polozeniPredmetService;
     private final PlanZaGodinuRepository planZaGodinuRepository;
     private final SkolskaGodinaRepository skolskaGodinaRepository;
-    public StudentNaGodiniService(CrudRepository<StudentNaGodini, Long> repository, StudentNaGodiniRepository studentNaGodiniRepository, UpisRepository upisRepository, PolozeniPredmetService polozeniPredmetService, PlanZaGodinuRepository planZaGodinuRepository, SkolskaGodinaRepository skolskaGodinaRepository) {
+    private final PredmetRepository predmetRepository;
+    private final PohadjanjePredmetaRepository pohadjanjePredmetaRepository;
+
+    public StudentNaGodiniService(CrudRepository<StudentNaGodini, Long> repository, StudentNaGodiniRepository studentNaGodiniRepository, UpisRepository upisRepository, PohadjanjePredmetaService polozeniPredmetService, PlanZaGodinuRepository planZaGodinuRepository, SkolskaGodinaRepository skolskaGodinaRepository, PredmetRepository predmetRepository, PohadjanjePredmetaRepository pohadjanjePredmetaRepository) {
         super(repository);
         this.studentNaGodiniRepository = studentNaGodiniRepository;
         this.upisRepository = upisRepository;
         this.polozeniPredmetService = polozeniPredmetService;
         this.planZaGodinuRepository = planZaGodinuRepository;
         this.skolskaGodinaRepository = skolskaGodinaRepository;
+        this.predmetRepository = predmetRepository;
+        this.pohadjanjePredmetaRepository = pohadjanjePredmetaRepository;
     }
 
     public List<StudentNaGodini> findAllByStudentId(Long studentId){
@@ -42,6 +48,9 @@ public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long
     public StudentNaGodini saveWithUpis(StudentNaGodini entity) {
         Long studijskiProgramId = entity.getStudijskiProgram().getId();
         Long studentId = entity.getStudent().getId();
+
+        List<Predmet> predmeti = predmetRepository.findPredmetiByStudijskiProgramAndGodina(studijskiProgramId, entity.getGodinaStudija());
+        List<PohadjanjePredmeta> pohadjanja = new ArrayList<>();
 
         List<StudentNaGodini> existingStudentNaGodiniList = studentNaGodiniRepository.findStudentNaGodiniByStudijskiProgramIdAndStudentId(studentId, studijskiProgramId);
 
@@ -58,7 +67,17 @@ public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long
 
             upisRepository.save(upis);
 
-            return studentNaGodiniRepository.save(entity);
+            StudentNaGodini saved = studentNaGodiniRepository.save(entity);
+            predmeti.forEach(predmet -> {
+                PohadjanjePredmeta p = new PohadjanjePredmeta();
+                p.setStudent(saved);
+                p.setPredmet(predmet);
+                pohadjanja.add(p);
+                pohadjanjePredmetaRepository.save(p);
+            });
+            entity.setPredmeti(pohadjanja);
+
+            return saved;
         }
 
         throw new IllegalStateException("Student je vec upisan na studijski program.");
@@ -66,7 +85,7 @@ public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long
 
     @Transactional
     public StudentNaGodini updateWithUpis(StudentNaGodini entity){
-        Integer ostvareniEspbStudenta = polozeniPredmetService.findOstvareniEspbByStudentId(entity.getId());
+        //Integer ostvareniEspbStudenta = polozeniPredmetService.findOstvareniEspbByStudentId(entity.getId());
         Integer potrebnoEspbZaUpis = planZaGodinuRepository.getPotrebnoEspbByStudijskiProgramIdAndGodina(entity.getStudijskiProgram().getId(), entity.getGodinaStudija() + 1);
         Integer brojUpisa = upisRepository.getBrojUpisaGodineByStudentIdAndGodina(entity.getId(), entity.getGodinaStudija());
         Integer godineTrajanja = entity.getStudijskiProgram().getGodineTrajanja();
@@ -75,12 +94,12 @@ public class StudentNaGodiniService extends GenericService<StudentNaGodini, Long
         upis.setDatumUpisa(LocalDateTime.now());
         upis.setStudijskiProgram(entity.getStudijskiProgram().getNaziv());
         upis.setEspbNajava(potrebnoEspbZaUpis);
-        upis.setEspbOsvojeno(ostvareniEspbStudenta);
+       // upis.setEspbOsvojeno(ostvareniEspbStudenta);
         upis.setSkolskaGodina(null);
         upis.setKojiPut(brojUpisa + 1);
         upis.setStudent(entity);
 
-        if(entity.getGodinaStudija() + 1 <= godineTrajanja && ostvareniEspbStudenta >= potrebnoEspbZaUpis){
+        if(entity.getGodinaStudija() + 1 <= godineTrajanja /*ostvareniEspbStudenta >= potrebnoEspbZaUpis*/){
             entity.setGodinaStudija(entity.getGodinaStudija() + 1);
             upis.setKojiPut(1);
         }

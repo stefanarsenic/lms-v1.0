@@ -59,6 +59,7 @@ export class PregledPredmetaComponent {
       this.studentNaGodiniService.getAllByStudentUsername(this.studentUsername).subscribe({
         next: (data) => {
           this.studentNaGodini = data;
+          console.log(data);
           this.loading = false;
         },
         error: (err) => {

@@ -77,12 +77,19 @@ export class UpisStudenataComponent implements OnInit{
     this.getStudenti();
     this.getStudijskiProgrami();
   }
+
+  otkazi(){
+    this.upisNaSledecuGodinuDialog = false;
+  }
+
   upis(student: any) {
     this.selektovaniStudent = student;
     this.upisDialog = true;
     this.dozvoljeniStudijskiProgrami = this.studijskiProgrami.filter(studijskiProgram =>
-      !student.studentiNaGodini.some((student: any) =>
-        studijskiProgram.id === student.studijskiProgram.id
+      !student.studentiNaGodini.some((student: any) => {
+        studijskiProgram.id === student.studijskiProgram.id;
+        console.log(this.dozvoljeniStudijskiProgrami);
+      }
       )
     );
   }

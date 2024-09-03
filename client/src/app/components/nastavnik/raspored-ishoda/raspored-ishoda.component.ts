@@ -83,8 +83,10 @@ export class RasporedIshodaComponent implements OnInit{
 
   clickInfo!: EventClickArg;
 
+  obrazovniCiljevi: ObrazovniCilj[] = [];
+
   nastavniMaterijali: NastavniMaterijal[] = [];
-  selectedNastavniMaterijal!: NastavniMaterijal;
+  selectedNastavniMaterijal!: NastavniMaterijal | undefined;
 
   predmeti: Predmet[] = [];
   selectedPredmet!: Predmet;
@@ -101,32 +103,27 @@ export class RasporedIshodaComponent implements OnInit{
 
   visible: boolean = false;
 
-  form: FormGroup;
-
   constructor(
     private changeDetector: ChangeDetectorRef,
     private terminNastaveService: TerminNastaveService,
     private predmetService: PredmetService,
     private nastavnikService: NastavnikService,
     private googleDriveService: GoogleDriveService,
-    private fb: FormBuilder,
     private messageService: MessageService
     ) {
-    this.form = this.fb.group({
-      items: this.fb.array([this.fb.control('')])
-    });
   }
 
   get items() {
-    return this.form.get('items') as FormArray;
+    return this.obrazovniCiljevi;
   }
 
   addItem() {
-    this.items.push(this.fb.control(''));
+    const newItem: ObrazovniCilj = { id: 0, opis: ''};
+    this.obrazovniCiljevi.push(newItem);
   }
 
   removeItem(index: number) {
-    this.items.removeAt(index);
+    this.obrazovniCiljevi.splice(index, 1);
   }
 
   ngOnInit(): void {
@@ -154,22 +151,13 @@ export class RasporedIshodaComponent implements OnInit{
   }
 
   sacuvaj(){
+    let obrazovniCiljevi: ObrazovniCilj[] = this.obrazovniCiljevi;
 
-    let obrazovniCiljevi: ObrazovniCilj[] = [];
-
-    for(let item of this.form.value["items"]){
-      obrazovniCiljevi.push({
-        id: 0,
-        opis: item
-      });
-    }
-
-    console.log(this.form.value["items"]);
     const params: HttpParams = new HttpParams()
-      .set("predmetId", this.selectedPredmet.id)
+      .set("predmetId", this.selectedPredmet.id);
 
     const ishod: any = {
-      id: 0,
+      id: this.ishodId,
       opis: this.opis,
       nastavniMaterijal: this.selectedNastavniMaterijal,
       obrazovniCiljevi: obrazovniCiljevi
@@ -177,7 +165,9 @@ export class RasporedIshodaComponent implements OnInit{
 
     lastValueFrom(this.terminNastaveService.updateIshod(Number(this.clickInfo.event.id), params, ishod))
       .then(() => {
-        this.messageService.add({ severity: "success", summary: "Success", detail: "Ishod uspesno dodat", life: 1000 });
+        this.messageService.add({ severity: "success", summary: "Success", detail: "Ishod uspesno sacuvan", life: 1000 });
+        this.loadEvents();
+        this.visible = false;
       })
       .catch((error) => {
         this.messageService.add({ severity: "error", summary: "Error", detail: "Greska", life: 1000 });
@@ -190,13 +180,14 @@ export class RasporedIshodaComponent implements OnInit{
   }
 
   loadEvents(){
+    this.calendarComponent.getApi().removeAllEvents();
+    this.terminiNastave = [];
     if(this.selectedPredmet && this.nastavnik.id) {
       const params: HttpParams = new HttpParams()
         .set("nastavnikId", this.nastavnik.id)
         .set("predmetId", this.selectedPredmet.id)
 
       this.terminNastaveService.getAllByNastavnikAndPredmet(params).subscribe((data) => {
-        console.log(data);
         this.terminiNastave = data;
         for(let terminNastave of data){
           this.addEventToCalendar(terminNastave);
@@ -217,12 +208,28 @@ export class RasporedIshodaComponent implements OnInit{
     });
   }
 
-  handleEventClick(clickInfo: EventClickArg){
+  clearItems(){
+    this.ishodId = 0;
+    this.opis = "";
+    this.selectedNastavniMaterijal = undefined;
+    this.obrazovniCiljevi = [];
+  }
+
+  handleEventClick(clickInfo: EventClickArg) {
+    this.clearItems();
     this.clickInfo = clickInfo;
+
     const terminNastave = this.terminiNastave.find(t => t.id === Number(clickInfo.event.id));
 
-    if(terminNastave?.ishod?.id){
+    if (terminNastave?.ishod && terminNastave.ishod.id) {
+      this.ishodId = terminNastave.ishod.id;
+      this.opis = terminNastave.ishod.opis;
 
+      if (terminNastave.ishod.obrazovniCiljevi) {
+        terminNastave.ishod.obrazovniCiljevi.forEach(o => {
+          this.obrazovniCiljevi.push(o);
+        });
+      }
     }
 
     this.visible = true;
