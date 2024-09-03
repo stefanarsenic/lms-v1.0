@@ -1,0 +1,30 @@
+<div [formGroup]="fakultetForm" class="p-fluid">
+  <div class="p-field">
+    <label for="naziv">Name</label>
+    <input id="naziv" type="text" pInputText formControlName="naziv" />
+    <small *ngIf="fakultetForm.get('naziv')?.invalid && fakultetForm.get('naziv')?.touched" class="p-error">
+      Name is required.
+    </small>
+  </div>
+
+  <div class="p-field">
+    <label for="ulica">Street</label>
+    <input id="ulica" type="text" pInputText formControlName="ulica" />
+    <small *ngIf="fakultetForm.get('adresa.ulica')?.invalid && fakultetForm.get('adresa.ulica')?.touched" class="p-error">
+      Street is required.
+    </small>
+  </div>
+
+  <div class="p-field">
+    <label for="broj">Number</label>
+    <input id="broj" type="text" pInputText formControlName="broj" />
+    <small *ngIf="fakultetForm.get('adresa.broj')?.invalid && fakultetForm.get('adresa.broj')?.touched" class="p-error">
+      Number is required.
+    </small>
+  </div>
+
+  <div class="p-dialog-footer">
+    <button pButton label="Save" icon="pi pi-check" (click)="save()" [disabled]="fakultetForm.invalid"></button>
+    <button pButton label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="cancel()"></button>
+  </div>
+</div>
