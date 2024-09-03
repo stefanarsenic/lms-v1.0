@@ -1,0 +1,178 @@
+/* University Card Styles */
+.university-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+}
+
+.university-card:hover {
+  transform: translateY(-5px);
+}
+
+/* University Header Styles */
+.university-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  border-radius: 8px 8px 0 0;
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.university-icon {
+  font-size: 1.8em;
+}
+
+.university-actions {
+  display: flex;
+  gap: 12px;
+}
+.university-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.faculty-search {
+  margin-left: auto; /* Pushes the search input to the far right */
+}
+
+.p-input-icon-left .p-inputtext {
+  padding-left: 2.5em; /* Adjust padding for the search icon */
+}
+
+
+/* Subtitle and Content Styling */
+.p-card-subtitle {
+  font-size: 1.2em;
+  color: #007bff;
+  margin-top: 12px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.p-card-content {
+  font-size: 1.1em;
+  color: #333333;
+  padding: 10px 0;
+  transition: height 0.3s ease;
+}
+
+.p-card-content[ng-animating] {
+  overflow: hidden;
+}
+
+/* Faculty Search Styles */
+.faculty-search {
+  margin-bottom: 15px;
+}
+
+.faculty-search input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+/* Add Faculty Button Styles */
+.add-faculty-button {
+  margin-top: 20px;
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  font-size: 1.2em;
+}
+
+/* Faculty Card Styles */
+.faculty-card {
+  background-color: #e0f7fa;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  padding: 15px;
+  overflow: hidden;
+}
+
+.faculty-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Faculty Header Styles */
+.faculty-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0288d1;
+  color: white;
+  padding: 12px;
+  border-radius: 6px 6px 0 0;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+.faculty-icon {
+  font-size: 1.5em;
+}
+
+/* Faculty Actions Styles */
+.faculty-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.faculty-actions button {
+  font-size: 1.5em;
+  color: #0a33e5;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.faculty-actions button:hover {
+  transform: scale(1.2);
+  color: #0940ee;
+}
+
+/* Program List Styles */
+.program-list-item {
+  padding-left: 20px;
+  margin-bottom: 12px;
+  border-left: 4px solid #0288d1;
+  font-size: 1.1em;
+  line-height: 1.5;
+  color: #4a4a4a;
+}
+
+/* General Text and Button Styles */
+p {
+  margin: 8px 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* List Styles */
+ul {
+  padding-left: 25px;
+  margin-top: 15px;
+  list-style-type: none;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+ul li::before {
+  content: "";
+  color: #007bff;
+  font-size: 1.5em;
+  margin-right: 10px;
+  vertical-align: middle;
+}

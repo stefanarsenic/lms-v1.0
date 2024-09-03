@@ -58,6 +58,11 @@ import {
 import {IstorijaStudiranjaComponent} from "./components/student/istorija-studiranja/istorija-studiranja.component";
 import {RasporedIshodaComponent} from "./components/nastavnik/raspored-ishoda/raspored-ishoda.component";
 import {PredmetiComponent} from "./components/admin/predmeti/predmeti.component";
+import {AccessComponent} from "./components/access/access.component";
+import {NotFoundComponent} from "./components/not-found/not-found.component";
+import {
+  AdministracijaOrganizacijeComponent
+} from "./components/admin/administracija-organizacije/administracija-organizacije.component";
 
 StudijskiProgramCrudComponent
 
@@ -184,6 +189,10 @@ export const routes: Routes = [
       {
         path: "predmeti",
         component: PredmetiComponent
+      },
+      {
+        path: "administracija-organizacije",
+        component: AdministracijaOrganizacijeComponent
       }
     ],
     canActivate:[authGuard],data:{
@@ -270,5 +279,10 @@ export const routes: Routes = [
     // canActivate:[authGuard],data:{
     //   allowedRoles:["ROLE_REGULAR"]
     // }
-  }
+  },
+  {
+    path:"access-denied",
+    component: AccessComponent
+  },
+  { path: '**', component: NotFoundComponent },
 ];

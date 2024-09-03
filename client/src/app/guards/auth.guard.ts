@@ -9,6 +9,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (loginService.isAuthenticated() && loginService.proveraUloga(route.data["allowedRoles"])){
     return true;
   }
-  router.navigate(['/login']);
+  router.navigate(['/access-denied']);
   return false;
 };

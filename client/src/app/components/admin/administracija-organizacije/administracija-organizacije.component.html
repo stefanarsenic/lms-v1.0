@@ -1,0 +1,51 @@
+<div *ngFor="let university of universities; let i = index" class="university-card p-card p-mb-3">
+  <div class="university-header p-card-title">
+    <i class="pi pi-building p-mr-2 university-icon"></i>{{ university.naziv }}
+    <div class="university-actions">
+      <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-secondary" (click)="openUniverzitetDialog(university, i)"></button>
+      <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="deleteUniverzitet(i)"></button>
+    </div>
+  </div>
+  <div class="p-card-subtitle">
+    <i class="pi pi-calendar p-mr-2"></i>Osnovan: {{ university.datumOsnivanja[2] }}.{{ university.datumOsnivanja[1] }}.{{ university.datumOsnivanja[0] }}
+  </div>
+  <div class="p-card-content">
+    <p><i class="pi pi-map-marker p-mr-2"></i>Adresa: {{ university.adresa.ulica }}, {{ university.adresa.broj }}</p>
+    <p><i class="pi pi-user p-mr-2"></i>Rektor: {{ university.rektor.ime }} {{ university.rektor.prezime }}</p>
+  </div>
+
+  <!-- Container for Button and Search Field -->
+  <div class="university-controls">
+    <button pButton label="Prikaži Fakultete" icon="pi pi-chevron-down" class="p-button-rounded p-button-outlined p-button-primary" (click)="toggleFaculties(i)"></button>
+
+    <div class="faculty-search">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText placeholder="Pretraži fakultete..." [(ngModel)]="searchTerm" />
+      </span>
+    </div>
+  </div>
+
+  <!-- Faculties List, initially hidden -->
+  <div *ngIf="isFacultiesVisible[i]" class="faculty-section">
+    <div *ngFor="let fakultet of getFilteredFaculties(university); let j = index" class="faculty-card p-card p-mb-3 p-ml-3">
+      <div class="faculty-header p-card-title" (click)="toggleFacultyDetails(i, j)">
+        <i class="pi pi-book p-mr-2 faculty-icon"></i>{{ fakultet.naziv }}
+        <div class="faculty-actions">
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-secondary" (click)="openFakultetDialog(fakultet, i, j); $event.stopPropagation()"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="deleteFakultet(i, j); $event.stopPropagation()"></button>
+        </div>
+      </div>
+      <div class="p-card-content" *ngIf="isFacultyDetailsVisible[i][j]">
+        <p *ngIf="fakultet.adresa"><i class="pi pi-map-marker p-mr-2"></i>Adresa: {{ fakultet.adresa.ulica }}, {{ fakultet.adresa.broj }}</p>
+        <p *ngIf="fakultet.studijskiProgrami.length > 0"><i class="pi pi-graduation p-mr-2"></i>Studijski programi:</p>
+        <ul *ngIf="fakultet.studijskiProgrami.length > 0">
+          <li *ngFor="let program of fakultet.studijskiProgrami" class="program-list-item">
+            {{ program.naziv }} ({{ program.godineTrajanja }} years) - Head: {{ program.rukovodilac.ime }} {{ program.rukovodilac.prezime }}
+            <p>{{ program.opis }}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -52,9 +52,10 @@ export class AdminProfileComponent implements OnDestroy {
           { label: 'Profesori', icon: 'pi pi-fw pi-user', routerLink: 'nastavnici' },
           { label: 'Studenti', icon: 'pi pi-fw pi-users', routerLink: 'studenti' },
           { label: 'Studijski Programi', icon: 'pi pi-fw pi-bookmark', routerLink: 'studijski-programi' },
-          { label: 'Organizacija', icon: 'pi pi-fw pi-sitemap', routerLink: 'organizacija-studijskog-programa' },
+          { label: 'Organizacija studijskih programa', icon: 'pi pi-fw pi-sitemap', routerLink: 'organizacija-studijskog-programa' },
           { label: 'Šifarnik', icon: 'pi pi-fw pi-list', routerLink: 'uloge' },
-          { label: 'Predmeti', icon: 'pi pi-fw pi-book', routerLink: 'predmeti' }
+          { label: 'Predmeti', icon: 'pi pi-fw pi-book', routerLink: 'predmeti' },
+          { label: 'Administracija Organizacije', icon: 'pi pi-fw pi-book', routerLink: 'administracija-organizacije' }
         ]
       }
     ];
