@@ -14,6 +14,12 @@ import java.util.Set;
 @Repository
 public interface StudentNaGodiniRepository extends JpaRepository<StudentNaGodini, Long> {
 
+    @Query("SELECT s FROM StudentNaGodini s" +
+            " LEFT JOIN PohadjanjePredmeta pp " +
+            "ON s.id = pp.student.id " +
+            "WHERE pp.predmet.id = :predmetId")
+    List<StudentNaGodini> findStudentiNaGodiniByPredmet(Long predmetId);
+
     @Query("SELECT sng FROM StudentNaGodini sng" +
             " WHERE sng.student.id = :studentId ")
     List<StudentNaGodini> findStudentNaGodinisByStudentId(@Param("studentId") Long studentId);

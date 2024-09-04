@@ -7,12 +7,13 @@ import org.springframework.stereotype.Repository;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EvaluacijaZnanjaRepository extends JpaRepository<EvaluacijaZnanja, Long> {
 
 
-    EvaluacijaZnanja findEvaluacijaZnanjaByRealizacijaPredmetaAndIspitniRokAndTipEvaluacije(RealizacijaPredmeta realizacijaPredmeta, IspitniRok ispitniRok, TipEvaluacije tipEvaluacije);
+    Optional<EvaluacijaZnanja> findEvaluacijaZnanjaByRealizacijaPredmetaAndIspitniRokAndTipEvaluacije(RealizacijaPredmeta realizacijaPredmeta, IspitniRok ispitniRok, TipEvaluacije tipEvaluacije);
 
     @Query("SELECT ez " +
             "FROM EvaluacijaZnanja ez " +

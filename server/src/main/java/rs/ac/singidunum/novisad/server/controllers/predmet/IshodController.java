@@ -36,9 +36,11 @@ public class IshodController extends GenericController<Ishod, Long, IshodDto> {
     @Override
     protected IshodDto convertToDto(Ishod entity) throws IllegalAccessException, InstantiationException {
         IshodDto ishodDto = EntityDtoMapper.convertToDto(entity, IshodDto.class);
-        ishodDto.setPredmet(EntityDtoMapper.convertToDto(entity.getPredmet(), PredmetDto.class));
-        ishodDto.getPredmet().setNastavnik(EntityDtoMapper.convertToDto(entity.getPredmet().getNastavnik(), NastavnikDto.class));
-        ishodDto.getPredmet().setAsistent(EntityDtoMapper.convertToDto(entity.getPredmet().getAsistent(), NastavnikDto.class));
+        if(entity.getPredmet() != null) {
+            ishodDto.setPredmet(EntityDtoMapper.convertToDto(entity.getPredmet(), PredmetDto.class));
+            ishodDto.getPredmet().setNastavnik(EntityDtoMapper.convertToDto(entity.getPredmet().getNastavnik(), NastavnikDto.class));
+            ishodDto.getPredmet().setAsistent(EntityDtoMapper.convertToDto(entity.getPredmet().getAsistent(), NastavnikDto.class));
+        }
 
         return ishodDto;
     }

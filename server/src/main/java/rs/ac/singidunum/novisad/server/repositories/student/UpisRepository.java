@@ -4,7 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
 import rs.ac.singidunum.novisad.server.model.student.Upis;
+
+import java.util.List;
 
 @Repository
 public interface UpisRepository extends JpaRepository<Upis, Long> {
@@ -14,4 +17,6 @@ public interface UpisRepository extends JpaRepository<Upis, Long> {
             "WHERE u.student.id = :studentId " +
             "AND u.godinaStudija = :godinaStudija")
     Integer getBrojUpisaGodineByStudentIdAndGodina(@Param("studentId") Long studentId, @Param("godinaStudija") Integer godinaStudija);
+
+    List<Upis> findAllByStudent(StudentNaGodini student);
 }

@@ -21,15 +21,39 @@
           <td>{{ predmet.obavezan ? "Obavezan Predmet" : "Izborni Predmet" }}</td>
           <td>{{ predmet.espb }}</td>
           <td>{{ predmet.nastavnik.ime }} {{ predmet.nastavnik.prezime }}</td>
-          <td><p-button (onClick)="prijaviIspit(predmet)" styleClass="p-button-sm" label="Prijavi"></p-button></td>
+          <td><p-button (onClick)="prijaviIspit(s.id, predmet)" styleClass="p-button-sm" label="Prijavi"></p-button></td>
         </tr>
       </ng-template>
     </p-table>
     <h3>Prijavljeni Ispiti</h3>
+    <p-table *ngIf="prijavljeniIspiti[s.id]"
+      [value]="getPrijavljeniIspiti(s.id)"
+      [tableStyle]="{'min-width': '50rem', 'max-width': '70rem'}">
+      styleClass="p-datatable-striped"
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Naziv</th>
+          <th>Espb</th>
+          <th>Nastavnik</th>
+          <th>Bodovi</th>
+          <th>Datum Polaganja</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-polaganje>
+        <tr>
+          <td>{{ polaganje.predmet.naziv }}</td>
+          <td>{{ polaganje.predmet.espb }}</td>
+          <td>{{ polaganje.predmet.nastavnik.ime }} {{ polaganje.predmet.nastavnik.prezime }}</td>
+          <td>{{polaganje.bodovi ? polaganje.bodovi : 0}}</td>
+          <td>{{formatDateFromString(polaganje.evaluacijaZnanja.vremePocetka.toString())}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </p-panel>
 </div>
 
-<p-dialog header="Prijava Ispita" [visible]="visible" [modal]="true" [draggable]="false" [closeIcon]="undefined">
+<p-dialog header="Prijava Ispita" [(visible)]="visible" [modal]="true" [draggable]="false">
   <p-dropdown [options]="ispitniRokovi" [(ngModel)]="selectedIspitniRok" optionLabel="naziv" placeholder="Izaberite Ispitni Rok" appendTo="body"></p-dropdown>
 
   <ng-template pTemplate="footer">
@@ -37,4 +61,5 @@
     <p-button (onClick)="potvrdiPrijavu()" severity="primary" label="Potvrdi" icon="pi pi-check" styleClass="p-button-sm"></p-button>
   </ng-template>
 </p-dialog>
+<p-toast></p-toast>
 

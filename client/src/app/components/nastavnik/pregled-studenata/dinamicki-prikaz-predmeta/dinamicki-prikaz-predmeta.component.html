@@ -1,0 +1,23 @@
+<div class="container">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h3>{{ predmet.naziv }}</h3>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li>Pocetna</li>
+        <li>Raspored Ishoda</li>
+        <li>Instrumenti Evaluacije</li>
+        <li [routerLink]="['spisak-studenata']" [queryParams]="{ id: predmet.id }">Spisak Studenata</li>
+        <li>Uredjivanje Silabusa</li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <div *ngFor="let o of obavestenja" class="post">
+      <h2>{{ o.naslov }}</h2>
+      <p>{{ o.sadrzaj }}</p>
+    </div>
+    <router-outlet></router-outlet>
+  </main>
+</div>

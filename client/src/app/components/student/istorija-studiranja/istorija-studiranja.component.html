@@ -1,4 +1,69 @@
 <div *ngFor="let s of studijskiProgrami">
   <p-panel [header]="s.naziv" [toggleable]="true">
+    <p-panel header="Polozeni Predmeti" [toggleable]="true">
+      <div class="student-info">
+        <div class="info-item">
+          <b>Prosečna Ocena: </b>
+          <p class="info-value">{{ getInformacijeStudenata(s.id).prosecnaOcena }}</p>
+        </div>
+        <div class="info-item">
+          <b>Ukupno ECTS: </b>
+          <p class="info-value">{{ getInformacijeStudenata(s.id).ects }}</p>
+        </div>
+      </div>
+
+      <p-table [value]="getInformacijeStudenata(s.id).polozeniPredmeti" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Predmet</th>
+            <th>Espb</th>
+            <th>Konacna Ocena</th>
+            <th>Bodovi</th>
+            <th>Obavezan</th>
+            <th>Broj Prijava</th>
+            <th>Nastavnik</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-polaganje>
+          <tr>
+            <td>{{polaganje.predmet.naziv}}</td>
+            <td>{{polaganje.predmet.espb}}</td>
+            <td>{{polaganje.konacnaOcena}}</td>
+            <td>{{polaganje.bodovi}}</td>
+            <td>{{polaganje.predmet.obavezan ? "Obavezan" : "Izborni"}}</td>
+            <td>{{polaganje.brojPolaganja}}</td>
+            <td>{{polaganje.predmet.nastavnik.ime}} {{polaganje.predmet.nastavnik.prezime}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-panel>
+    <br>
+    <p-panel header="Neuspesna Polaganja" [toggleable]="true">
+      <p-table [value]="getInformacijeStudenata(s.id).neuspesnaPolaganja" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Predmet</th>
+            <th>Espb</th>
+            <th>Konacna Ocena</th>
+            <th>Bodovi</th>
+            <th>Obavezan</th>
+            <th>Broj Prijava</th>
+            <th>Nastavnik</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-polaganje>
+          <tr>
+            <td>{{polaganje.predmet.naziv}}</td>
+            <td>{{polaganje.predmet.espb}}</td>
+            <td>{{polaganje.konacnaOcena}}</td>
+            <td>{{polaganje.bodovi}}</td>
+            <td>{{polaganje.predmet.obavezan ? "Obavezan" : "Izborni"}}</td>
+            <td>{{polaganje.brojPolaganja}}</td>
+            <td>{{polaganje.predmet.nastavnik.ime}} {{polaganje.predmet.nastavnik.prezime}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-panel>
+    <br>
   </p-panel>
 </div>

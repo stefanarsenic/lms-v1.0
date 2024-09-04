@@ -53,10 +53,9 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
 
     @GetMapping("/nepolozeni-predmeti")
     public ResponseEntity<?> getNepolozeniPredmeti(
-        @PathParam("studentId") Long studentId,
-        @PathParam("studijskiProgramId") Long studijskiProgramId
+        @PathParam("studentId") Long studentId
     ){
-        List<Predmet> predmeti = predmetService.findAllNePolozeniPredmetiByStudentAndStudijskiProgram(studentId, studijskiProgramId);
+        List<Predmet> predmeti = predmetService.findAllNePolozeniPredmetiByStudent(studentId);
         return PredmetiToDto(predmeti);
     }
     @GetMapping("/studijski-program/{studijskiProgramId}")

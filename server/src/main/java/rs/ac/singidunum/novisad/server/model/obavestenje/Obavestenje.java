@@ -22,8 +22,10 @@ public class Obavestenje {
     private Long id;
     private LocalDateTime vremePostavljanja;
     @Column(columnDefinition = "Text")
-    private String sadrzaj;
     private String naslov;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String sadrzaj;
     @OneToMany(mappedBy = "obavestenje")
     private Set<Fajl> prilozi;
     @ManyToOne

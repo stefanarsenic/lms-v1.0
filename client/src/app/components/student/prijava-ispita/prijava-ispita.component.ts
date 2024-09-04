@@ -21,6 +21,10 @@ import {FormsModule} from "@angular/forms";
 import {PolaganjeService} from "../../../services/polaganje.service";
 import {Polaganje} from "../../../model/polaganje";
 import {EvaluacijaZnanjaService} from "../../../services/evaluacija-znanja.service";
+import {parseAndFormatDate} from "../../../utils/datum-utils";
+import {lastValueFrom} from "rxjs";
+import {MessageService} from "primeng/api";
+import {ToastModule} from "primeng/toast";
 
 @Component({
   selector: 'app-prijava-ispita',
@@ -35,7 +39,8 @@ import {EvaluacijaZnanjaService} from "../../../services/evaluacija-znanja.servi
     PanelModule,
     DialogModule,
     DropdownModule,
-    FormsModule
+    FormsModule,
+    ToastModule
   ],
   templateUrl: './prijava-ispita.component.html',
   styleUrl: './prijava-ispita.component.css'
@@ -50,7 +55,13 @@ export class PrijavaIspitaComponent implements OnInit{
   studijskiProgrami: StudijskiProgram[] = [];
   studijskiProgramiIspiti: { [key: number]: Predmet[] } = {};
 
+
   selectedPredmet!: Predmet;
+  student!: StudentNaGodini | undefined;
+
+  prijavljeniIspiti: { [key: number]: any[]} = {};
+
+  studijskiProgramId!: number;
 
   visible: boolean = false;
 
@@ -60,7 +71,8 @@ export class PrijavaIspitaComponent implements OnInit{
     private predmetService: PredmetService,
     private ispitniRokService: IspitniRokService,
     private polaganjeService: PolaganjeService,
-    private evaluacijaZnanjaService: EvaluacijaZnanjaService
+    private evaluacijaZnanjaService: EvaluacijaZnanjaService,
+    private messageService: MessageService
   ) {
   }
 
@@ -74,10 +86,10 @@ export class PrijavaIspitaComponent implements OnInit{
       for(let sng of data){
         this.studijskiProgrami.push(sng.studijskiProgram);
         this.fetchPredmeti(sng.studijskiProgram.id);
+        this.fetchPrijavljeniIspiti(sng.studijskiProgram.id);
       }
     });
     this.ispitniRokService.getAll().subscribe((data) => {
-      console.log(data);
       let today = new Date();
       let twoWeeksAgo = new Date();
 
@@ -91,22 +103,65 @@ export class PrijavaIspitaComponent implements OnInit{
     });
   }
 
-  potvrdiPrijavu(){
+  async createPolaganjeIspita(params: HttpParams): Promise<any>{
+    try{
+      return lastValueFrom(this.polaganjeService.createPolaganjeIspita(params));
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
 
-    // let polaganje: Polaganje = {
-    //   id: 0,
-    //   student: this.studentiNaGodini,
-    //   bodovi: null,
-    //   napomena: null,
-    //   evaluacijaZnanja:
-    // }
+  potvrdiPrijavu(){
+    if(this.student && this.student.id && this.selectedPredmet && this.selectedIspitniRok) {
+      let params: HttpParams = new HttpParams()
+        .set("studentId", this.student.id)
+        .set("predmetId", this.selectedPredmet.id)
+        .set("ispitniRokId", this.selectedIspitniRok.id);
+
+      this.createPolaganjeIspita(params)
+        .then(data => {
+          this.fetchPrijavljeniIspiti(this.studijskiProgramId);
+          this.messageService.add({severity: "success", summary: "Success", detail: "Prijava ispita uspesno izvrsena", life: 1000});
+          this.visible = false;
+        })
+        .catch(error => {
+          this.messageService.add({severity: "error", summary: "Error", detail: "Greska prilikom prijave ispita", life: 1000});
+        });
+    }
+    else {
+      this.messageService.add({severity: "error", summary: "Error", detail: "Greska prilikom prijave ispita", life: 1000});
+    }
+  }
+
+  fetchPrijavljeniIspiti(studijskiProgramId: number){
+    const student = this.studentiNaGodini.find(s => s.studijskiProgram.id === studijskiProgramId);
+
+    if(student && student.id){
+      let params: HttpParams = new HttpParams()
+        .set("studentId", student.id);
+
+      this.polaganjeService.getPrijavljeniIspitiStudenta(params).subscribe(data => {
+        this.prijavljeniIspiti[studijskiProgramId] = data;
+      });
+    }
+    else{
+      this.prijavljeniIspiti[studijskiProgramId] = [];
+    }
+
+  }
+
+  getPrijavljeniIspiti(studijskiProgramId: number): any[]{
+    return this.prijavljeniIspiti[studijskiProgramId] || [];
   }
 
   otkaziPrijavu(){
     this.visible = false;
   }
 
-  prijaviIspit(predmet: Predmet){
+  prijaviIspit(studijskiProgramId: number, predmet: Predmet){
+    this.studijskiProgramId = studijskiProgramId;
+    this.student = this.studentiNaGodini.find(s => s.studijskiProgram.id === studijskiProgramId);
     this.selectedPredmet = predmet;
     this.visible = true;
   }
@@ -117,7 +172,6 @@ export class PrijavaIspitaComponent implements OnInit{
     if (student) {
       const params: HttpParams = new HttpParams()
         .set('studentId', student.id)
-        .set('studijskiProgramId', studijskiProgramId);
 
       this.predmetService.getNepolozeniPredmeti(params).subscribe(data => {
         this.studijskiProgramiIspiti[studijskiProgramId] = data;

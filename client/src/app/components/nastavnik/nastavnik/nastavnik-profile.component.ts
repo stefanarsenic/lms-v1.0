@@ -60,6 +60,7 @@ export class NastavnikProfileComponent implements OnDestroy {
       {
         label: 'Studenti',
         items: [
+          { label: 'Predmeti', icon: 'pi pi-fw pi-users', routerLink: ['predmeti/kartice-predmeta'] },
           { label: 'Spisak Studenata', icon: 'pi pi-fw pi-users', routerLink: ['studenti-spisak'] },
           { label: 'Pretraga Studenata', icon: 'pi pi-fw pi-search', routerLink: 'pretraga-studenata' },
           { label: 'Podaci o Studentu', icon: 'pi pi-fw pi-id-card', routerLink: ['/studenti/podaci'] },

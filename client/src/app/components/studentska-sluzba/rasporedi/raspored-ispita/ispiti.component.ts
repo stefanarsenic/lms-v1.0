@@ -142,6 +142,7 @@ export class IspitiComponent implements OnInit{
 
     this.evaluacijaZnanjaService.getAllIspitiByStudijskiProgram(params).subscribe(
       data => {
+        console.log(data);
         this.ispiti = data;
         for(let evaluacijaZnanja of data){
           calendarApi.addEvent({

@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
+import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.EvaluacijaZnanjaDto;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.RealizacijaPredmetaDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.TerminNastaveDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.TipEvaluacijeDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
@@ -227,6 +229,13 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
             );
             dto.setTipEvaluacije(EntityDtoMapper.convertToDto(tipEvaluacije, TipEvaluacijeDto.class));
         }
+        RealizacijaPredmetaDto realizacijaPredmetaDto = EntityDtoMapper.convertToDto(entity.getRealizacijaPredmeta(), RealizacijaPredmetaDto.class);
+        realizacijaPredmetaDto.setObavestenja(null);
+        PredmetDto predmetDto = EntityDtoMapper.convertToDto(entity.getRealizacijaPredmeta().getPredmet(), PredmetDto.class);
+        predmetDto.setSilabus(null);
+        realizacijaPredmetaDto.setPredmet(predmetDto);
+
+        dto.setRealizacijaPredmeta(realizacijaPredmetaDto);
 
         return dto;
     }

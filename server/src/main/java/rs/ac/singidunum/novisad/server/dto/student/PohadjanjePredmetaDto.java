@@ -17,4 +17,6 @@ public class PohadjanjePredmetaDto implements Serializable {
     private Integer konacnaOcena;
     private PredmetDto predmet;
     private StudentNaGodiniDto student;
+    private Integer brojPolaganja;
+    private Integer bodovi;
 }

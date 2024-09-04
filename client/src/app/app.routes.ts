@@ -67,6 +67,16 @@ import {ZahtevMaterijalaComponent} from "./components/studentska-sluzba/zahtev-m
 import {
   AdministracijaZahetvaComponent
 } from "./components/admin/administracija-zahetva/administracija-zahetva.component";
+import {PregledPredmetaNastavnikComponent} from "./components/nastavnik/pregled-studenata/pregled-predmeta-nastavnik.component";
+import {
+  DinamickiPrikazPredmetaComponent
+} from "./components/nastavnik/pregled-studenata/dinamicki-prikaz-predmeta/dinamicki-prikaz-predmeta.component";
+import {
+  KarticePredmetaComponent
+} from "./components/nastavnik/pregled-studenata/kartice-predmeta/kartice-predmeta.component";
+import {
+  SpisakStudenataNastavnikComponent
+} from "./components/nastavnik/pregled-studenata/spisak-studenata-nastavnik/spisak-studenata-nastavnik.component";
 
 StudijskiProgramCrudComponent
 
@@ -222,6 +232,30 @@ export const routes: Routes = [
     path:"nastavnik",
     component: NastavnikProfileComponent,
     children:[
+      {
+        path: "predmeti",
+        component: PregledPredmetaNastavnikComponent,
+        children: [
+          {
+            path: "kartice-predmeta",
+            component: KarticePredmetaComponent
+          },
+          {
+            path: "predmet",
+            component: DinamickiPrikazPredmetaComponent
+          },
+          {
+            path: "predmet/:id",
+            component: DinamickiPrikazPredmetaComponent,
+            children: [
+              {
+                path: "spisak-studenata",
+                component: SpisakStudenataNastavnikComponent
+              },
+            ]
+          },
+        ]
+      },
       {
         path: "spisak-predmeta",
         component: SpisakPredmetaComponent

@@ -1,0 +1,9 @@
+.card-container {
+  display: inline-block;
+  transition: 0.1s;
+}
+
+.card-container:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}

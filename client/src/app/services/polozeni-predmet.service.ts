@@ -10,7 +10,7 @@ export class PolozeniPredmetService extends GenerickiService<PolozeniPredmet>{
 
   constructor(protected override http: HttpClient) {
     super(http);
-    this.putanja = "api/polozeni-predmeti"
+    this.putanja = "api/pohadjanje-predmeta";
   }
 
   getByStudentId(studentId: number){

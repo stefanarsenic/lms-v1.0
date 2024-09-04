@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.services.realizacija_predmeta;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
@@ -26,7 +27,7 @@ public class EvaluacijaZnanjaService extends GenericService<EvaluacijaZnanja, Lo
 
     public EvaluacijaZnanja findIspitByRealizacijaPredmetaAndIspitniRok(RealizacijaPredmeta realizacijaPredmeta, IspitniRok ispitniRok){
         TipEvaluacije tipEvaluacije = tipEvaluacijeRepository.findByNaziv("Usmeni Ispit");
-        return evaluacijaZnanjaRepository.findEvaluacijaZnanjaByRealizacijaPredmetaAndIspitniRokAndTipEvaluacije(realizacijaPredmeta, ispitniRok, tipEvaluacije);
+        return evaluacijaZnanjaRepository.findEvaluacijaZnanjaByRealizacijaPredmetaAndIspitniRokAndTipEvaluacije(realizacijaPredmeta, ispitniRok, tipEvaluacije).orElseThrow(() -> new EntityNotFoundException("Evaluacija znanja not found"));
     }
     public List<EvaluacijaZnanja> findAllByStudijskiProgramAndTipEvaluacijeAndIspitniRok(Long studijskiProgramId, Long ispitniRokId){
         TipEvaluacije tipEvaluacije = tipEvaluacijeRepository.findByNaziv("Usmeni Ispit");

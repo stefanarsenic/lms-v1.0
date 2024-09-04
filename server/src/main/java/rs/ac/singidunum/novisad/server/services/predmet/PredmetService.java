@@ -74,11 +74,10 @@ public class PredmetService extends GenericService<Predmet, Long> {
         return saved;
     }
 
-    public List<Predmet> findAllNePolozeniPredmetiByStudentAndStudijskiProgram(Long studentId, Long studijskiProgramId){
+    public List<Predmet> findAllNePolozeniPredmetiByStudent(Long studentId){
         StudentNaGodini s = studentNaGodiniRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found with id: " + studentId.toString()));
-        StudijskiProgram sp = studijskiProgramRepository.findById(studijskiProgramId).orElseThrow(() -> new EntityNotFoundException("Student not found with id: " + studentId.toString()));
 
-        return predmetRepository.findAllNePolozeniPredmetiByStudentAndStudijskiProgram(studentId, studijskiProgramId, s.getGodinaStudija());
+        return predmetRepository.findAllNePolozeniPredmetiByStudentAndStudijskiProgram(studentId);
     }
     public List<Predmet> findPredmetiByStudijskiProgramAndSemestar(Long studijskiProgramId, Integer semestar){
         return predmetRepository.findPredmetiByStudijskiProgramAndSemestar(studijskiProgramId, semestar);

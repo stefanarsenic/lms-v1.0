@@ -1,0 +1,129 @@
+<p-table #dt
+
+         [value]="studenti"
+         [rows]="10"
+         [paginator]="true"
+         [globalFilterFields]="['name','country.name','representative.name','status']"
+         [rowHover]="true"
+         [showCurrentPageReport]="true"
+         dataKey="id"
+         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+>
+<!--  <ng-template pTemplate="caption">-->
+<!--    <div class="flex align-items-center justify-content-between">-->
+<!--      <h5 class="m-0">Manage Products</h5>-->
+<!--      <span class="p-input-icon-left">-->
+<!--                    <i class="pi pi-search"></i>-->
+<!--&lt;!&ndash;                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />&ndash;&gt;-->
+<!--                </span>-->
+<!--    </div>-->
+<!--  </ng-template>-->
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Ime</th>
+      <th>Prezime</th>
+      <th>Broj Indeksa</th>
+      <th>Ects</th>
+      <th>Prosecna Ocena</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-student>
+    <tr>
+      <td>{{student.student.student.ime}}</td>
+      <td>{{student.student.student.prezime}}</td>
+      <td>{{student.student.brojIndeksa}}</td>
+      <td>{{student.ects}}</td>
+      <td>{{student.prosecnaOcena}}</td>
+      <td><p-button (onClick)="prikaziPodatke(student.student.id)" severity="primary">Prikazi Podatke</p-button></td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="flex align-items-center justify-content-between">
+      In total there are {{studenti ? studenti.length : 0 }} products.
+    </div>
+  </ng-template>
+</p-table>
+
+<p-dialog header="Podaci o Studentu" [modal]="true" [(visible)]="visible" [draggable]="false" [resizable]="false">
+
+  <p-panel header="Polozeni Predmeti" [toggleable]="true">
+    <div class="student-info">
+      <div class="info-item">
+        <b>Prosečna Ocena: </b>
+        <p class="info-value">{{ informacijeStudenta.prosecnaOcena }}</p>
+      </div>
+      <div class="info-item">
+        <b>Ukupno ECTS: </b>
+        <p class="info-value">{{ informacijeStudenta.ects }}</p>
+      </div>
+    </div>
+
+    <p-table [value]="informacijeStudenta.polozeniPredmeti" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Predmet</th>
+          <th>Espb</th>
+          <th>Konacna Ocena</th>
+          <th>Bodovi</th>
+          <th>Obavezan</th>
+          <th>Broj Prijava</th>
+          <th>Nastavnik</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-polaganje>
+        <tr>
+          <td>{{polaganje.predmet.naziv}}</td>
+          <td>{{polaganje.predmet.espb}}</td>
+          <td>{{polaganje.konacnaOcena}}</td>
+          <td>{{polaganje.bodovi}}</td>
+          <td>{{polaganje.predmet.obavezan ? "Obavezan" : "Izborni"}}</td>
+          <td>{{polaganje.brojPolaganja}}</td>
+          <td>{{polaganje.predmet.nastavnik.ime}} {{polaganje.predmet.nastavnik.prezime}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+  <br>
+  <p-panel header="Neuspesna Polaganja" [toggleable]="true">
+    <p-table [value]="informacijeStudenta.neuspesnaPolaganja" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Predmet</th>
+          <th>Espb</th>
+          <th>Konacna Ocena</th>
+          <th>Bodovi</th>
+          <th>Obavezan</th>
+          <th>Broj Prijava</th>
+          <th>Nastavnik</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-polaganje>
+        <tr>
+          <td>{{polaganje.predmet.naziv}}</td>
+          <td>{{polaganje.predmet.espb}}</td>
+          <td>{{polaganje.konacnaOcena}}</td>
+          <td>{{polaganje.bodovi}}</td>
+          <td>{{polaganje.predmet.obavezan ? "Obavezan" : "Izborni"}}</td>
+          <td>{{polaganje.brojPolaganja}}</td>
+          <td>{{polaganje.predmet.nastavnik.ime}} {{polaganje.predmet.nastavnik.prezime}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+  <br>
+  <p-panel header="Upisi Studenta" [toggleable]="true">
+    <p-table [value]="informacijeStudenta.upisi" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-polaganje>
+        <tr>
+         
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+</p-dialog>
