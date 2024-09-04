@@ -12,14 +12,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.singidunum.novisad.server.dto.PravoPristupaDto;
 import rs.ac.singidunum.novisad.server.dto.RegistrovaniKorisnikDto;
+import rs.ac.singidunum.novisad.server.dto.UlogaDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
+import rs.ac.singidunum.novisad.server.model.korisnik.PravoPristupa;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikService;
 import rs.ac.singidunum.novisad.server.utils.TokenUtils;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 @Controller
@@ -49,7 +53,21 @@ public class SecurityController extends GenericController<RegistrovaniKorisnik,L
     @Override
     protected RegistrovaniKorisnikDto convertToDto(RegistrovaniKorisnik entity) throws IllegalAccessException, InstantiationException {
 
-        return EntityDtoMapper.convertToDto(entity,RegistrovaniKorisnikDto.class);
+        RegistrovaniKorisnikDto registrovaniKorisnikDto=EntityDtoMapper.convertToDto(entity,RegistrovaniKorisnikDto.class);
+        registrovaniKorisnikDto.setPravoPristupaSet(new HashSet<>());
+        if(!entity.getPravoPristupaSet().isEmpty())
+        {
+            for(PravoPristupa p:entity.getPravoPristupaSet()){
+                RegistrovaniKorisnikDto registrovaniKorisnik=new RegistrovaniKorisnikDto();
+                registrovaniKorisnik.setId(entity.getId());
+                UlogaDto ulogaDto=EntityDtoMapper.convertToDto(p.getUloga(),UlogaDto.class);
+                PravoPristupaDto pravoPristupaDto=new PravoPristupaDto();
+                pravoPristupaDto.setUloga(ulogaDto);
+                registrovaniKorisnikDto.getPravoPristupaSet().add(pravoPristupaDto);
+            }
+        }
+
+        return registrovaniKorisnikDto;
     }
 
     @Override

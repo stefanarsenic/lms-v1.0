@@ -62,7 +62,7 @@ export class StudentskaSluzbaComponent implements OnDestroy{
       {
         label: 'Kancelarijski Inventar',
         items: [
-          { label: 'Trebovanje Inventara', icon: 'pi pi-fw pi-pencil', routerLink: 'trebovanje-inventara' }
+          { label: 'Trebovanje Inventara', icon: 'pi pi-fw pi-pencil', routerLink: 'zahtev-materijala' }
         ]
       }
     ];

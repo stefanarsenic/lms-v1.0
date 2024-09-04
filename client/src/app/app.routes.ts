@@ -63,6 +63,10 @@ import {NotFoundComponent} from "./components/not-found/not-found.component";
 import {
   AdministracijaOrganizacijeComponent
 } from "./components/admin/administracija-organizacije/administracija-organizacije.component";
+import {ZahtevMaterijalaComponent} from "./components/studentska-sluzba/zahtev-materijala/zahtev-materijala.component";
+import {
+  AdministracijaZahetvaComponent
+} from "./components/admin/administracija-zahetva/administracija-zahetva.component";
 
 StudijskiProgramCrudComponent
 
@@ -101,10 +105,10 @@ export const routes: Routes = [
   {
     path: "studentska-sluzba",
     component: StudentskaSluzbaComponent,
-    // canActivate: [authGuard],
-    // data: {
-    //   allowedRoles: ["ROLE_SLUZBA"]
-    // }
+    canActivate: [authGuard],
+    data: {
+      allowedRoles: ["ROLE_SLUZBA"]
+    },
     children: [
       {
         path: "upis-studenata",
@@ -155,6 +159,10 @@ export const routes: Routes = [
       {
         path: "raspored-evaluacija-znanja",
         component: RasporedEvaluacijaZnanjaComponent
+      },
+      {
+        path: "zahtev-materijala",
+        component: ZahtevMaterijalaComponent
       }
     ]
   },
@@ -193,6 +201,10 @@ export const routes: Routes = [
       {
         path: "administracija-organizacije",
         component: AdministracijaOrganizacijeComponent
+      },
+      {
+        path: "administracija-zahteva",
+        component:AdministracijaZahetvaComponent
       }
     ],
     canActivate:[authGuard],data:{

@@ -58,7 +58,6 @@ public class KorisnikController extends GenericController<RegistrovaniKorisnik,L
                 UlogaDto ulogaDto=EntityDtoMapper.convertToDto(p.getUloga(),UlogaDto.class);
                 PravoPristupaDto pravoPristupaDto=new PravoPristupaDto();
                 pravoPristupaDto.setUloga(ulogaDto);
-                pravoPristupaDto.setRegistrovaniKorisnikDto(registrovaniKorisnik);
                 registrovaniKorisnikDto.getPravoPristupaSet().add(pravoPristupaDto);
             }
         }

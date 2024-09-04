@@ -1,0 +1,103 @@
+<p-toast></p-toast>
+<div class="p-grid p-dir-col">
+  <div class="p-col">
+    <h2>Zahtevi za Kancelarijski Materijal</h2>
+  </div>
+
+  <div class="p-col">
+    <!-- Button to open the dialog -->
+    <p-button label="Dodaj Novi Zahtev" icon="pi pi-plus" (click)="showDialog()"></p-button>
+  </div>
+
+  <div class="p-col">
+    <!-- Add the template reference variable #dt to the table -->
+    <p-table #dt [value]="requests" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]" [globalFilterFields]="['naslov', 'opis', 'status', 'korisnik.ime', 'datumPodnosenja']">
+      <!-- Header with Filters -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <div class="p-flex p-flex-column">
+              <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'naslov', 'contains')" placeholder="Search Naslov">
+            </div>
+            <div>
+              <span>Naslov</span>
+            </div>
+          </th>
+          <th>
+            <div class="p-flex p-flex-column">
+              <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'opis', 'contains')" placeholder="Search Opis">
+            </div>
+            <div>
+              <span>Opis</span>
+            </div>
+          </th>
+          <th>
+            <div class="p-flex p-flex-column">
+              <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'status', 'equals')" placeholder="Search Status">
+            </div>
+            <div>
+              <span>Status</span>
+            </div>
+          </th>
+          <th>
+            <div class="p-flex p-flex-column">
+              <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'korisnik.ime', 'contains')" placeholder="Search Korisnik">
+            </div>
+            <div>
+              <span>Korisnik</span>
+            </div>
+          </th>
+          <th>
+            <div class="p-flex p-flex-column">
+              <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'datumPodnosenja', 'contains')" placeholder="Search Datum Podnosenja">
+            </div>
+            <div>
+              <span>Datum Podnosenja</span>
+            </div>
+          </th>
+          <th>
+            Akcije
+          </th>
+        </tr>
+      </ng-template>
+
+      <!-- Body with Dropdown for Status -->
+      <ng-template pTemplate="body" let-request>
+        <tr>
+          <td>{{ request.naslov }}</td>
+          <td>{{ request.opis }}</td>
+          <td>
+            <p-dropdown [options]="statuses" [(ngModel)]="request.status" (onChange)="updateStatus(request)" appendTo="body">
+            </p-dropdown>
+          </td>
+          <td>{{ request.korisnik.ime }} {{ request.korisnik.prezime }}</td>
+          <td>{{ request.datumPodnosenja | date: 'short' }}</td>
+          <td>
+            <!-- Button to remove the request -->
+            <p-button icon="pi pi-trash" class="p-button-danger" severity="danger" (click)="confirmDelete(request.id)"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- PrimeNG Dialog for Creating a New Zahtev -->
+  <p-dialog header="Dodaj Novi Zahtev" [(visible)]="displayDialog" [modal]="true" [closable]="false" [style]="{width: '30vw'}">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="naslov">Naslov</label>
+        <input id="naslov" pInputText [(ngModel)]="newZahtev.naslov" required>
+      </div>
+      <div class="p-field">
+        <label for="opis">Opis</label>
+        <input id="opis" pInputText [(ngModel)]="newZahtev.opis" required>
+      </div>
+    </div>
+    <div class="p-dialog-footer">
+      <p-button label="Odustani" icon="pi pi-times" (click)="hideDialog()" class="p-button-text"></p-button>
+      <p-button label="Dodaj" icon="pi pi-check" (click)="addZahtev()"></p-button>
+    </div>
+  </p-dialog>
+
+  <p-confirmDialog header="Confirm" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+</div>

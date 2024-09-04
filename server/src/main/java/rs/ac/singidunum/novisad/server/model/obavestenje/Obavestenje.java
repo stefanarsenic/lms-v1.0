@@ -21,6 +21,7 @@ public class Obavestenje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime vremePostavljanja;
+    @Column(columnDefinition = "Text")
     private String sadrzaj;
     private String naslov;
     @OneToMany(mappedBy = "obavestenje")
