@@ -26,6 +26,11 @@
     </div>
   </div>
 
+  <!-- Button to Add New Fakultet -->
+  <div *ngIf="isFacultiesVisible[i]" class="add-faculty-button">
+    <button pButton label="Dodaj Fakultet" icon="pi pi-plus" class="p-button-rounded p-button-outlined p-button-success" (click)="openFakultetDialog(null, i)"></button>
+  </div>
+
   <!-- Faculties List, initially hidden -->
   <div *ngIf="isFacultiesVisible[i]" class="faculty-section">
     <div *ngFor="let fakultet of getFilteredFaculties(university); let j = index" class="faculty-card p-card p-mb-3 p-ml-3">
@@ -37,15 +42,23 @@
         </div>
       </div>
       <div class="p-card-content" *ngIf="isFacultyDetailsVisible[i][j]">
-        <p *ngIf="fakultet.adresa"><i class="pi pi-map-marker p-mr-2"></i>Adresa: {{ fakultet.adresa.ulica }}, {{ fakultet.adresa.broj }}</p>
-        <p *ngIf="fakultet.studijskiProgrami.length > 0"><i class="pi pi-graduation p-mr-2"></i>Studijski programi:</p>
+        <p *ngIf="fakultet.adresa">
+          <i class="pi pi-map-marker p-mr-2"></i>Adresa: {{ fakultet.adresa.ulica }}, {{ fakultet.adresa.broj }}
+        </p>
+        <p *ngIf="fakultet.nastavnik">
+          <i class="pi pi-user p-mr-2"></i>Dekan: {{ fakultet.nastavnik.ime }} {{ fakultet.nastavnik.prezime }}
+        </p>
+        <p *ngIf="fakultet.studijskiProgrami.length > 0">
+          <i class="pi pi-graduation p-mr-2"></i>Studijski programi:
+        </p>
         <ul *ngIf="fakultet.studijskiProgrami.length > 0">
           <li *ngFor="let program of fakultet.studijskiProgrami" class="program-list-item">
-            {{ program.naziv }} ({{ program.godineTrajanja }} years) - Head: {{ program.rukovodilac.ime }} {{ program.rukovodilac.prezime }}
+            {{ program.naziv }} ({{ program.godineTrajanja }} godine) - Rukovodilac: {{ program.rukovodilac.ime }} {{ program.rukovodilac.prezime }}
             <p>{{ program.opis }}</p>
           </li>
         </ul>
       </div>
     </div>
   </div>
+
 </div>

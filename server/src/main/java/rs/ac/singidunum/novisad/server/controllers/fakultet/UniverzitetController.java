@@ -3,6 +3,8 @@ package rs.ac.singidunum.novisad.server.controllers.fakultet;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
+import rs.ac.singidunum.novisad.server.dto.adresa.DrzavaDto;
+import rs.ac.singidunum.novisad.server.dto.adresa.MestoDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.FakultetDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.UniverzitetDto;
@@ -11,6 +13,7 @@ import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.adresa.Adresa;
+import rs.ac.singidunum.novisad.server.model.adresa.Mesto;
 import rs.ac.singidunum.novisad.server.model.fakultet.Fakultet;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.fakultet.Univerzitet;
@@ -38,7 +41,15 @@ public class UniverzitetController extends GenericController<Univerzitet, Long, 
     protected UniverzitetDto convertToDto(Univerzitet entity) throws IllegalAccessException, InstantiationException {
         UniverzitetDto univerzitetDto = EntityDtoMapper.convertToDto(entity, UniverzitetDto.class);
         univerzitetDto.setFakulteti(Collections.emptySet());
-        univerzitetDto.setAdresa(EntityDtoMapper.convertToDto(entity.getAdresa(), AdresaDto.class));
+        AdresaDto adresaDto=EntityDtoMapper.convertToDto(entity.getAdresa(), AdresaDto.class);
+        DrzavaDto drzavaDto=EntityDtoMapper.convertToDto(entity.getAdresa().getMesto().getDrzava(), DrzavaDto.class);
+        drzavaDto.setMesta(new HashSet<>());
+        MestoDto mestoDto=EntityDtoMapper.convertToDto(entity.getAdresa().getMesto(), MestoDto.class);
+        mestoDto.setDrzava(drzavaDto);
+        adresaDto.setMesto(mestoDto);
+
+        univerzitetDto.setAdresa(adresaDto);
+
         entity.getRektor().setPravoPristupaSet(null);
         univerzitetDto.setRektor(EntityDtoMapper.convertToDto(entity.getRektor(), NastavnikDto.class));
 
@@ -55,7 +66,20 @@ public class UniverzitetController extends GenericController<Univerzitet, Long, 
                 studijskiProgrami.add(studijskiProgramDto);
             }
             FakultetDto fakultetDto = EntityDtoMapper.convertToDto(fakultet, FakultetDto.class);
+            NastavnikDto nastavnikDto=EntityDtoMapper.convertToDto(fakultet.getDekan(), NastavnikDto.class);
+            nastavnikDto.setPravoPristupaSet(new HashSet<>());
+            AdresaDto adresaDtoFaks=EntityDtoMapper.convertToDto(fakultet.getAdresa(), AdresaDto.class);
+            DrzavaDto drzavaDtoFaks=EntityDtoMapper.convertToDto(fakultet.getAdresa().getMesto().getDrzava(), DrzavaDto.class);
+            drzavaDtoFaks.setMesta(new HashSet<>());
+            MestoDto mestoDtoFaks=EntityDtoMapper.convertToDto(fakultet.getAdresa().getMesto(), MestoDto.class);
+            mestoDtoFaks.setDrzava(drzavaDtoFaks);
+            adresaDtoFaks.setMesto(mestoDtoFaks);
+            UniverzitetDto univerzitetDto1=EntityDtoMapper.convertToDto(entity, UniverzitetDto.class);
+            univerzitetDto1.setFakulteti(new HashSet<>());
+            fakultetDto.setUniverzitet(univerzitetDto1);
             fakultetDto.setStudijskiProgrami(studijskiProgrami);
+            fakultetDto.setAdresa(adresaDtoFaks);
+            fakultetDto.setNastavnik(nastavnikDto);
             fakulteti.add(fakultetDto);
         }
 

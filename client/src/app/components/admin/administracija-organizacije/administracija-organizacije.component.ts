@@ -9,6 +9,9 @@ import {FormsModule} from "@angular/forms";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ChipsModule} from "primeng/chips";
 import {AccordionModule} from "primeng/accordion";
+import {Univerzitet} from "../../../model/univerzitet";
+import {AdresaService} from "../../../services/adresa.service";
+import {FakultetService} from "../../../services/fakultet.service";
 
 @Component({
   selector: 'app-administracija-organizacije',
@@ -39,10 +42,11 @@ import {AccordionModule} from "primeng/accordion";
   ]
 })
 export class AdministracijaOrganizacijeComponent implements OnInit{
-  universities: any[] = [];
+  universities: Univerzitet[] = [];
   ref: DynamicDialogRef | undefined;
 
-  constructor(private universityService: UniverzitetService, private dialogService: DialogService) {}
+  constructor(private universityService: UniverzitetService, private dialogService: DialogService,private adresa:AdresaService,
+              private univerzitetService: UniverzitetService,private fakultetService:FakultetService) {}
 
   ngOnInit() {
     this.universityService.getAll().subscribe(data => {
@@ -93,8 +97,26 @@ export class AdministracijaOrganizacijeComponent implements OnInit{
 
     this.ref.onClose.subscribe((result: any) => {
       if (result) {
+        // Check if address has changed
+        const originalAddress = univerzitet?.adresa;
+        const newAddress = result.adresa;
+        const datum=result.datum
+        const addressChanged = this.hasAddressChanged(originalAddress, newAddress);
+        result.datumOsnivanja=datum
         if (index !== undefined) {
-          // Update the existing university in the array
+          if (addressChanged) {
+            this.adresa.create(newAddress).subscribe(r => {
+              result.adresa = r;
+              this.univerzitetService.update(result.id, result).subscribe(r => {
+                console.log(r);
+              });
+            });
+          } else {
+            // Update without changing the address
+            this.univerzitetService.update(result.id, result).subscribe(r => {
+              console.log(r);
+            });
+          }
           this.universities[index] = result;
         } else {
           // Add a new university to the array
@@ -103,6 +125,18 @@ export class AdministracijaOrganizacijeComponent implements OnInit{
       }
     });
   }
+
+  hasAddressChanged(originalAddress: any, newAddress: any): boolean {
+    if (!originalAddress || !newAddress) return true;
+
+    return (
+      originalAddress.ulica !== newAddress.ulica ||
+      originalAddress.broj !== newAddress.broj ||
+      originalAddress.mesto?.id !== newAddress.mesto?.id ||
+      originalAddress.mesto?.drzava?.id !== newAddress.mesto?.drzava?.id
+    );
+  }
+
 
   openFakultetDialog(fakultet?: any, univerzitetIndex?: number, fakultetIndex?: number) {
     this.ref = this.dialogService.open(FakultetDialogComponent, {
@@ -115,12 +149,44 @@ export class AdministracijaOrganizacijeComponent implements OnInit{
 
     this.ref.onClose.subscribe((result: any) => {
       if (result) {
+        const originalAddress = fakultet?.adresa;
+        const newAddress = result.adresa;
+        const addressChanged = this.hasAddressChanged(originalAddress, newAddress);
+
         if (univerzitetIndex !== undefined && fakultetIndex !== undefined) {
-          // Update the existing faculty in the university's faculty array
-          this.universities[univerzitetIndex].fakulteti[fakultetIndex] = result;
+          result.univerzitet = fakultet.univerzitet;
+          result.studijskiProgrami = fakultet.studijskiProgrami;
+          if (addressChanged) {
+            this.adresa.create(newAddress).subscribe(r => {
+              result.adresa = r;
+              this.fakultetService.update(result.id, result).subscribe(r => {
+                this.universities[univerzitetIndex].fakulteti[fakultetIndex] = result;
+              });
+            });
+          } else {
+            this.fakultetService.update(result.id, result).subscribe(r => {
+              this.universities[univerzitetIndex].fakulteti[fakultetIndex] = result;
+            });
+          }
         } else if (univerzitetIndex !== undefined) {
-          // Add a new faculty to the university's faculty array
-          this.universities[univerzitetIndex].fakulteti.push(result);
+          result.univerzitet = this.universities[univerzitetIndex];
+          result.univerzitet.fakulteti = result.univerzitet.fakulteti || [];
+          result.studijskiProgrami = [];
+          if (addressChanged) {
+            this.adresa.create(newAddress).subscribe(r => {
+              result.adresa = r;
+              this.fakultetService.create(result).subscribe(r => {
+                this.universities[univerzitetIndex].fakulteti.push(result);
+                console.log(this.universities[univerzitetIndex].fakulteti)
+                this.isFacultiesVisible[univerzitetIndex] = true; // Ensure faculties list is visible
+              });
+            });
+          } else {
+            this.fakultetService.create(result).subscribe(r => {
+              this.universities[univerzitetIndex].fakulteti.push(result);
+              this.isFacultiesVisible[univerzitetIndex] = true; // Ensure faculties list is visible
+            });
+          }
         }
       }
     });
@@ -131,10 +197,16 @@ export class AdministracijaOrganizacijeComponent implements OnInit{
 
 
   deleteUniverzitet(index: number) {
-    //this.universityService.deleteUniverzitet(index);
+    this.univerzitetService.delete(index).subscribe(r=>{
+      console.log(r)
+    })
   }
 
-  deleteFakultet(index: number,index2:number) {
-    //this.universityService.deleteUniverzitet(index);
+  deleteFakultet(univerzitetIndex: number, fakultetIndex: number) {
+    const fakultetId = this.universities[univerzitetIndex].fakulteti[fakultetIndex].id;
+    this.fakultetService.delete(fakultetId).subscribe(() => {
+      this.universities[univerzitetIndex].fakulteti.splice(fakultetIndex, 1);
+    });
   }
+
 }

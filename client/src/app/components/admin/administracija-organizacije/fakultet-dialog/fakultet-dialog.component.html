@@ -7,24 +7,73 @@
     </small>
   </div>
 
-  <div class="p-field">
-    <label for="ulica">Street</label>
-    <input id="ulica" type="text" pInputText formControlName="ulica" />
-    <small *ngIf="fakultetForm.get('adresa.ulica')?.invalid && fakultetForm.get('adresa.ulica')?.touched" class="p-error">
-      Street is required.
-    </small>
+  <!-- Adresa Section -->
+  <div formGroupName="adresa">
+    <div class="p-field">
+      <label for="ulica">Street</label>
+      <input id="ulica" type="text" pInputText formControlName="ulica" />
+      <small *ngIf="fakultetForm.get('adresa.ulica')?.invalid && fakultetForm.get('adresa.ulica')?.touched" class="p-error">
+        Street is required.
+      </small>
+    </div>
+
+    <div class="p-field">
+      <label for="broj">Number</label>
+      <input id="broj" type="text" pInputText formControlName="broj" />
+      <small *ngIf="fakultetForm.get('adresa.broj')?.invalid && fakultetForm.get('adresa.broj')?.touched" class="p-error">
+        Number is required.
+      </small>
+    </div>
+
+    <div class="p-field">
+      <label for="drzava">Country</label>
+      <p-dropdown id="drzava" formControlName="drzava" [options]="drzave" optionLabel="naziv"></p-dropdown>
+      <small *ngIf="fakultetForm.get('adresa.drzava')?.invalid && fakultetForm.get('adresa.drzava')?.touched" class="p-error">
+        Country is required.
+      </small>
+    </div>
+
+    <div class="p-field">
+      <label for="mesto">City</label>
+      <p-dropdown id="mesto" formControlName="mesto" [options]="mesta" optionLabel="naziv"></p-dropdown>
+      <small *ngIf="fakultetForm.get('adresa.mesto')?.invalid && fakultetForm.get('adresa.mesto')?.touched" class="p-error">
+        City is required.
+      </small>
+    </div>
   </div>
 
   <div class="p-field">
-    <label for="broj">Number</label>
-    <input id="broj" type="text" pInputText formControlName="broj" />
-    <small *ngIf="fakultetForm.get('adresa.broj')?.invalid && fakultetForm.get('adresa.broj')?.touched" class="p-error">
-      Number is required.
+    <label for="nastavnik">Dekan</label>
+    <p-dropdown
+      id="nastavnik"
+      formControlName="nastavnik"
+      [options]="nastavnici"
+      [filter]="true"
+      [showClear]="true"
+      optionLabel="imePrezime"
+      filterBy="ime,prezime"
+      placeholder="Select Rector"
+      appendTo="body"
+    >
+      <ng-template pTemplate="selectedItem" let-selectedNastavnik>
+        <div class="flex align-items-center gap-2">
+          <div>{{ selectedNastavnik?.ime }} {{ selectedNastavnik?.prezime }}</div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="item" let-nastavnik>
+        <div class="flex align-items-center gap-2">
+          <div>{{ nastavnik.ime }} {{ nastavnik.prezime }}</div>
+        </div>
+      </ng-template>
+    </p-dropdown>
+    <small *ngIf="fakultetForm.get('nastavnik')?.invalid && fakultetForm.get('nastavnik')?.touched" class="p-error">
+      Dekan is required.
     </small>
   </div>
 
-  <div class="p-dialog-footer">
-    <button pButton label="Save" icon="pi pi-check" (click)="save()" [disabled]="fakultetForm.invalid"></button>
+  <!-- Footer with Save and Cancel buttons -->
+  <div class="p-dialog-footer" style="margin-top: 20px;">
+    <button pButton label="Save" icon="pi pi-check" (click)="save()" class="p-mr-2"></button>
     <button pButton label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="cancel()"></button>
   </div>
 </div>

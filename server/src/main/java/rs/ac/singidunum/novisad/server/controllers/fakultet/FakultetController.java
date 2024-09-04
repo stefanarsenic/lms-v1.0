@@ -2,6 +2,9 @@ package rs.ac.singidunum.novisad.server.controllers.fakultet;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
+import rs.ac.singidunum.novisad.server.dto.adresa.DrzavaDto;
+import rs.ac.singidunum.novisad.server.dto.adresa.MestoDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.FakultetDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
@@ -38,11 +41,18 @@ public class FakultetController extends GenericController<Fakultet, Long, Fakult
     @Override
     protected FakultetDto convertToDto(Fakultet entity) throws IllegalAccessException, InstantiationException {
         entity.getUniverzitet().setFakulteti(Collections.emptySet());
+
         FakultetDto fakultetDto = EntityDtoMapper.convertToDto(entity, FakultetDto.class);
-        fakultetDto.setStudijskiProgrami(Collections.emptySet());
-        //fakultetDto.setNastavnik(EntityDtoMapper.convertToDto(entity.getDekan(), NastavnikDto.class));
-        //fakultetDto.setAdresa(EntityDtoMapper.convertToDto(entity.getAdresa(), AdresaDto.class));
-        //fakultetDto.setUniverzitet(EntityDtoMapper.convertToDto(entity.getUniverzitet(), UniverzitetDto.class));
+        NastavnikDto nastavnikDto=EntityDtoMapper.convertToDto(entity.getDekan(), NastavnikDto.class);
+        nastavnikDto.setPravoPristupaSet(new HashSet<>());
+        AdresaDto adresaDtoFaks=EntityDtoMapper.convertToDto(entity.getAdresa(), AdresaDto.class);
+        DrzavaDto drzavaDtoFaks=EntityDtoMapper.convertToDto(entity.getAdresa().getMesto().getDrzava(), DrzavaDto.class);
+        drzavaDtoFaks.setMesta(new HashSet<>());
+        MestoDto mestoDtoFaks=EntityDtoMapper.convertToDto(entity.getAdresa().getMesto(), MestoDto.class);
+        mestoDtoFaks.setDrzava(drzavaDtoFaks);
+        adresaDtoFaks.setMesto(mestoDtoFaks);
+        fakultetDto.setAdresa(adresaDtoFaks);
+        fakultetDto.setNastavnik(nastavnikDto);
 
         Set<StudijskiProgramDto> studijskiProgramDtos = new HashSet<>(Collections.emptySet());
 
