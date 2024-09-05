@@ -102,6 +102,7 @@ export class RasporedIshodaComponent implements OnInit{
   uploadedFile!: Fajl;
 
   visible: boolean = false;
+  loading: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -127,6 +128,7 @@ export class RasporedIshodaComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.loading = true;
     const token: string | null = localStorage.getItem('token');
     if (token) {
       const nastavnikUsername = JSON.parse(atob(token.split(".")[1])).username;
@@ -135,7 +137,10 @@ export class RasporedIshodaComponent implements OnInit{
 
       this.nastavnikService.getByKorisnickoIme(params).subscribe(data => this.nastavnik = data);
 
-      this.predmetService.getPredmetByNastavnik(nastavnikUsername).subscribe(data => this.predmeti = data);
+      this.predmetService.getPredmetByNastavnik(nastavnikUsername).subscribe(data => {
+        this.predmeti = data;
+        this.loading = false;
+      });
     }
   }
 

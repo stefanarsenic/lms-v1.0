@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.lang.reflect.Type;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,6 +20,8 @@ public class Fajl {
     private Long id;
     @Column(unique = true)
     private String sifra;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String opis;
     private String url;
     @ManyToOne

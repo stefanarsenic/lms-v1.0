@@ -1,8 +1,0 @@
-<div class="card-container" *ngFor="let predmet of predmeti">
-  <p-card [routerLink]="['../predmet', predmet.id]" [header]="predmet.naziv" [style]="{'width': '25rem', 'margin-bottom': '2em', 'display': 'inline-block', 'margin-right': '20px'}">
-    <ng-template pTemplate="header">
-    </ng-template>
-    <b>Broj Predavanja:</b><p>{{ predmet.brojPredavanja }}</p>
-    <b>Broj Vezbi:</b><p>{{ predmet.brojVezbi }}</p>
-  </p-card>
-</div>

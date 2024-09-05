@@ -18,10 +18,16 @@ import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.*;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
+import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
 import rs.ac.singidunum.novisad.server.model.obavestenje.Fajl;
 import rs.ac.singidunum.novisad.server.model.predmet.Ishod;
+import rs.ac.singidunum.novisad.server.model.predmet.ObrazovniCilj;
 import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
+import rs.ac.singidunum.novisad.server.repositories.nastavnik.NastavnikRepository;
+import rs.ac.singidunum.novisad.server.repositories.obavestenje.FajlRepository;
+import rs.ac.singidunum.novisad.server.repositories.predmet.PredmetRepository;
 import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.EvaluacijaZnanjaRepository;
+import rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta.TipPolaganjaRepository;
 import rs.ac.singidunum.novisad.server.services.fakultet.StudijskiProgramService;
 import rs.ac.singidunum.novisad.server.services.obavestenje.FajlService;
 import rs.ac.singidunum.novisad.server.services.predmet.IshodService;
@@ -50,9 +56,17 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
     private final StudijskiProgramService studijskiProgramService;
     private final IspitniRokService ispitniRokService;
     private final PlanZaGodinuService planZaGodinuService;
+    private final TipPolaganjaRepository tipPolaganjaRepository;
+    private final NastavnikRepository nastavnikRepository;
+    private final PredmetRepository predmetRepository;
+    private final FajlRepository fajlRepository;
 
     public EvaluacijaZnanjaController(GenericService<EvaluacijaZnanja, Long> service, EvaluacijaZnanjaService evaluacijaZnanjaService, RealizacijaPredmetaService realizacijaPredmetaService, IshodService ishodService, FajlService fajlService, TipEvaluacijeService tipEvaluacijeService,
-                                      EvaluacijaZnanjaRepository evaluacijaZnanjaRepository, PredmetService predmetService, StudijskiProgramService studijskiProgramService, IspitniRokService ispitniRokService, PlanZaGodinuService planZaGodinuService) {
+                                      EvaluacijaZnanjaRepository evaluacijaZnanjaRepository, PredmetService predmetService, StudijskiProgramService studijskiProgramService, IspitniRokService ispitniRokService, PlanZaGodinuService planZaGodinuService,
+                                      TipPolaganjaRepository tipPolaganjaRepository,
+                                      NastavnikRepository nastavnikRepository,
+                                      PredmetRepository predmetRepository,
+                                      FajlRepository fajlRepository) {
         super(service);
         this.evaluacijaZnanjaService = evaluacijaZnanjaService;
         this.realizacijaPredmetaService = realizacijaPredmetaService;
@@ -64,6 +78,47 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
         this.studijskiProgramService = studijskiProgramService;
         this.ispitniRokService = ispitniRokService;
         this.planZaGodinuService = planZaGodinuService;
+        this.tipPolaganjaRepository = tipPolaganjaRepository;
+        this.nastavnikRepository = nastavnikRepository;
+        this.predmetRepository = predmetRepository;
+        this.fajlRepository = fajlRepository;
+    }
+
+    @GetMapping("/by-nastavnik-and-predmet")
+    public ResponseEntity<List<EvaluacijaZnanjaDto>> getAllByNastavnikAndPredmet(
+            @PathParam("nastavnikId") Long nastavnikId,
+            @PathParam("predmetId") Long predmetId
+    ) throws IllegalAccessException, InstantiationException {
+        Nastavnik nastavnik = nastavnikRepository.findById(nastavnikId).orElseThrow();
+        Predmet predmet = predmetRepository.findById(predmetId).orElseThrow();
+
+        List<EvaluacijaZnanja> evaluacije = evaluacijaZnanjaRepository.findEvaluacijeZnanjaByNastavnikAndPredmet(nastavnikId, predmetId);
+        List<EvaluacijaZnanjaDto> dtos = ListToDto(evaluacije);
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/tipovi-polaganja-k")
+    public ResponseEntity<?> getTipoviPolaganjaK(){
+        List<TipPolaganja> tipovi = tipPolaganjaRepository.findAllByNazivContains("k");
+        return ResponseEntity.ok(tipovi);
+    }
+
+    @GetMapping("/nepolagani-kolokvijumi-by-student")
+    public ResponseEntity<?> getNepolaganiKolokvijumi(
+            @PathParam("predmetId") Long predmetId,
+            @PathParam("studentId") Long studentId
+    ){
+        List<EvaluacijaZnanja> nepolaganiKolokvijumi = evaluacijaZnanjaService.findNepolaganeEvaluacijeZnanja(predmetId, studentId);
+        List<EvaluacijaZnanjaDto> dtos = nepolaganiKolokvijumi.stream().map(evaluacijaZnanja -> {
+            try {
+                return convertToDto(evaluacijaZnanja);
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/ispit-by-predmet-and-ispitni-rok")
@@ -187,6 +242,20 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
         return new ResponseEntity<>(evaluacijaZnanjaDto, HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}/instrument-evaluacije")
+    public ResponseEntity<EvaluacijaZnanjaDto> updateInstrumentEvaluacije(@PathVariable Long id, @RequestBody FajlDto fajlDto) throws IllegalAccessException, InstantiationException {
+        EvaluacijaZnanja evaluacijaZnanja = evaluacijaZnanjaService.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Evaluacija znanja not found with id: " + id.toString())
+        );
+
+        Fajl fajl = fajlService.findBySifra(fajlDto.getSifra());
+        evaluacijaZnanja.setInstrumentEvaluacije(fajl);
+
+        EvaluacijaZnanja saved = evaluacijaZnanjaService.save(evaluacijaZnanja);
+        EvaluacijaZnanjaDto dto = convertToDto(saved);
+        return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
+    }
+
     @PutMapping("/{id}")
     @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
     public ResponseEntity<EvaluacijaZnanjaDto> update(@PathVariable Long id, @RequestBody EvaluacijaZnanjaDto evaluacijaZnanjaDto) throws IllegalAccessException, InstantiationException {
@@ -226,6 +295,9 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
             Ishod ishod = ishodService.findById(entity.getIshod().getId()).orElseThrow(
                     () -> new EntityNotFoundException("Ishod not found with id: " + entity.getIshod().getId().toString())
             );
+            for(ObrazovniCilj o : ishod.getObrazovniCiljevi()){
+                o.setIshod(null);
+            }
             dto.setIshod(EntityDtoMapper.convertToDto(ishod, IshodDto.class));
         }
         if(entity.getInstrumentEvaluacije() != null){

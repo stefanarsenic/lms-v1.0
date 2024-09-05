@@ -28,7 +28,7 @@
 
   <div class="header">
     <div class="row">
-      <h3>Ishod</h3>
+      <h3>Instrument Evaluacije</h3>
       <div>
         <span class="p-buttonset">
         <button pButton (click)="sacuvaj()" class="p-button-sm" type="button" label="Sacuvaj" icon="pi pi-check"></button>
@@ -37,28 +37,16 @@
       </div>
     </div>
   </div>
-
   <div class="form-container">
-    <div class="form-group">
-      <label>Novi Obrazovni Cilj</label>
-    </div>
-    <div class="form-group">
-      <div *ngFor="let item of items; let i = index">
-        <input [(ngModel)]="item.opis" placeholder="Unesite opis">
-        <button class="remove" type="button" (click)="removeItem(i)">Ukloni</button>
+    <div class="form-row">
+      <div class="form-group file-upload">
+        <label>Izaberite instrument evaluacije:</label>
+        <div class="file-upload-wrapper">
+          <input type="file" id="file-upload" (change)="onFileSelected($event)">
+          <label for="file-upload" class="file-upload-button"></label>
+          {{ selectedFile?.name }}
+        </div>
       </div>
-      <button class="add" type="button" (click)="addItem()">+ Dodaj</button>
-    </div>
-
-    <div class="form-group">
-      <label>Izaberite nastavni materijal:</label>
-      <p-dropdown placeholder="Izaberite Nastavni Materijal" appendTo="body"></p-dropdown>
-    </div>
-
-    <div class="form-group">
-      <label for="editor">Opis Ishoda:</label>
-      <textarea [(ngModel)]="opis" id="editor"></textarea>
     </div>
   </div>
-
 </p-dialog>

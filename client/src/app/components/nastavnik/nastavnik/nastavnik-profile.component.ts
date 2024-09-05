@@ -53,18 +53,17 @@ export class NastavnikProfileComponent implements OnDestroy {
           { label: 'Pregled Predmeta', icon: 'pi pi-fw pi-book', routerLink: 'spisak-predmeta' },
           { label: 'Uređivanje Silabusa', icon: 'pi pi-fw pi-pencil', routerLink: 'uredjivanje-silabusa' },
           { label: 'Raspored Ishoda', icon: 'pi pi-fw pi-calendar', routerLink: ['raspored-ishoda'] },
-          { label: 'Instrumenti Evaluacije', icon: 'pi pi-fw pi-file-o', routerLink: ['/predmeti/evaluacija'] },
+          { label: 'Instrumenti Evaluacije', icon: 'pi pi-fw pi-file-o', routerLink: ['instrumenti-evaluacije'] },
           { label: 'Upravljanje Obaveštenjima', icon: 'pi pi-fw pi-bell', routerLink: 'uredjivanje-obavestenja' }
         ]
       },
       {
         label: 'Studenti',
         items: [
-          { label: 'Predmeti', icon: 'pi pi-fw pi-users', routerLink: ['predmeti/kartice-predmeta'] },
+          { label: 'Informacije Studenata', icon: 'pi pi-fw pi-users', routerLink: ['informacije-studenata'] },
           { label: 'Spisak Studenata', icon: 'pi pi-fw pi-users', routerLink: ['studenti-spisak'] },
           { label: 'Pretraga Studenata', icon: 'pi pi-fw pi-search', routerLink: 'pretraga-studenata' },
-          { label: 'Podaci o Studentu', icon: 'pi pi-fw pi-id-card', routerLink: ['/studenti/podaci'] },
-          { label: 'Unos Ocena', icon: 'pi pi-fw pi-check-square', routerLink: ['/studenti/ocene'] }
+          { label: 'Unos Ocena', icon: 'pi pi-fw pi-check-square', routerLink: ['unos-ocena'] }
         ]
       }
 

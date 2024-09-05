@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.ac.singidunum.novisad.server.dto.student.StudentNaGodiniDto;
+import rs.ac.singidunum.novisad.server.dto.student.TipPolaganjaDto;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.EvaluacijaZnanja;
 import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
 
@@ -22,4 +23,5 @@ public class PolaganjeDto implements Serializable {
     private String napomena;
     private StudentNaGodiniDto student;
     private EvaluacijaZnanjaDto evaluacijaZnanja;
+    private TipPolaganjaDto tipPolaganja;
 }

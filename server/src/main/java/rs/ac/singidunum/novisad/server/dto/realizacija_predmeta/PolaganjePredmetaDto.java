@@ -12,6 +12,7 @@ import rs.ac.singidunum.novisad.server.model.predmet.Predmet;
 import rs.ac.singidunum.novisad.server.model.student.StudentNaGodini;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,4 +26,6 @@ public class PolaganjePredmetaDto implements Serializable {
         private PredmetDto predmet;
         private Integer brojPolaganja;
         private Integer bodovi;
+        private List<PolaganjeDto> polaganja;
+        private IspitniRokDto ispitniRok;
 }

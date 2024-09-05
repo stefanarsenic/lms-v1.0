@@ -67,16 +67,13 @@ import {ZahtevMaterijalaComponent} from "./components/studentska-sluzba/zahtev-m
 import {
   AdministracijaZahetvaComponent
 } from "./components/admin/administracija-zahetva/administracija-zahetva.component";
-import {PregledPredmetaNastavnikComponent} from "./components/nastavnik/pregled-studenata/pregled-predmeta-nastavnik.component";
-import {
-  DinamickiPrikazPredmetaComponent
-} from "./components/nastavnik/pregled-studenata/dinamicki-prikaz-predmeta/dinamicki-prikaz-predmeta.component";
-import {
-  KarticePredmetaComponent
-} from "./components/nastavnik/pregled-studenata/kartice-predmeta/kartice-predmeta.component";
 import {
   SpisakStudenataNastavnikComponent
-} from "./components/nastavnik/pregled-studenata/spisak-studenata-nastavnik/spisak-studenata-nastavnik.component";
+} from "./components/nastavnik/spisak-studenata-nastavnik/spisak-studenata-nastavnik.component";
+import {UnosOcenaComponent} from "./components/nastavnik/unos-ocena/unos-ocena.component";
+import {
+  InstrumentiEvaluacijeComponent
+} from "./components/nastavnik/instrumenti-evaluacije/instrumenti-evaluacije.component";
 
 StudijskiProgramCrudComponent
 
@@ -267,6 +264,12 @@ export const routes: Routes = [
             ]
           },
         ]
+        path: "instrumenti-evaluacije",
+        component: InstrumentiEvaluacijeComponent,
+      },
+      {
+        path: "informacije-studenata",
+        component: SpisakStudenataNastavnikComponent,
       },
       {
         path: "spisak-predmeta",
@@ -291,6 +294,10 @@ export const routes: Routes = [
       {
         path: "raspored-ishoda",
         component: RasporedIshodaComponent
+      },
+      {
+        path: "unos-ocena",
+        component: UnosOcenaComponent
       }
     ],
     canActivate:[authGuard],data:{

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.IspitniRokDto;
 
 import java.io.Serializable;
 
@@ -19,4 +20,5 @@ public class PohadjanjePredmetaDto implements Serializable {
     private StudentNaGodiniDto student;
     private Integer brojPolaganja;
     private Integer bodovi;
+    private IspitniRokDto ispitniRok;
 }

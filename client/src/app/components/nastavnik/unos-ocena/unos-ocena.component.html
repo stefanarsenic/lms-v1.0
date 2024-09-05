@@ -1,0 +1,167 @@
+<p-dropdown
+  [options]="predmeti"
+  [(ngModel)]="selectedPredmet"
+  (onChange)="getStudenti()"
+  [loading]="loading"
+  optionLabel="naziv"
+  placeholder="Izaberite Predmet"
+>
+</p-dropdown>
+
+<p-table [value]="prijaveIspitaStudenta" dataKey="name" [loading]="loadingTabele" [tableStyle]="{'max-width': '60rem','margin-top': '10px'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 5rem"></th>
+      <th>Ime</th>
+      <th>Prezime</th>
+      <th>Broj Indeksa</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-object let-expanded="expanded">
+    <tr>
+      <td>
+        <button type="button" pButton pRipple [pRowToggler]="object" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+      </td>
+      <td>{{object.student.student.ime}}</td>
+      <td>{{object.student.student.prezime}}</td>
+      <td>{{object.student.brojIndeksa}}</td>
+      <td><p-button (onClick)="pregledAktivnosti(object.student.id)" severity="primary" styleClass="p-button-sm">Pregled Aktivnosti</p-button></td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="rowexpansion" let-object>
+    <tr>
+      <td colspan="7">
+        <div class="p-3">
+          <p-table [value]="object.prijaveIspita" dataKey="id">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Bodovi</th>
+                <th>Napomena</th>
+                <th>Ispitni Rok</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-prijava>
+              <tr>
+                <td>{{prijava.bodovi ? prijava.bodovi : 0}}</td>
+                <td>{{prijava.napomena ? prijava.napomena : "Nema"}}</td>
+                <td>{{prijava.evaluacijaZnanja.ispitniRok.naziv}}</td>
+                <td><p-button (onClick)="upisiBodove(prijava.id)" severity="success" styleClass="p-button-sm">Upisi Bodove</p-button></td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">Student nema aktivnih prijava.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="showPregledAktivnosti" [modal]="true" [draggable]="false" [resizable]="false" header="Pregled Aktivnosti">
+  <p-table [value]="aktivnostiStudenta" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Bodovi</th>
+        <th>Napomena</th>
+        <th>Tip Polaganja</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-polaganje>
+      <tr>
+        <td>{{polaganje.bodovi ? polaganje.bodovi : 0}}</td>
+        <td>{{polaganje.napomena ? polaganje.napomena : "Nema"}}</td>
+        <td>{{polaganje.tipPolaganja.naziv}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <b>Ocena: </b><p>{{getOcena()}}</p>
+  <div>
+    <p-button  [style]="{'margin-right': '8px'}" (onClick)="upisiOcenu()" severity="primary" styleClass="p-button-sm">Upisi Ocenu</p-button>
+    <p-button  (onClick)="getKolokvijumi()" severity="contrast" styleClass="p-button-sm">Dodaj Polaganje</p-button>
+  </div>
+  <small *ngIf="getOcena() < 6" style="color: red; font-size: 12px; margin-top: 8px"><i>Polaganje ce biti arhivirano u neuspesna polaganja</i></small>
+</p-dialog>
+
+<p-dialog [(visible)]="showUnosBodova" [modal]="true" [draggable]="false" [resizable]="false" header="Bodovanje Polaganja">
+  <div class="field col-12 md:col-3">
+    <b style="display: block">Bodovi</b>
+    <p-inputNumber [(ngModel)]="bodovi" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="100">
+    </p-inputNumber>
+  </div>
+  <b style="display: block">Napomena</b>
+  <textarea style="width: 100%" [(ngModel)]="napomena"></textarea>
+
+  <p-button [style]="{'margin-right': '8px'}" (onClick)="sacuvaj()" severity="primary" styleClass="p-button-sm">Sacuvaj</p-button>
+  <p-button (onClick)="showUnosBodova = false" severity="secondary" styleClass="p-button-sm">Otkazi</p-button>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="showDodajPolaganje"
+  [modal]="true"
+  [resizable]="false"
+  [draggable]="false"
+  header="Novo Polaganje Kolokvijuma"
+>
+  <p-dropdown
+    [options]="tipoviPolaganja"
+    [(ngModel)]="selectedTipPolaganja"
+    placeholder="Izaberite Tip Polaganja"
+    optionLabel="naziv"
+  >
+  </p-dropdown>
+  <div class="field col-12 md:col-3">
+    <b style="display: block">Bodovi</b>
+    <p-inputNumber [(ngModel)]="bodoviKolokvijuma" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="100">
+    </p-inputNumber>
+  </div>
+  <div style="padding-top: 4px; padding-bottom: 4px;">
+  <span style="color:blue;"><i>Klikom na red u tabeli birate za koji kolokvijum se kreira polaganje studentu</i></span>
+  </div>
+  <p-table selectionMode="single" [(selection)]="selectedKolokvijum" dataKey="id" [loading]="loadingKolokvijuma" [value]="nepolaganiKolokvijumi" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Vreme Pocetka</th>
+        <th>Bodovi</th>
+        <th>Tip Evaluacije</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-kolokvijum>
+      <tr [pSelectableRow]="kolokvijum">
+        <td>{{parseAndFormatDate(kolokvijum.vremePocetka.toString())}}</td>
+        <td>{{kolokvijum.bodovi ? kolokvijum.bodovi : 0}}</td>
+        <td>{{kolokvijum.tipEvaluacije.naziv}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <br>
+  <div>
+    <p-button (onClick)="sacuvajPolaganjeKolokvijuma()" [style]="{'margin-right': '8px'}"  severity="primary" styleClass="p-button-sm">Sacuvaj</p-button>
+    <p-button (onClick)="showDodajPolaganje = false" severity="secondary" styleClass="p-button-sm">Otkazi</p-button>
+  </div>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="showWarningDialog"
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{width: '350px'}"
+  class="warning-dialog"
+>
+
+  <div class="warning-content">
+    <i class="pi pi-exclamation-triangle warning-icon"></i>
+    <p>{{ warningMessage }}</p>
+  </div>
+  <p-footer class="p-footer">
+    <button pButton type="button" label="OK" icon="pi pi-check" (click)="closeWarningDialog()"></button>
+  </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>

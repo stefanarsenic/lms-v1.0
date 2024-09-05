@@ -17,7 +17,7 @@ public class PolaganjePredmetaHasPolaganje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private PohadjanjePredmeta pohadjanjePredmeta;
+    private PolaganjePredmeta polaganjePredmeta;
     @ManyToOne
     private Polaganje polaganje;
 }

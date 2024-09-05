@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.EvaluacijaZnanjaDto;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.IspitniRokDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.PolaganjeDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.PrijavljeniIspitDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.RealizacijaPredmetaDto;
+import rs.ac.singidunum.novisad.server.dto.student.TipPolaganjaDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
@@ -56,6 +58,26 @@ public class PolaganjeController extends GenericController<Polaganje, Long, Pola
         this.tipEvaluacijeRepository = tipEvaluacijeRepository;
         this.tipPolaganjaRepository = tipPolaganjaRepository;
         this.polaganjeRepository = polaganjeRepository;
+    }
+
+    @GetMapping("/latest-polaganja-by-student")
+    public ResponseEntity<?> getLatestPolaganjaByStudent(
+            @PathParam("studentId") Long studentId,
+            @PathParam("predmetId") Long predmetId){
+        StudentNaGodini studentNaGodini = studentNaGodiniRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found"));
+
+        List<Polaganje> polaganja = polaganjeRepository.findLatestDistinctPolaganjaByStudentIdAndPredmetId(studentNaGodini.getId(), predmetId);
+        List<PolaganjeDto> dtos = polaganja.stream().map(polaganje -> {
+            PolaganjeDto p = null;
+            try {
+                p = convertToDto(polaganje);
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+            return p;
+        }).toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/prijavljeni-ispiti-by-student")
@@ -110,6 +132,46 @@ public class PolaganjeController extends GenericController<Polaganje, Long, Pola
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    @PostMapping("/kolokvijum/by-student")
+    public ResponseEntity<?> createPolaganjeKolokvijuma(
+            @PathParam("studentId") Long studentId,
+            @PathParam("predmetId") Long predmetId,
+            @PathParam("tipPolaganjaId") Long tipPolaganjaId,
+            @PathParam("evaluacijaZnanjaId") Long evaluacijaZnanjaId,
+            @RequestBody PolaganjeDto polaganjeDto
+    ){
+        StudentNaGodini studentNaGodini = studentNaGodiniRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found"));
+        Predmet predmet = predmetRepository.findById(predmetId).orElseThrow(() -> new EntityNotFoundException("Predmet not found"));
+        RealizacijaPredmeta realizacijaPredmeta = realizacijaPredmetaRepository.findRealizacijaPredmetaByPredmetId(predmetId);
+        TipEvaluacije tipEvaluacije = tipEvaluacijeRepository.findByNaziv("Kolokvijum");
+        EvaluacijaZnanja evaluacijaZnanja = evaluacijaZnanjaRepository
+                .findById(evaluacijaZnanjaId)
+                .orElseThrow(() -> new EntityNotFoundException("Evaluacija znanja not found"));
+
+        TipPolaganja tipPolaganja = tipPolaganjaRepository.findById(tipPolaganjaId).orElseThrow(() -> new EntityNotFoundException("Tip polaganja not found"));
+
+        Polaganje polaganje = new Polaganje();
+        polaganje.setBodovi(polaganjeDto.getBodovi());
+        polaganje.setStudent(studentNaGodini);
+        polaganje.setEvaluacijaZnanja(evaluacijaZnanja);
+        polaganje.setTipPolaganja(tipPolaganja);
+
+        Polaganje saved = polaganjeRepository.save(polaganje);
+
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update-bodovi")
+    public ResponseEntity<?> updateBodovi(@PathParam("polaganjeId") Long polaganjeId, @RequestBody PolaganjeDto polaganjeDto) throws IllegalAccessException, InstantiationException {
+        Polaganje polaganje = polaganjeRepository.findById(polaganjeId).orElseThrow(() -> new EntityNotFoundException("Polaganje not found"));
+        polaganje.setBodovi(polaganjeDto.getBodovi());
+        polaganje.setNapomena(polaganjeDto.getNapomena());
+
+        Polaganje saved = polaganjeRepository.save(polaganje);
+        PolaganjeDto dto = convertToDto(saved);
+        return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
+    }
+
     @Override
     @Secured({"ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_ADMIN"})
     public ResponseEntity<Void> delete(Long aLong) {
@@ -130,7 +192,11 @@ public class PolaganjeController extends GenericController<Polaganje, Long, Pola
         entity.getEvaluacijaZnanja().getRealizacijaPredmeta().setObavestenja(null);
 
         PolaganjeDto polaganjeDto = EntityDtoMapper.convertToDto(entity, PolaganjeDto.class);
+        if(entity.getTipPolaganja() != null) {
+            polaganjeDto.setTipPolaganja(EntityDtoMapper.convertToDto(entity.getTipPolaganja(), TipPolaganjaDto.class));
+        }
         EvaluacijaZnanjaDto evaluacijaZnanjaDto = EntityDtoMapper.convertToDto(entity.getEvaluacijaZnanja(), EvaluacijaZnanjaDto.class);
+        evaluacijaZnanjaDto.setIspitniRok(EntityDtoMapper.convertToDto(entity.getEvaluacijaZnanja().getIspitniRok(), IspitniRokDto.class));
         RealizacijaPredmetaDto realizacijaPredmetaDto = EntityDtoMapper.convertToDto(entity.getEvaluacijaZnanja().getRealizacijaPredmeta(), RealizacijaPredmetaDto.class);
         PredmetDto predmetDto = EntityDtoMapper.convertToDto(entity.getEvaluacijaZnanja().getRealizacijaPredmeta().getPredmet(), PredmetDto.class);
         NastavnikDto nastavnik = EntityDtoMapper.convertToDto(entity.getEvaluacijaZnanja().getRealizacijaPredmeta().getPredmet().getNastavnik(), NastavnikDto.class);

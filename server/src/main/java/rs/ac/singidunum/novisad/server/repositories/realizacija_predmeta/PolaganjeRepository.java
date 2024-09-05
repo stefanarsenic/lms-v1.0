@@ -2,6 +2,7 @@ package rs.ac.singidunum.novisad.server.repositories.realizacija_predmeta;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.Polaganje;
 
@@ -35,4 +36,24 @@ public interface PolaganjeRepository extends JpaRepository<Polaganje, Long> {
             "and p.student.id = :studentId " +
             "and p.bodovi is null")
     List<Polaganje> findPrijavljeniIspitiByStudentId(Long studentId);
+
+    @Query("SELECT p FROM Polaganje p " +
+            "JOIN p.evaluacijaZnanja e " +
+            "JOIN p.tipPolaganja t " +
+            "JOIN e.realizacijaPredmeta rp " +
+            "JOIN rp.predmet pr " +
+            "WHERE p.student.id = :studentId " +
+            "AND pr.id = :predmetId " +
+            "AND t.naziv IN ('k1', 'k2', 'i') " +
+            "AND e.vremePocetka = (" +
+            "   SELECT MAX(e2.vremePocetka) " +
+            "   FROM Polaganje p2 " +
+            "   JOIN p2.evaluacijaZnanja e2 " +
+            "   JOIN e2.realizacijaPredmeta rp2 " +
+            "   WHERE p2.student.id = :studentId " +
+            "   AND p2.tipPolaganja.id = p.tipPolaganja.id " +
+            "   AND rp2.predmet.id = :predmetId" +
+            ")")
+    List<Polaganje> findLatestDistinctPolaganjaByStudentIdAndPredmetId(@Param("studentId") Long studentId,
+                                                                       @Param("predmetId") Long predmetId);
 }

@@ -1,3 +1,12 @@
+<p-dropdown
+  [options]="predmeti"
+  [(ngModel)]="selectedPredmet"
+  (onChange)="getStudenti()"
+  [loading]="loading"
+  optionLabel="naziv"
+  placeholder="Izaberite Predmet"
+>
+</p-dropdown>
 <p-table #dt
 
          [value]="studenti"
@@ -6,6 +15,7 @@
          [globalFilterFields]="['name','country.name','representative.name','status']"
          [rowHover]="true"
          [showCurrentPageReport]="true"
+         [loading]="loadingTabele"
          dataKey="id"
          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
 >

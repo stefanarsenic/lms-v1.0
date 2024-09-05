@@ -21,4 +21,5 @@ public class EvaluacijaZnanjaDto implements Serializable {
     private FajlDto instrumentEvaluacije;
     private TipEvaluacijeDto tipEvaluacije;
     private RealizacijaPredmetaDto realizacijaPredmeta;
+    private IspitniRokDto ispitniRok;
 }

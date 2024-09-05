@@ -23,4 +23,6 @@ public class PohadjanjePredmeta {
     private StudentNaGodini student;
     @ManyToOne
     private Predmet predmet;
+    @ManyToOne
+    private IspitniRok ispitniRok;
 }

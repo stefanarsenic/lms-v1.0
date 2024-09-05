@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KarticePredmetaComponent } from './kartice-predmeta.component';
+import { UnosOcenaComponent } from './unos-ocena.component';
 
-describe('KarticePredmetaComponent', () => {
-  let component: KarticePredmetaComponent;
-  let fixture: ComponentFixture<KarticePredmetaComponent>;
+describe('UnosOcenaComponent', () => {
+  let component: UnosOcenaComponent;
+  let fixture: ComponentFixture<UnosOcenaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KarticePredmetaComponent]
+      imports: [UnosOcenaComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(KarticePredmetaComponent);
+    fixture = TestBed.createComponent(UnosOcenaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
