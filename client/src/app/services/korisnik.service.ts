@@ -44,4 +44,19 @@ export class KorisnikService {
     });
   }
 
+
+  changePassword(username: string, currentPassword: string, newPassword: string): Observable<any> {
+    return this.http.post("http://localhost:8080/api/korisnici/edit-password", {
+      username: username,
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    });
+  }
+
+  changeEmail(username: string, newEmail: string): Observable<any> {
+    const params = { username, newEmail };
+    return this.http.post(`http://localhost:8080/api/korisnici/change-email`, {}, { params });
+  }
 }
+
+

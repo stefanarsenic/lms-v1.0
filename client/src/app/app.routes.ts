@@ -121,6 +121,10 @@ export const routes: Routes = [
     },
     children: [
       {
+        path: "edit-profil",
+        component: EditProfilComponent
+      },
+      {
         path: "upis-studenata",
         component: UpisStudenataComponent
       },
@@ -181,6 +185,10 @@ export const routes: Routes = [
     component: AdminProfileComponent,
     children: [
       {
+        path: "edit-profil",
+        component: EditProfilComponent
+      },
+      {
         path: "studijski-programi",
         component: StudijskiProgramCrudComponent
       },
@@ -232,6 +240,10 @@ export const routes: Routes = [
     path:"nastavnik",
     component: NastavnikProfileComponent,
     children:[
+      {
+        path: "edit-profil",
+        component: EditProfilComponent
+      },
       {
         path: "predmeti",
         component: PregledPredmetaNastavnikComponent,

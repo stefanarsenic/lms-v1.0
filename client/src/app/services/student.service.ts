@@ -16,4 +16,8 @@ export class StudentService extends GenerickiService<Student>{
   getNazivDrzaveByStudentId(studentId: number){
     return this.http.get<string>(`http://localhost:8080/${this.putanja}/${studentId}/drzava`, { responseType: 'text' as 'json' });
   }
+
+  dodaj(objekat:Student){
+    return this.http.post(`http://localhost:8080/${this.putanja}/dodaj`,objekat);
+  }
 }

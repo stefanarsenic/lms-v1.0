@@ -79,11 +79,9 @@ export class SpisakStudenataComponent {
   }
 
   onRowExpand(event: TableRowExpandEvent) {
-    this.messageService.add({ severity: 'info', summary: 'Predmet Expanded', detail: event.data.predmet.naziv, life: 3000 });
   }
 
   onRowCollapse(event: TableRowCollapseEvent) {
-    this.messageService.add({ severity: 'success', summary: 'Predmet Collapsed', detail: event.data.predmet.naziv, life: 3000 });
   }
 
 }

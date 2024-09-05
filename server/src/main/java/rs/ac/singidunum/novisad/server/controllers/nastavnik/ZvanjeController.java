@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.controllers.nastavnik;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
@@ -21,6 +22,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/zvanje")
+@Secured({"ROLE_ADMIN","ROLE_SLUZBA","ROLE_NASTAVNIK"})
 public class ZvanjeController extends GenericController<Zvanje, Long, ZvanjeDto> {
 
     private final NastavnikService nastavnikService;

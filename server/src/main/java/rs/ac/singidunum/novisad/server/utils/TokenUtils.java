@@ -49,8 +49,8 @@ public class TokenUtils {
 	public String getUsername(String token) {
 		String username = null;
 		try {
-			return getClaims(token).getSubject();
-		} catch (Exception e) {
+			return (String) getClaims(token).get("username");
+        } catch (Exception e) {
 		}
 
 		return username;

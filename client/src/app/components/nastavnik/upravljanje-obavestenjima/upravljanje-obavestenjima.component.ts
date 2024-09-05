@@ -16,13 +16,15 @@ import {DialogModule} from "primeng/dialog";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextModule} from "primeng/inputtext";
 import {InputTextareaModule} from "primeng/inputtextarea";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {Ripple} from "primeng/ripple";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {EditorModule} from "primeng/editor";
 import {RealizacijaPredmetaService} from "../../../services/realizacija-predmeta.service";
+import {parseAndFormatDate} from "../../../utils/datum-utils";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
 
 @Component({
   selector: 'app-upravljanje-obavestenjima',
@@ -41,7 +43,9 @@ import {RealizacijaPredmetaService} from "../../../services/realizacija-predmeta
     TableModule,
     ToastModule,
     ToolbarModule,
-    EditorModule
+    EditorModule,
+    NgForOf,
+    ProgressSpinnerModule
   ],
   templateUrl: './upravljanje-obavestenjima.component.html',
   styleUrl: './upravljanje-obavestenjima.component.css'
@@ -69,7 +73,6 @@ export class UpravljanjeObavestenjimaComponent extends AppGenerickoComponent<Rea
     super();
     const service = this.injector.get(ObavestenjaService);
     this.initialize(service);
-    this.loading=false
     this.init()
 
   }
@@ -126,12 +129,10 @@ export class UpravljanjeObavestenjimaComponent extends AppGenerickoComponent<Rea
 
   onRowExpand(event: TableRowExpandEvent) {
     this.obavestenje.realizacijaPredmeta=event.data.realizacijaPredmeta;
-    this.messageService.add({ severity: 'info', summary: 'Product Expanded', detail: event.data.name, life: 3000 });
   }
 
   onRowCollapse(event: TableRowCollapseEvent) {
     this.obavestenje.realizacijaPredmeta=null;
-    this.messageService.add({ severity: 'success', summary: 'Product Collapsed', detail: event.data.name, life: 3000 });
   }
 
   protected readonly Object = Object;
@@ -202,4 +203,6 @@ export class UpravljanjeObavestenjimaComponent extends AppGenerickoComponent<Rea
     this.obavestenjeDialog = false;
     this.obavestenje={id:null,naslov:"",sadrzaj:"",vremePostavljanja:new Date(),prilozi:[],realizacijaPredmeta:null}
   }
+
+  protected readonly parseAndFormatDate = parseAndFormatDate;
 }

@@ -5,6 +5,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.ObavestenjeDto;
@@ -25,6 +26,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/obavestenja")
+@Secured({"ROLE_ADMIN","ROLE_SLUZBA","ROLE_NASTAVNIK","ROLE_STUDENT"})
 public class ObavestenjaController extends GenericController<Obavestenje,Long, ObavestenjeDto> {
 
     @Autowired
@@ -106,5 +108,11 @@ public class ObavestenjaController extends GenericController<Obavestenje,Long, O
         obavestenje.setPrilozi(fajls);
 
         return obavestenje;
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA","ROLE_NASTAVNIK"})
+    public ResponseEntity<ObavestenjeDto> create(ObavestenjeDto dto) throws IllegalAccessException, InstantiationException {
+        return super.create(dto);
     }
 }

@@ -5,6 +5,7 @@ import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.PravoPristupaDto;
@@ -32,6 +33,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/nastavnici")
+@Secured({"ROLE_ADMIN","ROLE_SLUZBA","ROLE_NASTAVNIK"})
 public class NastavnikController extends GenericController<Nastavnik, Long, NastavnikDto> {
     public NastavnikController(GenericService<Nastavnik, Long> service) {
         super(service);
@@ -92,6 +94,7 @@ public class NastavnikController extends GenericController<Nastavnik, Long, Nast
     //TODO:Popraviti DTO response (Nastavnik)
     @Override
     @RequestMapping(path = "/dodaj", method = RequestMethod.POST)
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<NastavnikDto> create(@RequestBody NastavnikDto dto) throws IllegalAccessException, InstantiationException {
         Nastavnik entity = convertToEntity(dto);
 
@@ -120,6 +123,7 @@ public class NastavnikController extends GenericController<Nastavnik, Long, Nast
 
     //TODO:Testirati dodatno, izbaci error u konzoli u front
     @DeleteMapping("/delete")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<Void> deleteUsers(@RequestBody List<Long> userIds) {
         nastavnikService.deleteUsers(userIds);
         return ResponseEntity.noContent().build();

@@ -6,6 +6,9 @@ import {Table, TableModule, TableRowCollapseEvent, TableRowExpandEvent} from "pr
 import {ToastModule} from "primeng/toast";
 import {Button} from "primeng/button";
 import {Ripple} from "primeng/ripple";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {NgIf} from "@angular/common";
+import {ChipsModule} from "primeng/chips";
 
 @Component({
   selector: 'app-spisak-predmeta',
@@ -14,7 +17,10 @@ import {Ripple} from "primeng/ripple";
     ToastModule,
     TableModule,
     Button,
-    Ripple
+    Ripple,
+    ProgressSpinnerModule,
+    NgIf,
+    ChipsModule
 
   ],
   templateUrl: './spisak-predmeta.component.html',
@@ -33,11 +39,11 @@ export class SpisakPredmetaComponent{
     if (token) {
       this.nastavnikUsername = JSON.parse(atob(token.split(".")[1])).username;
     }
-    console.log(this.nastavnikUsername)
     if (this.nastavnikUsername) {
       this.predmetService.getPredmetByNastavnik(this.nastavnikUsername).subscribe({
         next: (data) => {
           this.predmeti = data;
+          console.log(data)
           this.loading = false;
         },
         error: (err) => {
@@ -70,12 +76,10 @@ export class SpisakPredmetaComponent{
 
   onRowExpand(event: TableRowExpandEvent) {
     this.predmetDetalji.push({"brojPredavanja":event.data.brojPredavanja,"brojVezbi":event.data.brojVezbi})
-    this.messageService.add({ severity: 'info', summary: 'Product Expanded', detail: event.data.name, life: 3000 });
   }
 
   onRowCollapse(event: TableRowCollapseEvent) {
     this.predmetDetalji=[]
-    this.messageService.add({ severity: 'success', summary: 'Product Collapsed', detail: event.data.name, life: 3000 });
   }
 
   protected readonly Object = Object;

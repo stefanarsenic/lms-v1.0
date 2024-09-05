@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.TipNastaveDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
@@ -31,8 +32,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/termin-nastave")
+@Secured({"ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT"})
 public class TerminNastaveController extends GenericController<TerminNastave, Long, TerminNastaveDto> {
-    //TODO: security anotacije
+
     private final IshodService ishodService;
     private final TipNastaveService tipNastaveService;
     private final NastavniMaterijalService nastavniMaterijalService;
@@ -78,6 +80,7 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     }
 
     @PostMapping("/predmet/{predmetId}")
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN"})
     public ResponseEntity<TerminNastaveDto> create(@PathVariable Long predmetId, @RequestBody TerminNastaveDto dto) throws IllegalAccessException, InstantiationException {
         RealizacijaPredmeta realizacijaPredmeta = realizacijaPredmetaService.findByPredmetId(predmetId);
         TerminNastave entity = convertToEntity(dto);
@@ -89,6 +92,7 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     }
 
     @PostMapping("/predmet/{predmetId}/recurring")
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN"})
     public ResponseEntity<List<TerminNastaveDto>> createRecurring(@PathVariable Long predmetId, @RequestBody TerminNastaveDto dto) throws IllegalAccessException, InstantiationException {
         RealizacijaPredmeta realizacijaPredmeta = realizacijaPredmetaService.findByPredmetId(predmetId);
         TerminNastave entity = convertToEntity(dto);
@@ -106,6 +110,7 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     }
 
     @PutMapping("/{terminNastaveId}/ishod")
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN"})
     public ResponseEntity<?> updateIshod(
             @PathVariable Long terminNastaveId,
             @PathParam("predmetId") Long predmetId,
@@ -172,6 +177,7 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     }
 
     @PutMapping("/{id}")
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN"})
     public ResponseEntity<TerminNastaveDto> update(@PathVariable Long id, @RequestBody TerminNastaveDto terminNastaveDto) throws IllegalAccessException, InstantiationException {
         TerminNastave terminNastave = terminNastaveService.findById(id).orElseThrow();
 
@@ -184,6 +190,7 @@ public class TerminNastaveController extends GenericController<TerminNastave, Lo
     }
 
     @DeleteMapping("/delete-all-by-realizacija-predmeta/{terminNastaveId}")
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN"})
     public ResponseEntity<?> deleteAllByRealizacijaPredmeta(@PathVariable Long terminNastaveId){
         TerminNastave terminNastave = terminNastaveService.findById(terminNastaveId).orElseThrow(
                 () -> new EntityNotFoundException("Termin nastave not found with id: " + terminNastaveId.toString())

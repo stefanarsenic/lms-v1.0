@@ -19,6 +19,7 @@ import {NgIf} from "@angular/common";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {IshodService} from "../../../services/ishod.service";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
 
 @Component({
   selector: 'app-uredjivanje-silabusa',
@@ -36,7 +37,8 @@ import {IshodService} from "../../../services/ishod.service";
     FormsModule,
     NgIf,
     FloatLabelModule,
-    InputTextareaModule
+    InputTextareaModule,
+    ProgressSpinnerModule
   ],
   templateUrl: './uredjivanje-silabusa.component.html',
   styleUrl: './uredjivanje-silabusa.component.css'
@@ -48,7 +50,7 @@ export class UredjivanjeSilabusaComponent extends AppGenerickoComponent<Ishod>{
   predmeti!:Predmet[]
   nastavnikUsername:any
   submitted: boolean = false;
-  @ViewChild('dt') dt: Table | undefined;
+  @ViewChild('dt') dt: Table | undefined ;
   @ViewChild('dt2') dt2: Table | undefined;
 
   selektovaniIshodi:Ishod[]=[]
@@ -62,7 +64,7 @@ export class UredjivanjeSilabusaComponent extends AppGenerickoComponent<Ishod>{
     super();
     const service = this.injector.get(IshodService);
     this.initialize(service);
-    this.loading=false
+    this.loading=true
     this.init()
 
   }
@@ -107,15 +109,20 @@ export class UredjivanjeSilabusaComponent extends AppGenerickoComponent<Ishod>{
 
 
   onRowExpand(event: TableRowExpandEvent) {
-    this.messageService.add({ severity: 'info', summary: 'Product Expanded', detail: event.data.name, life: 3000 });
   }
 
   onRowCollapse(event: TableRowCollapseEvent) {
-    this.messageService.add({ severity: 'success', summary: 'Product Collapsed', detail: event.data.name, life: 3000 });
   }
 
   protected readonly Object = Object;
 
+  applyFilterGlobal2(value: string, mode: string) {
+    if(this.dt){
+      this.dt.filterGlobal(value, mode);
+    }
+
+
+  }
 
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt2!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);

@@ -2,6 +2,7 @@ package rs.ac.singidunum.novisad.server.controllers.fakultet;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.fakultet.FakultetDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
@@ -34,6 +35,7 @@ public class StudijskiProgramController extends GenericController<StudijskiProgr
     }
 
     @PostMapping
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<StudijskiProgramDto> create(@RequestBody StudijskiProgramDto dto) throws IllegalAccessException, InstantiationException {
         StudijskiProgram studijskiProgram = convertToEntity(dto);
         studijskiProgram = studijskiProgramService.createStudijskiProgram(studijskiProgram);
@@ -43,6 +45,7 @@ public class StudijskiProgramController extends GenericController<StudijskiProgr
     }
 
     @PutMapping("/{id}")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<StudijskiProgramDto> update(@PathVariable Long id, @RequestBody StudijskiProgramDto dto) throws IllegalAccessException, InstantiationException {
         Optional<StudijskiProgram> entityOptional = service.findById(id);
         if (entityOptional.isPresent()) {
@@ -56,6 +59,7 @@ public class StudijskiProgramController extends GenericController<StudijskiProgr
     }
 
     @DeleteMapping("/{id}")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         Optional<StudijskiProgram> studijskiProgram = service.findById(id);
         if (studijskiProgram.isPresent()) {

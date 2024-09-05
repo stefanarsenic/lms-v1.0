@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.controllers.adresa;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/adresa")
+@Secured({"ROLE_ADMIN","ROLE_SLUZBA","ROLE_NASTAVNIK"})
 public class AdresaController extends GenericController<Adresa, Long, AdresaDto> {
 
     private final MestoService mestoService;

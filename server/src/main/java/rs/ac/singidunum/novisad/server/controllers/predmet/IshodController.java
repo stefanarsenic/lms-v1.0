@@ -2,6 +2,7 @@ package rs.ac.singidunum.novisad.server.controllers.predmet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ishod")
+@Secured({"ROLE_ADMIN","ROLE_SLUZBA","ROLE_NASTAVNIK","ROLE_STUDENT"})
 public class IshodController extends GenericController<Ishod, Long, IshodDto> {
 
     private final PredmetService predmetService;
@@ -56,8 +58,21 @@ public class IshodController extends GenericController<Ishod, Long, IshodDto> {
     }
 
     @DeleteMapping("/delete")
+    @Secured({"ROLE_NASTAVNIK","ROLE_ADMIN"})
     public ResponseEntity<Void> deleteUsers(@RequestBody List<Long> userIds) {
         ishodService.deleteUsers(userIds);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @Secured({"ROLE_NASTAVNIK","ROLE_ADMIN"})
+    public ResponseEntity<IshodDto> create(IshodDto dto) throws IllegalAccessException, InstantiationException {
+        return super.create(dto);
+    }
+
+    @Override
+    @Secured({"ROLE_NASTAVNIK","ROLE_ADMIN"})
+    public ResponseEntity<IshodDto> update(Long aLong, IshodDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
     }
 }

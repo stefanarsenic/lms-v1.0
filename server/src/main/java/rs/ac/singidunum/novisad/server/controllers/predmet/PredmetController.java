@@ -6,6 +6,7 @@ import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
@@ -34,6 +35,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/predmet")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class PredmetController extends GenericController<Predmet, Long, PredmetDto>{
 
     private final IshodService ishodService;
@@ -97,6 +99,7 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
     }
 
     @PostMapping("/create")
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
     public ResponseEntity<PredmetDto> createPredmet(
         @PathParam("nastavnikId") Long nastavnikId,
         @PathParam("asistentId") Long asistentId,
@@ -151,13 +154,15 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         return predmetDto;
     }
 
-    //TODO:Proveri da dobavlja samo studente koji nisu polozili predmet
+
     @GetMapping("/{predmetId}/students")
     public ResponseEntity<List<StudentDto>> getStudentsByPredmet(@PathVariable Long predmetId) throws IllegalAccessException, InstantiationException {
         List<Student> students = predmetService.getStudentsByPredmet(predmetId);
         List<StudentDto> studentDtos=new ArrayList<>();
         for(Student student:students){
-            studentDtos.add(EntityDtoMapper.convertToDto(student,StudentDto.class));
+            StudentDto  studentDto = EntityDtoMapper.convertToDto(student, StudentDto.class);
+            studentDto.setPravoPristupaSet(new HashSet<>());
+            studentDtos.add(studentDto);
         }
         return ResponseEntity.ok(studentDtos);
     }
@@ -189,6 +194,18 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         predmet.setPreduslov(preduslov);
 
         return predmet;
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
+    public ResponseEntity<PredmetDto> update(Long aLong, PredmetDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
     }
 
     private ResponseEntity<List<PredmetDto>> PredmetiToDto(List<Predmet> predmeti) {

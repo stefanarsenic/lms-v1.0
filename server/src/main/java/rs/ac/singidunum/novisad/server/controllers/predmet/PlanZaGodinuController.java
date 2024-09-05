@@ -26,6 +26,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/plan-za-godinu")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT"})
 public class PlanZaGodinuController extends GenericController<PlanZaGodinu, Long, PlanZaGodinuDto> {
 
     private final PredmetPlanaZaGodinuService predmetPlanaZaGodinuService;
@@ -59,6 +60,24 @@ public class PlanZaGodinuController extends GenericController<PlanZaGodinu, Long
         Integer uslovEspb = planZaGodinuService.getPotrebnoEspbByStudijskiProgramIdAndGodina(studijskiProgramId, godina);
 
         return ResponseEntity.ok(uslovEspb);
+    }
+
+    @Override
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN"})
+    public ResponseEntity<PlanZaGodinuDto> create(PlanZaGodinuDto dto) throws IllegalAccessException, InstantiationException {
+        return super.create(dto);
+    }
+
+    @Override
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN"})
+    public ResponseEntity<PlanZaGodinuDto> update(Long aLong, PlanZaGodinuDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
+    }
+
+    @Override
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
     }
 
     @Override

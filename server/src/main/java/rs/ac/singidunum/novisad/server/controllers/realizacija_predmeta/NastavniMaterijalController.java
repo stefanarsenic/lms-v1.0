@@ -1,5 +1,7 @@
 package rs.ac.singidunum.novisad.server.controllers.realizacija_predmeta;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
@@ -20,6 +22,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/nastavni-materijal")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class NastavniMaterijalController extends GenericController<NastavniMaterijal, Long, NastavniMaterijalDto> {
 
     private final NastavnikService nastavnikService;
@@ -64,5 +67,24 @@ public class NastavniMaterijalController extends GenericController<NastavniMater
         n.setFajl(fajl);
 
         return n;
+    }
+
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
+    public ResponseEntity<NastavniMaterijalDto> create(NastavniMaterijalDto dto) throws IllegalAccessException, InstantiationException {
+        return super.create(dto);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
+    public ResponseEntity<NastavniMaterijalDto> update(Long aLong, NastavniMaterijalDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
     }
 }

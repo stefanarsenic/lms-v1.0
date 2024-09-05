@@ -4,6 +4,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.korisnik.PravoPristupa;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
 import rs.ac.singidunum.novisad.server.model.korisnik.Uloga;
+import rs.ac.singidunum.novisad.server.model.secuirty.ChangePasswordRequest;
 import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikService;
 import rs.ac.singidunum.novisad.server.services.secuirty.PravoPristupaService;
 import rs.ac.singidunum.novisad.server.services.secuirty.UlogaService;
@@ -29,6 +31,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/api/korisnici")
 @CrossOrigin(origins = "http://localhost:4200")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class KorisnikController extends GenericController<RegistrovaniKorisnik,Long, RegistrovaniKorisnikDto> {
     public KorisnikController(GenericService<RegistrovaniKorisnik, Long> service) {
         super(service);
@@ -45,6 +48,28 @@ public class KorisnikController extends GenericController<RegistrovaniKorisnik,L
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @PostMapping("/edit-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
+        try {
+            korisnikService.changePassword(request.getUsername(), request.getCurrentPassword(), request.getNewPassword());
+            return ResponseEntity.ok("Password changed successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/change-email")
+    public ResponseEntity<String> changeEmail(@RequestParam String username, @RequestParam String newEmail) {
+        try {
+            korisnikService.changeEmail(username, newEmail);
+            return ResponseEntity.ok("Email updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
     @Override
     protected RegistrovaniKorisnikDto convertToDto(RegistrovaniKorisnik entity) throws IllegalAccessException, InstantiationException {
 
@@ -88,6 +113,7 @@ public class KorisnikController extends GenericController<RegistrovaniKorisnik,L
     //TODO:Popraviti DTO response (Korisnik)
     @Override
     @RequestMapping(path = "/dodaj", method = RequestMethod.POST)
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<RegistrovaniKorisnikDto> create(@RequestBody RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
         RegistrovaniKorisnik entity = convertToEntity(dto);
 
@@ -114,12 +140,14 @@ public class KorisnikController extends GenericController<RegistrovaniKorisnik,L
 
 
     @DeleteMapping("/delete")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<Void> deleteUsers(@RequestBody List<Long> userIds) {
         korisnikService.deleteUsers(userIds);
         return ResponseEntity.noContent().build();
     }
     //TODO:Popraviti DTO response (Korisnik)
     @PutMapping("/azuriaj/{id}")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<RegistrovaniKorisnikDto> azuriranje(@PathVariable Long id, @RequestBody RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
         RegistrovaniKorisnik existingUser = korisnikService.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));

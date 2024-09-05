@@ -3,6 +3,7 @@ package rs.ac.singidunum.novisad.server.controllers.studentskaSluzba;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.AdministratorDto;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api/zahtevi")
+@Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
 public class ZahtevMaterijalaController extends GenericController<ZahtevMaterijala,Long, ZahtevMaterijalaDto> {
 
 
@@ -130,11 +132,12 @@ public class ZahtevMaterijalaController extends GenericController<ZahtevMaterija
 
 
     @Override
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping("/update/{id}")
     public ResponseEntity<ZahtevMaterijalaDto> update(@PathVariable Long id, @RequestBody ZahtevMaterijalaDto dto) throws IllegalAccessException, InstantiationException {
         return super.update(id, dto);
     }
-
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
     @GetMapping("/user/{username}")
     public ResponseEntity<List<ZahtevMaterijalaDto>> getRequestsByUsername(@PathVariable String username) throws IllegalAccessException, InstantiationException {
         List<ZahtevMaterijala> requests = trebovanjeRepository.findByKorisnikKorisnickoIme(username);
@@ -149,6 +152,7 @@ public class ZahtevMaterijalaController extends GenericController<ZahtevMaterija
 
     @SneakyThrows
     @GetMapping("/all")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<List<ZahtevMaterijalaDto>> getAllRequests() {
         List<ZahtevMaterijala> requests = trebovanjeRepository.findAll();
         List<ZahtevMaterijalaDto> dtoList = new ArrayList<>();
@@ -161,6 +165,7 @@ public class ZahtevMaterijalaController extends GenericController<ZahtevMaterija
     }
 
     @PutMapping("/update-status/{id}")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<ZahtevMaterijalaDto> updateStatus(@PathVariable Long id, @RequestParam String status, @RequestParam Long adminId) throws IllegalAccessException, InstantiationException {
         ZahtevMaterijala trebovanje = trebovanjeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));

@@ -1,5 +1,7 @@
 package rs.ac.singidunum.novisad.server.controllers.adresa;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/drzava")
+@Secured({"ROLE_ADMIN","ROLE_SLUZBA","ROLE_NASTAVNIK","ROLE_STUDENT"})
 public class DrzavaController extends GenericController<Drzava, Long, DrzavaDto> {
     public DrzavaController(GenericService<Drzava, Long> service) {
         super(service);
@@ -37,6 +40,24 @@ public class DrzavaController extends GenericController<Drzava, Long, DrzavaDto>
         drzavaDto.setMesta(mesta);
 
         return drzavaDto;
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<DrzavaDto> create(DrzavaDto dto) throws IllegalAccessException, InstantiationException {
+        return super.create(dto);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<DrzavaDto> update(Long aLong, DrzavaDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
     }
 
     @Override

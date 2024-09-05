@@ -4,11 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.EvaluacijaZnanjaDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.PolaganjeDto;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.PrijavljeniIspitDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.RealizacijaPredmetaDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
@@ -24,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/polaganje")
+@Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_STUDENT"})
 public class PolaganjeController extends GenericController<Polaganje, Long, PolaganjeDto> {
 
     private final StudentNaGodiniRepository studentNaGodiniRepository;
@@ -79,6 +82,7 @@ public class PolaganjeController extends GenericController<Polaganje, Long, Pola
     }
 
     @PostMapping("/by-student")
+    @Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
     public ResponseEntity<?> createPolaganjeIspita(
             @PathParam("studentId") Long studentId,
             @PathParam("predmetId") Long predmetId,
@@ -104,6 +108,18 @@ public class PolaganjeController extends GenericController<Polaganje, Long, Pola
         Polaganje saved = polaganjeRepository.save(polaganje);
 
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @Override
+    @Secured({"ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_ADMIN"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
+    }
+
+    @Override
+    @Secured({"ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_ADMIN"})
+    public ResponseEntity<PolaganjeDto> update(Long aLong, PolaganjeDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
     }
 
     @Override

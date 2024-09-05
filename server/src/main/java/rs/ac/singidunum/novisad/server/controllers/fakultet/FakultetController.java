@@ -1,5 +1,7 @@
 package rs.ac.singidunum.novisad.server.controllers.fakultet;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
@@ -67,6 +69,24 @@ public class FakultetController extends GenericController<Fakultet, Long, Fakult
         fakultetDto.setStudijskiProgrami(studijskiProgramDtos);
 
         return fakultetDto;
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<FakultetDto> create(FakultetDto dto) throws IllegalAccessException, InstantiationException {
+        return super.create(dto);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<FakultetDto> update(Long aLong, FakultetDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
     }
 
     @Override

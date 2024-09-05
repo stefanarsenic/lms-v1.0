@@ -1,5 +1,7 @@
 package rs.ac.singidunum.novisad.server.controllers.realizacija_predmeta;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
@@ -26,6 +28,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/realizacija-predmeta")
+@Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_STUDENT"})
 public class RealizacijaPredmetaController extends GenericController<RealizacijaPredmeta, Long, RealizacijaPredmetaDto> {
 
     private final PredmetService predmetService;
@@ -95,5 +98,23 @@ public class RealizacijaPredmetaController extends GenericController<Realizacija
 
 
         return r;
+    }
+
+    @Override
+    @Secured({"ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_ADMIN"})
+    public ResponseEntity<RealizacijaPredmetaDto> create(RealizacijaPredmetaDto dto) throws IllegalAccessException, InstantiationException {
+        return super.create(dto);
+    }
+
+    @Override
+    @Secured({"ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_ADMIN"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
+    }
+
+    @Override
+    @Secured({"ROLE_NASTAVNIK","ROLE_SLUZBA","ROLE_ADMIN"})
+    public ResponseEntity<RealizacijaPredmetaDto> update(Long aLong, RealizacijaPredmetaDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
     }
 }

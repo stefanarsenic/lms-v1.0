@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.obavestenje.FajlDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
@@ -36,6 +37,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/evaluacija-znanja")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnanja, Long, EvaluacijaZnanjaDto> {
 
     private final EvaluacijaZnanjaService evaluacijaZnanjaService;
@@ -104,6 +106,7 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
     }
 
     @PostMapping("/ispit")
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
     public ResponseEntity<?> createIspit(
             @RequestParam Long predmetId,
             @RequestParam Long ispitniRokId,
@@ -157,6 +160,7 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
     }
 
     @PostMapping("/predmet/{predmetId}")
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
     public ResponseEntity<EvaluacijaZnanjaDto> create(
             @RequestParam String fajlSifra,
             @PathVariable Long predmetId,
@@ -184,6 +188,7 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
     }
 
     @PutMapping("/{id}")
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
     public ResponseEntity<EvaluacijaZnanjaDto> update(@PathVariable Long id, @RequestBody EvaluacijaZnanjaDto evaluacijaZnanjaDto) throws IllegalAccessException, InstantiationException {
         EvaluacijaZnanja evaluacijaZnanja = evaluacijaZnanjaService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Evaluacija znanja not found with id: " + id.toString())
@@ -206,6 +211,12 @@ public class EvaluacijaZnanjaController extends GenericController<EvaluacijaZnan
         }
 
         return dtoList;
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
     }
 
     @Override

@@ -1,4 +1,4 @@
-import {Component, Injector, ViewChild} from '@angular/core';
+import {Component, Injector, OnInit, ViewChild} from '@angular/core';
 import {Button} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
@@ -14,15 +14,12 @@ import {ConfirmationService, MessageService, PrimeTemplate} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
-import {Student} from "../../../model/student";
-import {Drzava} from "../../../model/drzava";
-import {Mesto} from "../../../model/mesto";
-import {DrzavaService} from "../../../services/drzava.service";
-import {StudentService} from "../../../services/student.service";
-import {StudijskiProgram} from "../../../model/studijskiProgram";
-import {StudijskiProgramService} from "../../../services/studijski-program.service";
 import {StudentNaGodiniService} from "../../../services/student-na-godini.service";
 import {StudentNaGodini} from "../../../model/studentNaGodini";
+import {PolozeniPredmetService} from "../../../services/polozeni-predmet.service";
+import {formatDateFromString} from "../../../utils/date-converter";
+import {parseAndFormatDate} from "../../../utils/datum-utils";
+
 
 @Component({
   selector: 'app-pretraga-studenata',
@@ -47,19 +44,16 @@ import {StudentNaGodini} from "../../../model/studentNaGodini";
   templateUrl: './pretraga-studenata.component.html',
   styleUrl: './pretraga-studenata.component.css'
 })
-export class PretragaStudenataComponent {
+export class PretragaStudenataComponent implements OnInit {
 
   @ViewChild('dt') dt: Table | undefined;
   loading: boolean = true;
   studijskIprogrami:StudentNaGodini[]=[]
   datum!:any
-  constructor(private messageService: MessageService, private confirmationService: ConfirmationService,
-              studijskiProgram:StudentNaGodiniService) {
+  prosecneOcene: { [studentId: number]: number } = {};
 
-    studijskiProgram.getAll().subscribe((r:StudentNaGodini[])=>{
-      this.studijskIprogrami=r;
-      console.log(r)
-    })
+  constructor(private messageService: MessageService, private confirmationService: ConfirmationService,
+             private  studijskiProgram:StudentNaGodiniService,private polozenPredmetService:PolozeniPredmetService) {
 
   }
 
@@ -67,8 +61,43 @@ export class PretragaStudenataComponent {
     this.dt!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
 
+  ngOnInit(): void {
+   this.studijskiProgram.getAll().subscribe((r:StudentNaGodini[])=>{
+      this.studijskIprogrami=r;
+      this.loadAverageGrades();
+    })
+  }
+
+  loadAverageGrades() {
+    this.studijskIprogrami.forEach(student => {
+      if(student.id){
+        this.polozenPredmetService.getProsecnaOcenaByStudentId(student.id).subscribe(averageGrade => {
+          this.prosecneOcene[student.student.id] = averageGrade;
+        });
+      }
+    });
+  }
+
+  formatDateArray(dateArray: number[]): string {
+    if (!dateArray || dateArray.length < 3) {
+      return ''; // Return empty string if date is invalid
+    }
+
+    const year = dateArray[0];
+    const month = dateArray[1];
+    const day = dateArray[2];
+    const date = new Date(year, month - 1, day);
+
+    // Format it as you need, e.g. "DD/MM/YYYY"
+    return date.toLocaleDateString('en-GB');
+  }
+
+  getAverageGrade(studentId: number): number {
+
+    return this.prosecneOcene[studentId] || 0;
+  }
 
 
-
-
+  protected readonly formatDateFromString = formatDateFromString;
+  protected readonly parseAndFormatDate = parseAndFormatDate;
 }

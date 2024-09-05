@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,8 +54,28 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    SecurityFilterChain configure(HttpSecurity httpSecurity, AuthenticationConfiguration configuration) throws Exception{
-        return httpSecurity.csrf(csrf->csrf.disable()).sessionManagement(managment->managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(authTokenFilterBean(configuration), UsernamePasswordAuthenticationFilter.class).build();
+    SecurityFilterChain configure(HttpSecurity httpSecurity, AuthenticationConfiguration configuration) throws Exception {
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())  // Disable CSRF for APIs
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS with custom settings
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session for JWT
+                .addFilterBefore(authTokenFilterBean(configuration), UsernamePasswordAuthenticationFilter.class) // Add JWT filter
+                .build();
+    }
 
+    // CORS configuration bean
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://192.168.0.11:4200");
+        corsConfiguration.addAllowedOrigin("http://localhost:4200");// Add Angular app's URL
+        corsConfiguration.addAllowedHeader("*"); // Allow all headers+
+        corsConfiguration.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
+        corsConfiguration.setAllowCredentials(true); // Allow credentials
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", corsConfiguration); // Apply CORS settings to API paths
+
+        return source;
     }
 }

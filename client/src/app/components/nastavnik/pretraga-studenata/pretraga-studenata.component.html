@@ -36,14 +36,12 @@
         <th pSortableColumn="brojIndeksa" style="min-width:15rem">
           Broj indeksa <p-sortIcon field="brojIndeksa" />
         </th>
-        <th pSortableColumn="godinaUpisa" style="min-width:15rem">
-          Godina upisa <p-sortIcon field="godinaUpisa" />
+        <th pSortableColumn="datumUpisa" style="min-width:15rem">
+          Godina upisa <p-sortIcon field="datumUpisa" />
         </th>
         <th pSortableColumn="prosecnaOcena" style="min-width:15rem">
           Prosecna ocena <p-sortIcon field="prosecnaOcena" />
         </th>
-
-
         <th></th>
       </tr>
       <tr>
@@ -58,66 +56,35 @@
           <p-columnFilter type="text" field="brojIndeksa" [showClearButton]="true" />
         </th>
         <th>
-          <p-columnFilter type="text" field="godinaUpisa" [showClearButton]="true" />
+          <p-columnFilter type="date" field="datumUpisa" [showClearButton]="true" />
         </th>
         <th>
-          <p-columnFilter type="date" field="prosecnaOcena" [showClearButton]="true" />
+          <p-columnFilter type="text" field="prosecnaOcena" [showClearButton]="true" />
         </th>
-
         <th></th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-product let-editing="editing">
       <tr>
         <td>
           <p-tableCheckbox [value]="product" />
         </td>
-        <td [pEditableColumn]="product.student.ime" pEditableColumnField="ime">
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.student.ime" />
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{ product.student.ime }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td [pEditableColumn]="product.student.prezime" pEditableColumnField="prezime">
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.student.prezime" />
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{ product.student.prezime }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td [pEditableColumn]="product.brojIndeksa" pEditableColumnField="brojIndeksa">
-          <p-cellEditor [pEditableColumn]="product.brojIndeksa" pEditableColumnField="brojIndeksa">
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.brojIndeksa" />
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{ product.brojIndeksa }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td [pEditableColumn]="product.datumUpisa" pEditableColumnField="datumUpisa">
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.datumUpisa" />
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{ product.datumUpisa }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td>
-          Nema
-        </td>
-
+        <td>{{ product.student.ime }}</td>
+        <td>{{ product.student.prezime }}</td>
+        <td>{{ product.brojIndeksa }}</td>
+        <td>{{ parseAndFormatDate(product.datumUpisa.toString()) }}</td>
+        <td>{{ getAverageGrade(product.student.id) }}</td>
       </tr>
     </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total, there are {{ studijskIprogrami ? studijskIprogrami.length : 0 }} students.
+      </div>
+    </ng-template>
+
+
     <ng-template pTemplate="summary">
       <div class="flex align-items-center justify-content-between">
         In total there are {{ studijskIprogrami ? studijskIprogrami.length : 0 }} users.

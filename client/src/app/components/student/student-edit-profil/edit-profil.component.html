@@ -1,42 +1,65 @@
 <p-toast></p-toast>
 
+<!-- Select Button to Toggle Forms -->
 <div class="p-d-flex p-jc-center p-ai-center p-mt-5">
-  <p-selectButton [options]="options" [(ngModel)]="selectedOption" optionLabel="label"
-                  optionValue="value" [style]="{'width': '400px'}"
-                  [class]="{'p-button-outlined': true}">
+  <p-selectButton [options]="options" [(ngModel)]="selectedOption" optionLabel="label" optionValue="value" [style]="{'width': '400px'}" [class]="{'p-button-outlined': true}">
   </p-selectButton>
 </div>
 
+<!-- Change Password Form -->
 <div *ngIf="selectedOption === 'password'" class="p-d-flex p-jc-center p-mt-3">
   <p-card header="Change Password" styleClass="p-shadow-5" [style]="{'width': '400px'}">
-    <form [formGroup]="form" (ngSubmit)="onSubmitChangePassword()" novalidate>
+    <form [formGroup]="passwordForm" (ngSubmit)="onSubmitChangePassword()" novalidate>
       <div class="p-fluid">
+        <!-- Current Password -->
         <div class="p-field">
           <label for="currentPassword">Current Password</label>
-          <span class="p-input-icon-left">
-            <i class="pi pi-lock"></i>
-            <input id="currentPassword" type="password" pInputText formControlName="currentPassword" placeholder="Enter current password" />
-          </span>
-          <p-message *ngIf="form.get('currentPassword')?.invalid && form.get('currentPassword')?.touched" severity="error" text="Current Password is required"></p-message>
+          <p-password id="currentPassword" formControlName="currentPassword"
+                      promptLabel="Enter your current password"
+                      weakLabel="Weak" mediumLabel="Medium" strongLabel="Strong"
+                      feedback="false" [toggleMask]="true"
+                      placeholder="Current password">
+            <!-- Adding lock icon inside the field -->
+            <ng-template pTemplate="icon">
+              <i class="pi pi-lock"></i>
+            </ng-template>
+          </p-password>
+          <p-message *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched" severity="error" text="Current Password is required"></p-message>
         </div>
 
+        <!-- New Password -->
         <div class="p-field">
           <label for="newPassword">New Password</label>
-          <p-password id="newPassword" formControlName="newPassword" promptLabel="Enter a password" weakLabel="Weak" mediumLabel="Medium" strongLabel="Strong"
-                      [feedback]="true" placeholder="Enter new password"></p-password>
-          <p-message *ngIf="form.get('newPassword')?.invalid && form.get('newPassword')?.touched" severity="error"
-                     text="Password must be at least 8 characters long"></p-message>
+          <p-password id="newPassword" formControlName="newPassword"
+                      promptLabel="Enter your new password"
+                      weakLabel="Weak" mediumLabel="Medium" strongLabel="Strong"
+                      feedback="true" [toggleMask]="true"
+                      placeholder="New password">
+            <!-- Adding lock icon inside the field -->
+            <ng-template pTemplate="icon">
+              <i class="pi pi-lock"></i>
+            </ng-template>
+          </p-password>
+          <p-message *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched" severity="error" text="Password must be at least 8 characters long"></p-message>
         </div>
 
+        <!-- Confirm New Password -->
         <div class="p-field">
           <label for="confirmPassword">Confirm New Password</label>
-          <span class="p-input-icon-left">
-            <i class="pi pi-lock"></i>
-            <input id="confirmPassword" type="password" pInputText formControlName="confirmPassword" placeholder="Confirm new password" />
-          </span>
-          <p-message *ngIf="form.errors?.['mismatch'] && form.get('confirmPassword')?.touched" severity="error" text="Passwords do not match"></p-message>
+          <p-password id="confirmPassword" formControlName="confirmPassword"
+                      promptLabel="Re-enter your new password"
+                      weakLabel="Weak" mediumLabel="Medium" strongLabel="Strong"
+                      feedback="false" [toggleMask]="true"
+                      placeholder="Confirm new password">
+            <!-- Adding lock icon inside the field -->
+            <ng-template pTemplate="icon">
+              <i class="pi pi-lock"></i>
+            </ng-template>
+          </p-password>
+          <p-message *ngIf="passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched" severity="error" text="Passwords do not match"></p-message>
         </div>
 
+        <!-- Submit Button -->
         <div class="p-field p-d-flex p-jc-center">
           <button pButton type="submit" label="Submit" icon="pi pi-check" class="p-button-rounded p-button-success"></button>
         </div>
@@ -45,9 +68,12 @@
   </p-card>
 </div>
 
+
+
+<!-- Change Email Form -->
 <div *ngIf="selectedOption === 'email'" class="p-d-flex p-jc-center p-mt-3">
   <p-card header="Change Email" styleClass="p-shadow-5" [style]="{'width': '400px'}">
-    <form [formGroup]="form" (ngSubmit)="onSubmitChangeEmail()" novalidate>
+    <form [formGroup]="emailForm" (ngSubmit)="onSubmitChangeEmail()" novalidate>
       <div class="p-fluid">
         <div class="p-field">
           <label for="email">New Email</label>
@@ -55,7 +81,7 @@
             <i class="pi pi-envelope"></i>
             <input id="email" type="email" pInputText formControlName="email" placeholder="Enter new email" />
           </span>
-          <p-message *ngIf="form.get('email')?.invalid && form.get('email')?.touched" severity="error" text="Please enter a valid email"></p-message>
+          <p-message *ngIf="emailForm.get('email')?.invalid && emailForm.get('email')?.touched" severity="error" text="Please enter a valid email"></p-message>
         </div>
 
         <div class="p-field p-d-flex p-jc-center">

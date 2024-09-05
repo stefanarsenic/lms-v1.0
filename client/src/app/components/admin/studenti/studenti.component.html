@@ -33,7 +33,7 @@
 
   <p-table
     #dt
-    [value]="items"
+    [value]="studenti"
     [rows]="10"
     [paginator]="true"
     [globalFilterFields]="['ime', 'prezime', 'email', 'jmbg','datumRodjenja']"
@@ -77,8 +77,8 @@
         <th pSortableColumn="jmbg" style="min-width:10rem">
           JMBG <p-sortIcon field="jmbg" />
         </th>
-        <th pSortableColumn="datumRodjenja" style="min-width:10rem">
-          Datum rodjenja <p-sortIcon field="datumRodjenja" />
+        <th pSortableColumn="datumRodjenja">
+          Datum Rodjenja <p-sortIcon field="datumRodjenja"></p-sortIcon>
         </th>
 
         <th></th>
@@ -104,7 +104,7 @@
           <p-columnFilter type="text" field="jmbg" [showClearButton]="true" />
         </th>
         <th>
-          <p-columnFilter type="text" field="datumRodjenja" [showClearButton]="true" />
+          <p-columnFilter type="date" field="datumRodjenja" [showClearButton]="true" display="menu"></p-columnFilter>
         </th>
         <th></th>
       </tr>
@@ -160,8 +160,8 @@
               <input pInputText type="text" [(ngModel)]="product.adresa" />
             </ng-template>
             <ng-template pTemplate="output">
-              {{ product.adresa }}
-            </ng-template>
+              {{ product.adresa.ulica }} {{ product.adresa.broj }} {{ product.adresa.mesto.naziv }}
+             </ng-template>
           </p-cellEditor>
         </td>
         <td>
@@ -283,18 +283,19 @@
         <p-dropdown
           [options]="selektovanaDrzava.mesta"
           appendTo="body"
-          [(ngModel)]="student.adresa.mesto"
+          [(ngModel)]="selektovanoMesto"
           optionLabel="naziv"
           [filter]="true"
           filterBy="naziv"
           [showClear]="true"
-          placeholder="Selektrujte mesto">
+          placeholder="Selektujte mesto">
           <ng-template pTemplate="selectedItem" let-selectedOption>
             <div class="flex align-items-center gap-2">
               <div>{{ selectedOption.naziv }}</div>
             </div>
           </ng-template>
         </p-dropdown>
+
       </div>
       <div class="field">
         <label for="ulica">Ulica</label>

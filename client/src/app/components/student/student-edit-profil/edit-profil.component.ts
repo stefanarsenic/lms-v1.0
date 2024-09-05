@@ -14,6 +14,7 @@ import {MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import {SelectButtonModule} from "primeng/selectbutton";
 import {MessageModule} from "primeng/message";
+import {KorisnikService} from "../../../services/korisnik.service";
 @Component({
   selector: 'app-student-edit-profil',
   standalone: true,
@@ -38,26 +39,31 @@ import {MessageModule} from "primeng/message";
 })
 export class EditProfilComponent implements OnInit {
 
-  form: FormGroup;
+  passwordForm!: FormGroup;
+  emailForm!: FormGroup;
   selectedOption: string = 'password';
+  username:string="";
 
   options: any[] = [
-    {label: 'Change Password', value: 'password', icon: 'pi pi-lock'},
-    {label: 'Change Email', value: 'email', icon: 'pi pi-envelope'}
+    { label: 'Change Password', value: 'password', icon: 'pi pi-lock' },
+    { label: 'Change Email', value: 'email', icon: 'pi pi-envelope' }
   ];
 
-  constructor(private fb: FormBuilder, private messageService: MessageService) {
-    this.form = this.fb.group({
+  constructor(private fb: FormBuilder, private messageService: MessageService, private korisnikService:KorisnikService) {
+    // Password form group
+    this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
+    }, { validator: this.passwordMatchValidator });
+
+    // Email form group
+    this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
-    })
-  }
-  ngOnInit() {
-
+    });
   }
 
+  ngOnInit() {}
 
   passwordMatchValidator(group: FormGroup) {
     const password = group.get('newPassword')?.value;
@@ -66,20 +72,31 @@ export class EditProfilComponent implements OnInit {
   }
 
   onSubmitChangePassword() {
-    if (this.form.valid) {
-      this.messageService.add({severity: 'success', summary: 'Success', detail: 'Password changed successfully!'});
-      // Perform your password change logic here
-    } else {
-      this.messageService.add({severity: 'error', summary: 'Error', detail: 'Please correct the errors in the form!'});
+    let token=localStorage.getItem("token")
+    if(this.passwordForm.valid){
+      if (token) {
+        this.username=JSON.parse(atob(token.split(".")[1]))["username"]
+        this.korisnikService.changePassword(this.username,this.passwordForm.get("currentPassword")?.value,this.passwordForm.get("newPassword")?.value).subscribe(r=>{
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password changed successfully!' });
+        })
+      }
+    }
+    else {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please correct the errors in the form!' });
     }
   }
 
   onSubmitChangeEmail() {
-    if (this.form.get('email')?.valid) {
-      this.messageService.add({severity: 'success', summary: 'Success', detail: 'Email changed successfully!'});
-      // Perform your email change logic here
-    } else {
-      this.messageService.add({severity: 'error', summary: 'Error', detail: 'Please enter a valid email!'});
+    let token=localStorage.getItem("token")
+    if(this.emailForm.valid){
+      if (token) {
+        this.username=JSON.parse(atob(token.split(".")[1]))["username"]
+        this.korisnikService.changeEmail(this.username,this.emailForm.get("email")?.value).subscribe(r=>{
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Email changed successfully!' });
+        })
+      }
+    }else {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please enter a valid email!' });
     }
   }
 }

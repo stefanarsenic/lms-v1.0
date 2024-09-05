@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.controllers.realizacija_predmeta;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.TipEvaluacijeDto;
@@ -10,6 +11,7 @@ import rs.ac.singidunum.novisad.server.model.RealizacijaPredmeta.TipEvaluacije;
 
 @RestController
 @RequestMapping("/api/tip-evaluacije")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class TipEvaluacijeController extends GenericController<TipEvaluacije, Long, TipEvaluacijeDto> {
     public TipEvaluacijeController(GenericService<TipEvaluacije, Long> service) {
         super(service);

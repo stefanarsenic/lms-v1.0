@@ -14,4 +14,6 @@ import java.util.Optional;
 public interface KorisnikRepository extends CrudRepository<RegistrovaniKorisnik,Long> {
      Optional<RegistrovaniKorisnik> findByKorisnickoIme(String korisnickoIme);
      void deleteByIdIn(List<Long> ids);
+
+     boolean existsByEmail(String email);
 }

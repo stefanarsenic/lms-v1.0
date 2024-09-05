@@ -36,13 +36,6 @@ export class MainStudentComponent implements OnDestroy{
   constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
     this.model1 = [
       {
-        label: 'Home',
-        items: [
-          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: 'dashboard' },
-          { label: 'Edit', icon: 'pi pi-fw pi-home', routerLink: 'edit-profil' }
-        ],
-      },
-      {
         label: 'Predmeti',
         items: [
           { label: 'Pregled Predmeta', icon: 'pi pi-fw pi-book', routerLink: 'pregled-predmeta' },

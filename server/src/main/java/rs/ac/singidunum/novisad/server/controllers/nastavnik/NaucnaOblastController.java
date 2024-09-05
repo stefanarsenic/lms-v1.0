@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.controllers.nastavnik;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import rs.ac.singidunum.novisad.server.model.nastavnik.NaucnaOblast;
 
 @RestController
 @RequestMapping("/api/naucna-oblast")
+@Secured({"ROLE_ADMIN","ROLE_SLUZBA","ROLE_NASTAVNIK"})
 public class NaucnaOblastController extends GenericController<NaucnaOblast, Long, NaucnaOblastDto> {
     public NaucnaOblastController(GenericService<NaucnaOblast, Long> service) {
         super(service);

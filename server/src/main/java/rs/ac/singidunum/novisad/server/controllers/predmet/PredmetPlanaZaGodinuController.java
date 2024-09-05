@@ -3,6 +3,7 @@ package rs.ac.singidunum.novisad.server.controllers.predmet;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PlanZaGodinuDto;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/predmet-plana-za-godinu")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class PredmetPlanaZaGodinuController extends GenericController<PredmetPlanaZaGodinu, Long, PredmetPlanaZaGodinuDto> {
 
     private final PredmetService predmetService;
@@ -67,6 +69,7 @@ public class PredmetPlanaZaGodinuController extends GenericController<PredmetPla
     }
 
     @PostMapping("/in-batch/{planZaGodinuId}")
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
     public ResponseEntity<?> createInBatch(@PathVariable Long planZaGodinuId, @RequestBody List<PredmetPlanaZaGodinuDto> dtos) {
 
         PlanZaGodinu planZaGodinu = planZaGodinuService.findById(planZaGodinuId).orElseThrow(
@@ -122,6 +125,18 @@ public class PredmetPlanaZaGodinuController extends GenericController<PredmetPla
         p.setPlanZaGodinu(planZaGodinuDto);
 
         return p;
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
+    public ResponseEntity<PredmetPlanaZaGodinuDto> update(Long aLong, PredmetPlanaZaGodinuDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
     }
 
     @Override

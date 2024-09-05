@@ -1,52 +1,84 @@
 <div class="card">
-  <p-toast />
-  <p-table #dt [value]="predmeti" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
+  <p-toast></p-toast>
+
+  <!-- Loading Spinner -->
+  <p-progressSpinner *ngIf="loading" styleClass="custom-spinner"></p-progressSpinner>
+
+  <p-table #dt
+           *ngIf="!loading"
+           [value]="predmeti"
+           dataKey="id"
+           [tableStyle]="{ 'min-width': '60rem' }"
+           [expandedRowKeys]="expandedRows"
+           [paginator]="true"
+           [rows]="10"
+           [rowsPerPageOptions]="[5, 10, 20]"
+           [globalFilterFields]="['naziv', 'esbp', 'asistent.ime', 'asistent.prezime']"
+           (onRowExpand)="onRowExpand($event)"
+           (onRowCollapse)="onRowCollapse($event)"
+           class="p-datatable-striped p-datatable-gridlines p-datatable-responsive">
+
+    <!-- Table Caption with Search Box -->
     <ng-template pTemplate="caption">
-      <div class="flex flex-wrap justify-content-end gap-2">
-        <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
-        <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
+      <div class="flex flex-wrap justify-content-between gap-2">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" placeholder="Search..." (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+        </span>
+        <div class="flex flex-wrap justify-content-end gap-2">
+          <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()"></p-button>
+          <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()"></p-button>
+        </div>
       </div>
     </ng-template>
+
+    <!-- Table Header -->
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 5rem"></th>
-        <th pSortableColumn="name">Naziv <p-sortIcon field="naziv" /></th>
-        <th pSortableColumn="price">ESBP <p-sortIcon field="esb" /></th>
-        <th pSortableColumn="category">Asistent <p-sortIcon field="asistent" /></th>
+        <th pSortableColumn="naziv">Naziv <p-sortIcon field="naziv"></p-sortIcon></th>
+        <th pSortableColumn="esbp">ESBP <p-sortIcon field="esbp"></p-sortIcon></th>
+        <th pSortableColumn="asistent">Asistent <p-sortIcon field="asistent.ime"></p-sortIcon></th>
       </tr>
     </ng-template>
+
+    <!-- Table Body -->
     <ng-template pTemplate="body" let-product let-expanded="expanded">
       <tr>
         <td>
-          <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+          <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true" [plain]="true"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></p-button>
         </td>
         <td>{{ product.naziv }}</td>
-        <td>{{ product.esbp}}</td>
-        <td>test</td>
+        <td>{{ product.espb }}</td>
+        <td>{{ product.asistent.ime }} {{ product.asistent.prezime }}</td>
       </tr>
     </ng-template>
+
+    <!-- Expanded Row Content -->
     <ng-template pTemplate="rowexpansion" let-product>
       <tr>
-        <td colspan="7">
+        <td colspan="4">
           <div class="p-3">
-            <table  class="regular-table">
+            <table class="regular-table">
               <thead>
-                <tr>
-                  <th pSortableColumn="brojPredavanja">Broj predavanja <p-sortIcon field="brojPredavanja" /></th>
-                  <th pSortableColumn="brojVezbi">Broj Vezbi <p-sortIcon field="brojVezbi" /></th>
-                  <th style="width: 4rem"></th>
-                </tr>
+              <tr>
+                <th pSortableColumn="brojPredavanja">Broj predavanja <p-sortIcon field="brojPredavanja"></p-sortIcon></th>
+                <th pSortableColumn="brojVezbi">Broj Vezbi <p-sortIcon field="brojVezbi"></p-sortIcon></th>
+              </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>{{ product.brojPredavanja }}</td>
-                  <td>{{ product.brojVezbi }}</td>
-                </tr>
+              <tr>
+                <td>{{ product.brojPredavanja }}</td>
+                <td>{{ product.brojVezbi }}</td>
+              </tr>
               </tbody>
             </table>
           </div>
         </td>
       </tr>
     </ng-template>
+
+    <!-- Paginator (auto-handled by PrimeNG's p-table) -->
   </p-table>
 </div>

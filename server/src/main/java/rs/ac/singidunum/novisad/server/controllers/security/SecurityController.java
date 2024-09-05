@@ -79,7 +79,6 @@ public class SecurityController extends GenericController<RegistrovaniKorisnik,L
     @RequestMapping(path = "/login",method = RequestMethod.POST)
     public ResponseEntity<String> login(@RequestBody RegistrovaniKorisnikDto korisnikDto) throws IllegalAccessException, InstantiationException {
         RegistrovaniKorisnik korisnik=convertToEntity(korisnikDto);
-        System.out.println(userDetailsService.loadUserByUsername(korisnik.getKorisnickoIme()));
         UsernamePasswordAuthenticationToken token=new UsernamePasswordAuthenticationToken(korisnik.getKorisnickoIme(),korisnik.getLozinka());
         Authentication authentication=authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);

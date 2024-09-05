@@ -1,6 +1,7 @@
 package rs.ac.singidunum.novisad.server.controllers.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.UlogaDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
@@ -15,6 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/uloge")
 @RestController
+@Secured({"ROLE_ADMIN"})
 public class UlogaController extends GenericController<Uloga,Long, UlogaDto> {
     public UlogaController(GenericService<Uloga,Long> service) {
         super(service);
@@ -22,7 +24,10 @@ public class UlogaController extends GenericController<Uloga,Long, UlogaDto> {
 
     @Autowired
     UlogaService ulogaService;
+
+
     @Override
+    @Secured({"ROLE_ADMIN"})
     protected UlogaDto convertToDto(Uloga entity) throws IllegalAccessException, InstantiationException {
         return EntityDtoMapper.convertToDto(entity,UlogaDto.class);
     }

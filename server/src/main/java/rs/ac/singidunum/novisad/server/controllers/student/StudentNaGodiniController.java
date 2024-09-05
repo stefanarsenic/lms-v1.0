@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
@@ -39,6 +40,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/student-na-godini")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class StudentNaGodiniController extends GenericController<StudentNaGodini, Long, StudentNaGodiniDto> {
     private final StudentService studentService;
     private final StudentNaGodiniService studentNaGodiniService;
@@ -162,6 +164,7 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
 
 
     @PostMapping
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
     public ResponseEntity<StudentNaGodiniDto> create(@RequestBody StudentNaGodiniDto dto) throws IllegalAccessException, InstantiationException {
         StudentNaGodini entity = convertToEntity(dto);
         entity = studentNaGodiniService.saveWithUpis(entity);
@@ -173,6 +176,7 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
     }
 
     @PutMapping("/{id}")
+    @Secured({"ROLE_ADMIN","ROLE_SLUZBA"})
     public ResponseEntity<StudentNaGodiniDto> update(@PathVariable Long id, @RequestBody StudentNaGodiniDto dto) throws IllegalAccessException, InstantiationException {
         Optional<StudentNaGodini> entityOptional = service.findById(id);
         if (entityOptional.isPresent()) {
@@ -189,6 +193,7 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
     protected StudentNaGodiniDto convertToDto(StudentNaGodini entity) throws IllegalAccessException, InstantiationException {
         StudentNaGodiniDto s = EntityDtoMapper.convertToDto(entity, StudentNaGodiniDto.class);
         StudentDto studentDto = EntityDtoMapper.convertToDto(entity.getStudent(), StudentDto.class);
+        studentDto.setPravoPristupaSet(new HashSet<>());
         s.setPredmeti(Collections.emptyList());
         if(entity.getStudijskiProgram() != null) {
             s.setStudijskiProgram(EntityDtoMapper.convertToDto(entity.getStudijskiProgram(), StudijskiProgramDto.class));

@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.PredmetDto;
 import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.PolaganjePredmetaDto;
-import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.PolozeniPredmetDto;
+import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.StudentInfoDto;
 import rs.ac.singidunum.novisad.server.dto.student.PohadjanjePredmetaDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentNaGodiniDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
@@ -30,6 +31,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/pohadjanje-predmeta")
+@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class PohadjanjePredmetaController extends GenericController<PohadjanjePredmeta, Long, PohadjanjePredmetaDto> {
     private final PohadjanjePredmetaService pohadjanjePredmetaService;
     private final PohadjanjePredmetaRepository pohadjanjePredmetaRepository;
@@ -158,5 +160,23 @@ public class PohadjanjePredmetaController extends GenericController<PohadjanjePr
     @Override
     protected PohadjanjePredmeta convertToEntity(PohadjanjePredmetaDto dto) throws IllegalAccessException, InstantiationException {
         return null;
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
+    public ResponseEntity<PohadjanjePredmetaDto> create(PohadjanjePredmetaDto dto) throws IllegalAccessException, InstantiationException {
+        return super.create(dto);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
+    public ResponseEntity<PohadjanjePredmetaDto> update(Long aLong, PohadjanjePredmetaDto dto) throws IllegalAccessException, InstantiationException {
+        return super.update(aLong, dto);
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN","ROLE_NASTAVNIK","ROLE_SLUZBA"})
+    public ResponseEntity<Void> delete(Long aLong) {
+        return super.delete(aLong);
     }
 }
