@@ -1,3 +1,4 @@
+<div *ngIf="studentNaGodini && studentNaGodini.length > 0">
 <div *ngFor="let data of studentNaGodini" class="p-grid">
   <p-panel class="p-col-12" header="{{ data.studijskiProgram.naziv }} - Godina {{ data.godinaStudija }}" [toggleable]="true">
     <div class="student-info">
@@ -26,24 +27,24 @@
       </ng-template>
       <ng-template pTemplate="body" let-predmet>
         <tr>
-          <td>{{ predmet.naziv }}</td>
-          <td>{{ predmet.espb }}</td>
-          <td>{{ predmet.obavezan ? 'Da' : 'Ne' }}</td>
-          <td>{{ predmet.brojPredavanja }}</td>
-          <td>{{ predmet.brojVezbi }}</td>
-          <td>{{ predmet.nastavnik.ime }} {{ predmet.nastavnik.prezime }}</td>
-          <td>{{ predmet.asistent.ime }} {{ predmet.asistent.prezime }}</td>
+          <td>{{ predmet.predmet.naziv }}</td>
+          <td>{{ predmet.predmet.espb }}</td>
+          <td>{{ predmet.predmet.obavezan ? 'Da' : 'Ne' }}</td>
+          <td>{{ predmet.predmet.brojPredavanja }}</td>
+          <td>{{ predmet.predmet.brojVezbi }}</td>
+          <td>{{ predmet.predmet.nastavnik.ime }} {{ predmet.predmet.nastavnik.prezime }}</td>
+          <td>{{ predmet.predmet.asistent.ime }} {{ predmet.predmet.asistent.prezime }}</td>
           <td>
-            <p-chip *ngFor="let pred of predmet.preduslov" label="{{ pred.naziv }}"></p-chip>
+            <p-chip *ngFor="let pred of predmet.predmet.preduslov" label="{{ pred.naziv }}"></p-chip>
           </td>
           <td>
-            <p-chip *ngFor="let plan of predmet.planovi" label="{{ plan.opis }}"></p-chip>
+            <p-chip *ngFor="let plan of predmet.predmet.planovi" label="{{ plan.opis }}"></p-chip>
           </td>
           <td>
             <p-accordion class="p-col-12">
-              <p-accordionTab header="Pogledaj Silabus ({{ predmet.silabus.length }})">
+              <p-accordionTab header="Pogledaj Silabus ({{ predmet.predmet.silabus.length }})">
                 <p-scroller
-                  [items]="predmet.silabus"
+                  [items]="predmet.predmet.silabus"
                   [itemSize]="50"
                   scrollHeight="200px"
                   styleClass="border-1 surface-border"
@@ -63,4 +64,5 @@
 
     <p-message *ngIf="data.predmeti.length === 0" severity="info" text="Trenutno nema predmeta."></p-message>
   </p-panel>
+</div>
 </div>

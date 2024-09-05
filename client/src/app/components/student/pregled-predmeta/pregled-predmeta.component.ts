@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Predmet} from "../../../model/predmet";
 import {MessageService, PrimeTemplate} from "primeng/api";
 import {PredmetService} from "../../../services/predmet.service";
@@ -40,7 +40,7 @@ import {ChipModule} from "primeng/chip";
   templateUrl: './pregled-predmeta.component.html',
   styleUrl: './pregled-predmeta.component.css'
 })
-export class PregledPredmetaComponent {
+export class PregledPredmetaComponent implements OnInit{
 
   loading: boolean = true;
 
@@ -48,9 +48,9 @@ export class PregledPredmetaComponent {
   studentUsername:any
 
 
-  studentNaGodini!:StudentNaGodini[]
+  studentNaGodini:StudentNaGodini[]=[]
 
-  constructor(private messageService: MessageService, private predmetService:PredmetService,private studentNaGodiniService: StudentNaGodiniService){
+  ngOnInit() {
     const token: string | null = localStorage.getItem('token');
     if (token) {
       this.studentUsername = JSON.parse(atob(token.split(".")[1])).username;
@@ -71,6 +71,9 @@ export class PregledPredmetaComponent {
       this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Invalid user token' });
       this.loading = false;
     }
+  }
+
+  constructor(private messageService: MessageService, private predmetService:PredmetService,private studentNaGodiniService: StudentNaGodiniService){
 
   }
 

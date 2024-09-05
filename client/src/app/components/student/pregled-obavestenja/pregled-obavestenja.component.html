@@ -3,10 +3,10 @@
     <p-card header="{{ program.studijskiProgram.naziv }}" subheader="Godina {{ program.godinaStudija }}" styleClass="subject-card">
       <ng-container *ngFor="let predmet of program.predmeti">
         <div class="predmet-details">
-          <h4>{{ predmet.naziv }}</h4>
-          <p>Nastavnik: {{ predmet.nastavnik.ime }} {{ predmet.nastavnik.prezime }}</p>
-          <p>Asistent: {{ predmet.asistent.ime }} {{ predmet.asistent.prezime }}</p>
-          <button pButton label="View Obavestenja" icon="pi pi-bell" class="p-button-outlined p-button-sm" (click)="openObavestenjaModal(predmet)"></button>
+          <h4>{{ predmet.predmet.naziv }}</h4>
+          <p>Nastavnik: {{ predmet.predmet.nastavnik.ime }} {{ predmet.predmet.nastavnik.prezime }}</p>
+          <p>Asistent: {{ predmet.predmet.asistent.ime }} {{ predmet.predmet.asistent.prezime }}</p>
+          <button pButton label="View Obavestenja" icon="pi pi-bell" class="p-button-outlined p-button-sm" (click)="openObavestenjaModal(predmet.predmet)"></button>
         </div>
       </ng-container>
     </p-card>

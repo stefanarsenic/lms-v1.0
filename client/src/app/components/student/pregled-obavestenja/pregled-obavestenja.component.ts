@@ -45,7 +45,7 @@ export class PregledObavestenjaComponent {
   //TODO:Prvier da izgleda lepse akd ima vise predmeta ili vise studentNaGodini
   loading: boolean = true;
   studentUsername: string | null;
-  studentNaGodini!: StudentNaGodini[];
+  studentNaGodini!: any[];
   obavestenja: any[] = [];
   selectedObavestenje: any | null = null;
   obavestenjaModalVisible: boolean = false;
@@ -67,6 +67,7 @@ export class PregledObavestenjaComponent {
     if (this.studentUsername) {
       this.studentNaGodiniService.getAllByStudentUsername(this.studentUsername).subscribe({
         next: (data) => {
+          console.log(data)
           this.studentNaGodini = data;
           this.loading = false;
         },
@@ -82,6 +83,7 @@ export class PregledObavestenjaComponent {
   }
 
   openObavestenjaModal(predmet: any): void {
+    this.selectedObavestenje = null
     this.obavestenjaModalVisible = true;
     this.loadObavestenja(predmet.id);
   }
@@ -91,6 +93,7 @@ export class PregledObavestenjaComponent {
       next: (obavestenja) => {
         this.obavestenja = obavestenja.map(obavestenje => {
           obavestenje.vremePostavljanja = this.convertArrayToDate(obavestenje.vremePostavljanja as any);
+          console.log(obavestenja)
           return obavestenje;
         });
       },
