@@ -16,6 +16,7 @@ import {formatDateFromString} from "../../../../utils/date-converter";
 import {parseAndFormatDate} from "../../../../utils/datum-utils";
 import {PanelModule} from "primeng/panel";
 import {PolaganjeService} from "../../../../services/polaganje.service";
+import {switchMap} from "rxjs";
 
 @Component({
   selector: 'app-spisak-studenata-nastavnik',
@@ -34,6 +35,7 @@ import {PolaganjeService} from "../../../../services/polaganje.service";
 })
 export class SpisakStudenataNastavnikComponent implements OnInit{
 
+  prijavljeniIspiti: any[] = [];
   informacijeStudenta: any = {};
   studenti: any[] = [];
   selectedStudent!: any;
@@ -45,7 +47,8 @@ export class SpisakStudenataNastavnikComponent implements OnInit{
   constructor(
     private route: ActivatedRoute,
     private studentNaGodiniService: StudentNaGodiniService,
-    private polaganjeService: PolaganjeService
+    private polaganjeService: PolaganjeService,
+    private upisService: PolaganjeService
   ) {
   }
   ngOnInit(): void {
@@ -59,7 +62,7 @@ export class SpisakStudenataNastavnikComponent implements OnInit{
       });
     });
   }
-
+//TODO: filteri za tabelu, unos ocene, instrumenti evaluacije, izolovati komponentu
   prikaziPodatke(id: number){
     this.visible = true;
     if(id){
@@ -67,13 +70,30 @@ export class SpisakStudenataNastavnikComponent implements OnInit{
       if(this.selectedStudent) {
         let params: HttpParams = new HttpParams()
           .set("studentId", this.selectedStudent.student.id);
-        this.studentNaGodiniService.getStudentInfo(params).subscribe(data => this.informacijeStudenta = data);
-        this.polaganjeService.getPrijavljeniIspitiStudenta(params).subscribe(data => {
-          this.informacijeStudenta = {
-            ...this.informacijeStudenta,
-            upisi: data
-          }
-        });
+
+        this.polaganjeService.getPrijavljeniIspitiStudenta(params).subscribe(data => this.prijavljeniIspiti = data);
+        this.studentNaGodiniService.getStudentInfo(params)
+          .pipe(
+            switchMap((data) => {
+              this.informacijeStudenta = data;
+              return this.studentNaGodiniService.getUpisi(params);
+            })
+          )
+          .subscribe({
+            next: (upisiData) => {
+              this.informacijeStudenta = {
+                ...this.informacijeStudenta,
+                upisi: upisiData
+              };
+              console.log(this.informacijeStudenta);
+            },
+            error: (error) => {
+              console.error("Error occurred:", error);
+            },
+            complete: () => {
+              console.log("Request completed.");
+            }
+          });
       }
     }
   }

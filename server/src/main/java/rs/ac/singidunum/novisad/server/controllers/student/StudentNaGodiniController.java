@@ -3,12 +3,8 @@ package rs.ac.singidunum.novisad.server.controllers.student;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.singidunum.novisad.server.dto.adresa.AdresaDto;
-import rs.ac.singidunum.novisad.server.dto.adresa.MestoDto;
-import rs.ac.singidunum.novisad.server.dto.fakultet.FakultetDto;
 import rs.ac.singidunum.novisad.server.dto.fakultet.StudijskiProgramDto;
 import rs.ac.singidunum.novisad.server.dto.nastavnik.NastavnikDto;
 import rs.ac.singidunum.novisad.server.dto.predmet.IshodDto;
@@ -18,6 +14,7 @@ import rs.ac.singidunum.novisad.server.dto.realizacija_predmeta.PolaganjePredmet
 import rs.ac.singidunum.novisad.server.dto.student.PohadjanjePredmetaDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 import rs.ac.singidunum.novisad.server.dto.student.StudentNaGodiniDto;
+import rs.ac.singidunum.novisad.server.dto.student.UpisDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
@@ -68,6 +65,21 @@ public class StudentNaGodiniController extends GenericController<StudentNaGodini
         this.upisRepository = upisRepository;
         this.polaganjeRepository = polaganjeRepository;
         this.polaganjePredmetaRepository = polaganjePredmetaRepository;
+    }
+
+    @GetMapping("/upisi-by-student")
+    public ResponseEntity<?> getUpisiByStudent(@PathParam("studentId") Long studentId){
+        StudentNaGodini student = studentNaGodiniRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found"));
+        List<Upis> upisi = upisRepository.findAllByStudent(student);
+        List<UpisDto> dtos = upisi.stream().map(upis -> {
+            try {
+                return EntityDtoMapper.convertToDto(upis, UpisDto.class);
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/by-predmet")

@@ -116,12 +116,49 @@
     <p-table [value]="informacijeStudenta.upisi" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
       <ng-template pTemplate="header">
         <tr>
-
+          <th>Datum Upisa</th>
+          <th>Godina Studija</th>
+          <th>Osvojeno Espb</th>
+          <th>Najavljeno Espb</th>
+          <th>Koji Put</th>
+          <th>Studijski Program</th>
+          <th>Skolska Godina</th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-polaganje>
+      <ng-template pTemplate="body" let-upis>
         <tr>
-         
+          <td>{{parseAndFormatDate(upis.datumUpisa.toString())}}</td>
+          <td>{{upis.godinaStudija}}</td>
+          <td>{{upis.espbOsvojeno}}</td>
+          <td>{{upis.espbNajavljeno}}</td>
+          <td>{{upis.kojiPut}}</td>
+          <td>{{upis.studijskiProgram}}</td>
+          <td>{{upis.skolskaGodina.pocetakSkolskeGodine}}/{{upis.skolskaGodina.krajSkolskeGodine}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+  <br>
+  <p-panel header="Prijavljeni Ispiti" [toggleable]="true">
+    <p-table [value]="prijavljeniIspiti" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Predmet</th>
+          <th>Espb</th>
+          <th>Bodovi</th>
+          <th>Napomena</th>
+          <th>Vreme Pocetka</th>
+          <th>Nastavnik</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-ispit>
+        <tr>
+          <td>{{ispit.predmet.naziv}}</td>
+          <td>{{ispit.predmet.espb}}</td>
+          <td>{{ispit.bodovi ? ispit.bodovi : 0}}</td>
+          <td>{{ispit.napomena ? ispit.napomena : "Nema"}}</td>
+          <td>{{formatDateFromString(ispit.evaluacijaZnanja.vremePocetka.toString())}}</td>
+          <td>{{ispit.predmet.nastavnik.ime}} {{ispit.predmet.nastavnik.prezime}}</td>
         </tr>
       </ng-template>
     </p-table>

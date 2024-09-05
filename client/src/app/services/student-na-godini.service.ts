@@ -14,6 +14,10 @@ export class StudentNaGodiniService extends GenerickiService<StudentNaGodini>{
     this.putanja = "api/student-na-godini";
   }
 
+  getUpisi(params: HttpParams){
+    return this.http.get<any[]>(`http://localhost:8080/${this.putanja}/upisi-by-student?${params}`);
+  }
+
   getStudentInfo(params: HttpParams){
     return this.http.get<any>(`http://localhost:8080/api/pohadjanje-predmeta/student-info?${params}`);
   }
