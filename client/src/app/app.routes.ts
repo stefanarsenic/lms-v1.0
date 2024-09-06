@@ -230,7 +230,7 @@ export const routes: Routes = [
     path:"korisnik",
     component: UserProfileComponent,
     canActivate:[authGuard],data:{
-      allowedRoles:["ROLE_ADMIN"]
+      allowedRoles:["ROLE_REGULAR"]
     }
   },
   {

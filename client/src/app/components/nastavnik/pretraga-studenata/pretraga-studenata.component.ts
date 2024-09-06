@@ -64,8 +64,25 @@ export class PretragaStudenataComponent implements OnInit {
   ngOnInit(): void {
    this.studijskiProgram.getAll().subscribe((r:StudentNaGodini[])=>{
       this.studijskIprogrami=r;
+     this.studijskIprogrami.map(s=>{
+       s.datumUpisa=<Date>this.convertDate(s.datumUpisa)
+     })
       this.loadAverageGrades();
     })
+  }
+
+  convertDate(input: any): Date | null {
+    if (Array.isArray(input)) {
+      const [year, month, day, hours, minutes] = input;
+      return new Date(year, month - 1, day, hours, minutes);
+    }
+
+    if (typeof input === 'string') {
+      const sanitizedDate = input.split('.')[0];
+      return new Date(sanitizedDate.replace(' ', 'T'));
+    }
+
+    return null;
   }
 
   loadAverageGrades() {

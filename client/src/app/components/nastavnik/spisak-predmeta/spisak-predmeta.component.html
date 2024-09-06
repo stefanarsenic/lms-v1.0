@@ -12,13 +12,14 @@
            [expandedRowKeys]="expandedRows"
            [paginator]="true"
            [rows]="10"
-           [rowsPerPageOptions]="[5, 10, 20]"
+           [rowsPerPageOptions]="[10, 15, 20]"
            [globalFilterFields]="['naziv', 'esbp', 'asistent.ime', 'asistent.prezime']"
            (onRowExpand)="onRowExpand($event)"
            (onRowCollapse)="onRowCollapse($event)"
            class="p-datatable-striped p-datatable-gridlines p-datatable-responsive">
 
-    <!-- Table Caption with Search Box -->
+
+  <!-- Table Caption with Search Box -->
     <ng-template pTemplate="caption">
       <div class="flex flex-wrap justify-content-between gap-2">
         <span class="p-input-icon-left">
