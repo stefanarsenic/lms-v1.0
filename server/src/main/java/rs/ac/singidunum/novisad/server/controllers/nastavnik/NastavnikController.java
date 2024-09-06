@@ -115,7 +115,7 @@ public class NastavnikController extends GenericController<Nastavnik, Long, Nast
         entity.setZvanja(zvanjes);
 
         Nastavnik nastavnik=service.save(entity);
-        NastavnikDto nastavnikDto=EntityDtoMapper.convertToDto(nastavnik,NastavnikDto.class);
+        NastavnikDto nastavnikDto=convertToDto(nastavnik);
 
         return new ResponseEntity<>(nastavnikDto, HttpStatus.CREATED);
     }
@@ -197,7 +197,7 @@ public class NastavnikController extends GenericController<Nastavnik, Long, Nast
         Nastavnik savedUser = nastavnikService.save(existingUser);
 
         // Convert and return the saved user DTO
-        NastavnikDto savedDto = EntityDtoMapper.convertToDto(savedUser, NastavnikDto.class);
+        NastavnikDto savedDto = convertToDto(savedUser);
         return ResponseEntity.ok(savedDto);
     }
 

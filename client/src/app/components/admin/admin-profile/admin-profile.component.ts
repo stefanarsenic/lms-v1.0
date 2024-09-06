@@ -45,21 +45,39 @@ export class AdminProfileComponent implements OnDestroy {
   constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
     this.model1 = [
       {
-        label: 'Admin Dashboard',
+        label: 'Kontrolna tabla',
         items: [
-          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: 'admin' },
+          { label: 'Pregled Kontrolne Table', icon: 'pi pi-fw pi-home', routerLink: 'admin' }
+        ]
+      },
+      {
+        label: 'Upravljanje Korisnicima',
+        items: [
           { label: 'Korisnici', icon: 'pi pi-fw pi-users', routerLink: 'korisnici' },
-          { label: 'Profesori', icon: 'pi pi-fw pi-user', routerLink: 'nastavnici' },
-          { label: 'Studenti', icon: 'pi pi-fw pi-users', routerLink: 'studenti' },
+          { label: 'Profesori', icon: 'pi pi-fw pi-user', routerLink: 'nastavnici' }, // Ispravna ikona za korisnika/profesora
+          { label: 'Studenti', icon: 'pi pi-fw pi-user', routerLink: 'studenti' }
+        ]
+      },
+      {
+        label: 'Akademski Programi',
+        items: [
           { label: 'Studijski Programi', icon: 'pi pi-fw pi-bookmark', routerLink: 'studijski-programi' },
-          { label: 'Organizacija studijskih programa', icon: 'pi pi-fw pi-sitemap', routerLink: 'organizacija-studijskog-programa' },
+          { label: 'Organizacija Programa', icon: 'pi pi-fw pi-sitemap', routerLink: 'organizacija-studijskog-programa' },
+          { label: 'Predmeti', icon: 'pi pi-fw pi-book', routerLink: 'predmeti' }
+        ]
+      },
+      {
+        label: 'Administracija',
+        items: [
           { label: 'Šifarnik', icon: 'pi pi-fw pi-list', routerLink: 'uloge' },
-          { label: 'Predmeti', icon: 'pi pi-fw pi-book', routerLink: 'predmeti' },
-          { label: 'Administracija Organizacije', icon: 'pi pi-fw pi-book', routerLink: 'administracija-organizacije' },
-          { label: 'Administracija Zahteva', icon: 'pi pi-fw pi-book', routerLink: 'administracija-zahteva' }
+          { label: 'Administracija Organizacije', icon: 'pi pi-fw pi-building', routerLink: 'administracija-organizacije' },
+          { label: 'Administracija Zahteva', icon: 'pi pi-fw pi-inbox', routerLink: 'administracija-zahteva' }
         ]
       }
     ];
+
+
+
 
 
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {

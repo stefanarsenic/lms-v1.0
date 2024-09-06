@@ -4,6 +4,7 @@ import {Nastavnik} from "../model/nastavnik";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {RegistrovaniKorisnik} from "../model/registrovaniKorisnik";
+import {Student} from "../model/student";
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,10 @@ export class NastavnikService extends GenerickiService<Nastavnik>{
 
   updateNastavnik(id: number | null, korisnik: Nastavnik){
     return this.http.put(`http://localhost:8080/api/nastavnici/azuriraj/${id}`,korisnik)
+  }
+
+  dodaj(objekat:Nastavnik){
+    return this.http.post(`http://localhost:8080/${this.putanja}/dodaj`,objekat);
   }
 
 }

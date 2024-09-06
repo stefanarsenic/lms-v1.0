@@ -84,7 +84,7 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
   zvanje:Zvanje={id:null,datumIzbora:null,datumPrestanka:null,nastavnik:null,tipZvanja: {id:null,naziv:""},naucnaOblast:null}
   noviZvanja: Zvanje[] | undefined = [];
   constructor(private injector: Injector,private messageService: MessageService, private confirmationService: ConfirmationService,private naucnaOblastService:NacunaOblastService,
-  private tipZvanjaService:TipZvanjaService) {
+  private tipZvanjaService:TipZvanjaService,private nastavnikService:NastavnikService) {
     super();
     const service = this.injector.get(NastavnikService);
     this.initialize(service);
@@ -154,7 +154,7 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
     this.submitted = true;
     if (this.korisnikZaEditovanje === undefined) {
       this.nastavnik.zvanja=this.noviZvanja
-      this.service2.create(this.nastavnik).subscribe((r:Nastavnik)=>{
+      this.nastavnikService.dodaj(this.nastavnik).subscribe(r=>{
         this.update(this.service2)
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Proffesor Created', life: 3000 });
       })
@@ -163,6 +163,7 @@ export class NastavnikComponent extends AppGenerickoComponent<Nastavnik>{
       console.log(this.nastavnik)
       this.service2.updateNastavnik(this.nastavnik.id,this.nastavnik).subscribe((r:Nastavnik)=>{
         this.update(this.service2)
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Proffesor Updated', life: 3000 });
       })
 
     }
