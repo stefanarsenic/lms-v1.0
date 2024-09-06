@@ -15,16 +15,20 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.singidunum.novisad.server.dto.PravoPristupaDto;
 import rs.ac.singidunum.novisad.server.dto.RegistrovaniKorisnikDto;
 import rs.ac.singidunum.novisad.server.dto.UlogaDto;
+import rs.ac.singidunum.novisad.server.dto.student.StudentDto;
 import rs.ac.singidunum.novisad.server.generic.EntityDtoMapper;
 import rs.ac.singidunum.novisad.server.generic.GenericController;
 import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.korisnik.PravoPristupa;
 import rs.ac.singidunum.novisad.server.model.korisnik.RegistrovaniKorisnik;
+import rs.ac.singidunum.novisad.server.model.student.Student;
 import rs.ac.singidunum.novisad.server.services.korisnik.KorisnikService;
+import rs.ac.singidunum.novisad.server.services.secuirty.UlogaService;
 import rs.ac.singidunum.novisad.server.utils.TokenUtils;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/api")
@@ -49,6 +53,8 @@ public class SecurityController extends GenericController<RegistrovaniKorisnik,L
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    UlogaService ulogaService;
 
     @Override
     protected RegistrovaniKorisnikDto convertToDto(RegistrovaniKorisnik entity) throws IllegalAccessException, InstantiationException {
@@ -106,9 +112,24 @@ public class SecurityController extends GenericController<RegistrovaniKorisnik,L
     @Override
     @RequestMapping(path = "/register",method = RequestMethod.POST)
     public ResponseEntity<RegistrovaniKorisnikDto> create(RegistrovaniKorisnikDto dto) throws IllegalAccessException, InstantiationException {
-        String lozinka=dto.getLozinka();
-        dto.setLozinka(passwordEncoder.encode(lozinka));
-        return super.create(dto);
+        String lozinka = dto.getLozinka();
+        dto.setPravoPristupaSet(new HashSet<>());
+        RegistrovaniKorisnik entity=convertToEntity(dto);
+
+        entity.setLozinka(passwordEncoder.encode(lozinka));
+
+
+        entity.setPravoPristupaSet(new HashSet<>());
+
+        PravoPristupa pravoPristupa = new PravoPristupa();
+        pravoPristupa.setUloga(ulogaService.findById(4L).orElse(null));
+        pravoPristupa.setRegistrovaniKorisnik(entity);
+        entity.getPravoPristupaSet().add(pravoPristupa);
+        RegistrovaniKorisnik savedEntity = service.save(entity);
+
+        RegistrovaniKorisnikDto savedDto = convertToDto(savedEntity);
+
+        return new ResponseEntity<>(savedDto, HttpStatus.CREATED);
     }
 
 }
