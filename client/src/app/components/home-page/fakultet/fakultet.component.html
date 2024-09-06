@@ -24,7 +24,28 @@
         <p>{{ studijskiProgram.opis }}</p>
       </div>
     </div>
-
+    <p-table [value]="predmeti" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Naziv</th>
+          <th>Espb</th>
+          <th>Obavezan</th>
+          <th>Broj Predavanja</th>
+          <th>Broj Vezbi</th>
+          <th>Nastavnik</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-predmet>
+        <tr>
+          <td>{{predmet.naziv}}</td>
+          <td>{{predmet.espb}}</td>
+          <td>{{predmet.obavezan ? "Obavezan" : "Izborni"}}</td>
+          <td>{{predmet.brojPredavanja}}</td>
+          <td>{{predmet.brojVezbi}}</td>
+          <td>{{predmet.nastavnik.ime}} {{predmet.nastavnik.prezime}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 </div>
 </body>

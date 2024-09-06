@@ -4,6 +4,9 @@ import {FakultetService} from "../../../services/fakultet.service";
 import {NgForOf, NgIf} from "@angular/common";
 import {StudijskiProgramService} from "../../../services/studijski-program.service";
 import {TabMenuModule} from "primeng/tabmenu";
+import {PredmetService} from "../../../services/predmet.service";
+import {Predmet} from "../../../model/predmet";
+import {TableModule} from "primeng/table";
 
 @Component({
   selector: 'app-fakultet',
@@ -11,7 +14,8 @@ import {TabMenuModule} from "primeng/tabmenu";
   imports: [
     NgForOf,
     NgIf,
-    TabMenuModule
+    TabMenuModule,
+    TableModule
   ],
   templateUrl: './fakultet.component.html',
   styleUrl: './fakultet.component.css'
@@ -21,13 +25,16 @@ export class FakultetComponent implements OnInit{
   constructor(
     private route: ActivatedRoute,
     private fakultetService: FakultetService,
+    private predmetService: PredmetService
   ) {}
 
   fakultet: any = {};
   studijskiProgram: any = {};
   rukovodilac: any = {};
+  predmeti: Predmet[] = [];
 
   ngOnInit(): void {
+    this.predmeti = [];
     this.studijskiProgram = {};
     this.route.paramMap.subscribe(params => {
       const id: number = Number(this.route.snapshot.paramMap.get('id'));
@@ -43,5 +50,8 @@ export class FakultetComponent implements OnInit{
       studijskiProgram.id === studijski_program_id);
 
     this.rukovodilac = this.studijskiProgram.rukovodilac;
+    if(this.studijskiProgram) {
+      this.predmetService.getPredmetiByStudijskiProgram(this.studijskiProgram.id).subscribe(data => this.predmeti = data);
+    }
   }
 }

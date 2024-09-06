@@ -242,28 +242,6 @@ export const routes: Routes = [
         component: EditProfilComponent
       },
       {
-        path: "predmeti",
-        component: PregledPredmetaNastavnikComponent,
-        children: [
-          {
-            path: "kartice-predmeta",
-            component: KarticePredmetaComponent
-          },
-          {
-            path: "predmet",
-            component: DinamickiPrikazPredmetaComponent
-          },
-          {
-            path: "predmet/:id",
-            component: DinamickiPrikazPredmetaComponent,
-            children: [
-              {
-                path: "spisak-studenata",
-                component: SpisakStudenataNastavnikComponent
-              },
-            ]
-          },
-        ]
         path: "instrumenti-evaluacije",
         component: InstrumentiEvaluacijeComponent,
       },

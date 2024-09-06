@@ -19,9 +19,7 @@ import {IspitniRok} from "../../../model/ispitniRok";
 import {IspitniRokService} from "../../../services/ispitni-rok.service";
 import {FormsModule} from "@angular/forms";
 import {PolaganjeService} from "../../../services/polaganje.service";
-import {Polaganje} from "../../../model/polaganje";
 import {EvaluacijaZnanjaService} from "../../../services/evaluacija-znanja.service";
-import {parseAndFormatDate} from "../../../utils/datum-utils";
 import {lastValueFrom} from "rxjs";
 import {MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
@@ -74,6 +72,10 @@ export class PrijavaIspitaComponent implements OnInit{
     private evaluacijaZnanjaService: EvaluacijaZnanjaService,
     private messageService: MessageService
   ) {
+  }
+
+  log(){
+    console.log(this.selectedIspitniRok);
   }
 
   ngOnInit(): void {

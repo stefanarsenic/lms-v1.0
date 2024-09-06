@@ -11,17 +11,17 @@
       <div class="logo"></div>
 <!--     // <div class="logo-text">{{univerzitet[0].naziv}}</div>-->
     </div>
-    <div class="nav">
-      <a class="link" routerLink="organizacija-sp">Organizacija-SP</a>
+    <div class="nav" style="display: flex; align-items: center">
       <a class="link" routerLink="o-univerzitetu">O Univerzitetu</a>
-<!--      <p-dropdown-->
-<!--        [options]="univerzitet[0].fakulteti"-->
-<!--        [(ngModel)]="selectedFakultet"-->
-<!--        (onChange)="onSelectFakultet($event)"-->
-<!--        optionLabel="naziv"-->
-<!--        placeholder="Izaberi Fakultet" />-->
-      <a class="login-btn" routerLink="login">Login</a>
-      <a class="register-btn" routerLink="register">Register</a>
+      <p-dropdown
+        [options]="univerzitet[0].fakulteti"
+        [(ngModel)]="selectedFakultet"
+        (onChange)="onSelectFakultet($event)"
+        [style]="{'margin-right': '8px'}"
+        optionLabel="naziv"
+        placeholder="Izaberi Fakultet" />
+      <p-button severity="primary" styleClass="p-button-sm" routerLink="login" [style]="{'margin-right': '8px'}">Login</p-button>
+      <p-button severity="secondary" styleClass="p-button-sm" routerLink="register">Register</p-button>
     </div>
   </div>
 </div>

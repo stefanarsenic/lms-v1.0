@@ -9,6 +9,7 @@ import {PolozeniPredmetService} from "../../../../services/polozeni-predmet.serv
 import {PolozeniPredmet} from "../../../../model/polozeniPredmet";
 import {PredmetService} from "../../../../services/predmet.service";
 import {NgForOf} from "@angular/common";
+import {formatDateFromString} from "../../../../utils/date-converter";
 
 @Component({
   selector: 'app-uverenje-o-polozenim-ispitima',
@@ -51,7 +52,7 @@ export class UverenjeOPolozenimIspitimaComponent implements OnInit{
       this.form.setValue({
         punoIme: `${this.selektovaniStudent.student.ime} ${this.selektovaniStudent.student.prezime}`,
         brojIndeksa: this.selektovaniStudent.brojIndeksa || '',
-        datumRodjenja: this.selektovaniStudent.student.datumRodjenja || '',
+        datumRodjenja: formatDateFromString(this.selektovaniStudent.student.datumRodjenja?.toString() ? String(this.selektovaniStudent.student.datumRodjenja) : "") || '',
         godinaStudija: this.selektovaniStudent.godinaStudija || 0,
         studijskiProgram: this.selektovaniStudent.studijskiProgram.naziv || '',
         skolskaGodina: new Date().getFullYear()});

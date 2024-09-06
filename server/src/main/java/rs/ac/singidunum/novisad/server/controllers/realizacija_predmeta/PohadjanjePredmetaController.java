@@ -143,6 +143,7 @@ public class PohadjanjePredmetaController extends GenericController<PohadjanjePr
             try {
                 PohadjanjePredmetaDto dto = EntityDtoMapper.convertToDto(polozeniPredmet, PohadjanjePredmetaDto.class);
                 dto.setPredmet(EntityDtoMapper.convertToDto(polozeniPredmet.getPredmet(), PredmetDto.class));
+                dto.getPredmet().setSilabus(null);
                 return dto;
             } catch (IllegalAccessException | InstantiationException e) {
                 throw new RuntimeException(e);

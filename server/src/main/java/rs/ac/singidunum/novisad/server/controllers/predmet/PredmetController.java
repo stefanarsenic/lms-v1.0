@@ -35,7 +35,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/predmet")
-@Secured({"ROLE_SLUZBA","ROLE_ADMIN","ROLE_STUDENT","ROLE_NASTAVNIK"})
 public class PredmetController extends GenericController<Predmet, Long, PredmetDto>{
 
     private final IshodService ishodService;
@@ -60,6 +59,7 @@ public class PredmetController extends GenericController<Predmet, Long, PredmetD
         List<Predmet> predmeti = predmetService.findAllNePolozeniPredmetiByStudent(studentId);
         return PredmetiToDto(predmeti);
     }
+
     @GetMapping("/studijski-program/{studijskiProgramId}")
     public ResponseEntity<List<PredmetDto>> getPredmetiByStudijskiProgram(@PathVariable Long studijskiProgramId){
         List<Predmet> predmeti = predmetService.findPredmetiByStudijskiProgram(studijskiProgramId);

@@ -79,7 +79,7 @@ export class RasporedEvaluacijaZnanjaComponent implements OnInit{
     initialView: 'timeGridWeek',
     timeZone: 'local',
     initialEvents: [],
-    contentHeight: 700,
+    contentHeight: 600,
     weekends: true,
     editable: true,
     selectable: true,

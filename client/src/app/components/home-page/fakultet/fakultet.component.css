@@ -1,7 +1,9 @@
 body {
+  padding-top: 100px;
   display: flex;
   justify-content: center;
   max-height: 100%;
+  background-color: transparent;
 }
 
 .container {

@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.server.controllers.fakultet;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -13,11 +14,15 @@ import rs.ac.singidunum.novisad.server.generic.GenericService;
 import rs.ac.singidunum.novisad.server.model.fakultet.Fakultet;
 import rs.ac.singidunum.novisad.server.model.fakultet.StudijskiProgram;
 import rs.ac.singidunum.novisad.server.model.nastavnik.Nastavnik;
+import rs.ac.singidunum.novisad.server.model.student.Student;
+import rs.ac.singidunum.novisad.server.repositories.fakultet.StudijskiProgramRepository;
+import rs.ac.singidunum.novisad.server.repositories.student.StudentRepository;
 import rs.ac.singidunum.novisad.server.services.fakultet.FakultetService;
 import rs.ac.singidunum.novisad.server.services.fakultet.StudijskiProgramService;
 import rs.ac.singidunum.novisad.server.services.nastavnik.NastavnikService;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,11 +32,33 @@ public class StudijskiProgramController extends GenericController<StudijskiProgr
     private final FakultetService fakultetService;
     private final NastavnikService nastavnikService;
     private final StudijskiProgramService studijskiProgramService;
-    public StudijskiProgramController(GenericService<StudijskiProgram, Long> service, FakultetService fakultetService, NastavnikService nastavnikService, StudijskiProgramService studijskiProgramService) {
+    private final StudijskiProgramRepository studijskiProgramRepository;
+    private final StudentRepository studentRepository;
+
+    public StudijskiProgramController(GenericService<StudijskiProgram, Long> service, FakultetService fakultetService, NastavnikService nastavnikService, StudijskiProgramService studijskiProgramService,
+                                      StudijskiProgramRepository studijskiProgramRepository,
+                                      StudentRepository studentRepository) {
         super(service);
         this.fakultetService = fakultetService;
         this.nastavnikService = nastavnikService;
         this.studijskiProgramService = studijskiProgramService;
+        this.studijskiProgramRepository = studijskiProgramRepository;
+        this.studentRepository = studentRepository;
+    }
+
+    @GetMapping("/not-attended-by-student")
+    public ResponseEntity<?> getAllNotAttendedByStudent(@PathParam("studentId") Long studentId){
+        Student student = studentRepository.findById(studentId).orElseThrow();
+        List<StudijskiProgram> studijskiProgramList = studijskiProgramRepository.findStudijskiProgramiNotConnectedToStudent(studentId);
+        List<StudijskiProgramDto> dtos = studijskiProgramList.stream().map(studijskiProgram -> {
+            try {
+                return convertToDto(studijskiProgram);
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping

@@ -23,6 +23,8 @@ import {StudijskiProgramService} from "../../../services/studijski-program.servi
 import {StudentNaGodini} from "../../../model/studentNaGodini";
 import {PolozeniPredmetService} from "../../../services/polozeni-predmet.service";
 import {PlanZaGodinuService} from "../../../services/plan-za-godinu.service";
+import {formatDateFromString} from "../../../utils/date-converter";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-upis-studenata',
@@ -63,6 +65,7 @@ export class UpisStudenataComponent implements OnInit{
   godina: number = new Date().getFullYear();
   brojIndeksa: number | null = null;
   uslovEspb: number = 0;
+  visible: boolean = false;
 
   constructor(
     private studentNaGodiniService: StudentNaGodiniService,
@@ -84,14 +87,14 @@ export class UpisStudenataComponent implements OnInit{
 
   upis(student: any) {
     this.selektovaniStudent = student;
-    this.upisDialog = true;
-    this.dozvoljeniStudijskiProgrami = this.studijskiProgrami.filter(studijskiProgram =>
-      !student.studentiNaGodini.some((student: any) => {
-        studijskiProgram.id === student.studijskiProgram.id;
-        console.log(this.dozvoljeniStudijskiProgrami);
-      }
-      )
-    );
+
+    let params: HttpParams = new HttpParams()
+      .set("studentId", this.selektovaniStudent.id)
+    this.studijskiProgramService.getAllNotAttended(params).subscribe(data => {
+      this.dozvoljeniStudijskiProgrami = data;
+      this.visible = true;
+      this.upisDialog = true;
+    });
   }
   upisNaSledecuGodinu(studentNaGodini: StudentNaGodini){
     forkJoin({
@@ -194,4 +197,7 @@ export class UpisStudenataComponent implements OnInit{
   onRowCollapse(event: TableRowCollapseEvent) {
     this.messageService.add({ severity: 'success', summary: 'Student Collapsed', detail: event.data.name, life: 1000 });
   }
+
+  protected readonly formatDateFromString = formatDateFromString;
+  protected readonly parseAndFormatDate = parseAndFormatDate;
 }

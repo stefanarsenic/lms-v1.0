@@ -5,6 +5,7 @@ import {Univerzitet} from "../../model/univerzitet";
 import {NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {DropdownChangeEvent, DropdownModule} from 'primeng/dropdown';
+import {Button} from "primeng/button";
 
 @Component({
   selector: 'app-home-page',
@@ -14,7 +15,8 @@ import {DropdownChangeEvent, DropdownModule} from 'primeng/dropdown';
     RouterLink,
     NgForOf,
     FormsModule,
-    DropdownModule
+    DropdownModule,
+    Button
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'

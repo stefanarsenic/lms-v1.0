@@ -54,11 +54,11 @@
 </div>
 
 <p-dialog header="Prijava Ispita" [(visible)]="visible" [modal]="true" [draggable]="false">
-  <p-dropdown [options]="ispitniRokovi" [(ngModel)]="selectedIspitniRok" optionLabel="naziv" placeholder="Izaberite Ispitni Rok" appendTo="body"></p-dropdown>
+  <p-dropdown [options]="ispitniRokovi" [(ngModel)]="selectedIspitniRok" placeholder="Izaberite Ispitni Rok" optionLabel="naziv" appendTo="body" [showClear]="true"></p-dropdown>
 
   <ng-template pTemplate="footer">
-    <p-button (onClick)="otkaziPrijavu()" severity="secondary" label="Otkazi" icon="pi pi-check" styleClass="p-button-sm"></p-button>
     <p-button (onClick)="potvrdiPrijavu()" severity="primary" label="Potvrdi" icon="pi pi-check" styleClass="p-button-sm"></p-button>
+    <p-button (onClick)="otkaziPrijavu()" severity="secondary" label="Otkazi" icon="pi pi-check" styleClass="p-button-sm"></p-button>
   </ng-template>
 </p-dialog>
 <p-toast></p-toast>

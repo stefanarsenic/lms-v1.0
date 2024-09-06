@@ -24,7 +24,7 @@
           </td>
           <td>{{ student.ime }}</td>
           <td>{{ student.prezime }}</td>
-          <td>{{ student.datumRodjenja }}</td>
+          <td>{{ formatDateFromString(student.datumRodjenja.toString()) }}</td>
           <td>{{ student.jmbg }}</td>
           <td><button
             (click)="upis(student)"
@@ -105,8 +105,8 @@
               <input id="flat-input" [(ngModel)]="brojIndeksa" required>
             </div>
           </div>
-          <div *ngIf="!!dozvoljeniStudijskiProgrami">
-            <small class="info-message">Student vec pohadja sve studijske programe.</small>
+          <div>
+            <small *ngIf="!dozvoljeniStudijskiProgrami || dozvoljeniStudijskiProgrami.length === 0" class="info-message">Student vec pohadja sve studijske programe.</small>
           </div>
         </div>
       </div>
